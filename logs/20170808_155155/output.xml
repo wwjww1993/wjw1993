@@ -1,0 +1,3950 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170808 15:52:01.816" generator="Robot 3.0.2 (Python 2.7.8 on win32)">
+<suite source="F:\logs and reports\账户中心" id="s1" name="账户中心">
+<suite source="F:\logs and reports\账户中心\订单" id="s1-s1" name="订单">
+<suite source="F:\logs and reports\账户中心\订单\订单取消支付（线上）.txt" id="s1-s1-s1" name="订单取消支付（线上）">
+<test id="s1-s1-s1-t1" name="艾佳币账户未过期时，待支付订单冻结艾佳币后取消订单，解冻艾佳币，有效期大于15天，不延长">
+<kw name="参数配置" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.274" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170808 15:52:02.360" starttime="20170808 15:52:02.252"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:02.362" starttime="20170808 15:52:02.250"></status>
+</kw>
+<kw name="输入拥有不同类型账户的用户user_id" library="myResource">
+<arguments>
+<arg>10000</arg>
+<arg>10000</arg>
+<arg>123456781</arg>
+<arg>http://192.168.1.31:10003</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.369" level="INFO">${boss_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:02.371" starttime="20170808 15:52:02.367"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.375" level="INFO">${app_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:02.377" starttime="20170808 15:52:02.373"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${no_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.381" level="INFO">${no_user_account_id} = 123456781</msg>
+<status status="PASS" endtime="20170808 15:52:02.383" starttime="20170808 15:52:02.379"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${environment}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.391" level="INFO">${environment} = http://192.168.1.31:10003</msg>
+<status status="PASS" endtime="20170808 15:52:02.393" starttime="20170808 15:52:02.387"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${boss_user_account_id}' and channel_no=1</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.398" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=1 </msg>
+<msg timestamp="20170808 15:52:02.410" level="INFO">${boss_channel_no1} = ((17757, '32102151361501753586', 10000, 100005, 1, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 36), datetime.datetime(2017, 8, 8, 15, 40, 17)),)</msg>
+<status status="PASS" endtime="20170808 15:52:02.411" starttime="20170808 15:52:02.395"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${boss_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.414" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:02.416" starttime="20170808 15:52:02.412"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${app_user_account_id}' and channel_no=2</arg>
+</arguments>
+<assign>
+<var>${app_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.421" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=2 </msg>
+<msg timestamp="20170808 15:52:02.430" level="INFO">${app_channel_no1} = ((17756, '32102151361501753580', 10000, 100004, 2, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 24), datetime.datetime(2017, 8, 8, 15, 40, 14)),)</msg>
+<status status="PASS" endtime="20170808 15:52:02.431" starttime="20170808 15:52:02.418"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${app_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${app_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.435" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:02.436" starttime="20170808 15:52:02.433"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.439" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:02.440" starttime="20170808 15:52:02.437"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.444" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:02.446" starttime="20170808 15:52:02.442"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:02.448" starttime="20170808 15:52:02.364"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:02.450" starttime="20170808 15:52:02.248"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<assign>
+<var>${current_time}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.455" level="INFO">${current_time} = 2017-08-08 15:52:02.455</msg>
+<status status="PASS" endtime="20170808 15:52:02.457" starttime="20170808 15:52:02.452"></status>
+</kw>
+<kw name="Add Time To Date" library="DateTime">
+<doc>Adds time to date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time}</arg>
+<arg>20 days</arg>
+</arguments>
+<assign>
+<var>${after_time}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.466" level="INFO">${after_time} = 2017-08-28 15:52:02.455</msg>
+<status status="PASS" endtime="20170808 15:52:02.467" starttime="20170808 15:52:02.459"></status>
+</kw>
+<kw name="Subtract Time From Date" library="DateTime">
+<doc>Subtracts time from date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time}</arg>
+<arg>10 days</arg>
+</arguments>
+<assign>
+<var>${account_begin_time}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.471" level="INFO">${account_begin_time} = 2017-07-29 15:52:02.455</msg>
+<status status="PASS" endtime="20170808 15:52:02.472" starttime="20170808 15:52:02.469"></status>
+</kw>
+<kw name="Convert Date" library="DateTime">
+<doc>Converts between supported `date formats`.</doc>
+<arguments>
+<arg>${after_time}</arg>
+<arg>datetime</arg>
+</arguments>
+<assign>
+<var>${after_time_check}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.475" level="INFO">${after_time_check} = 2017-08-28 15:52:02.455000</msg>
+<status status="PASS" endtime="20170808 15:52:02.476" starttime="20170808 15:52:02.473"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id="${boss_user_account_id}"</arg>
+</arguments>
+<assign>
+<var>${id}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.479" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id="10000" </msg>
+<msg timestamp="20170808 15:52:02.488" level="INFO">${id} = ((17756, '32102151361501753580', 10000, 100004, 2, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 24), datetime.datetime(2017, 8, 8, 15, 40, 14)), (17757, '32102151361501753586', 10000, 100005, 1, 2, 0, ...</msg>
+<status status="PASS" endtime="20170808 15:52:02.489" starttime="20170808 15:52:02.477"></status>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>delete from account_base where user_id="${boss_user_account_id}"</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.493" level="INFO">Executing : Execute SQL String  |  delete from account_base where user_id="10000" </msg>
+<status status="PASS" endtime="20170808 15:52:02.623" starttime="20170808 15:52:02.490"></status>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("${id[0][3]}","${boss_user_account_id}","1","2","2","${account_begin_time}","${after_time}","${account_begin_time}","${account_begin_time}","0");</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.626" level="INFO">Executing : Execute SQL String  |  insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("100004","10000","1","2","2","2017-07-29 15:52:02.455","2017-08-28 15:52:02.455","2017-07-29 15:52:02.455","2017-07-29 15:52:02.455","0"); </msg>
+<status status="PASS" endtime="20170808 15:52:02.683" starttime="20170808 15:52:02.624"></status>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("${id[1][3]}","${boss_user_account_id}","1","2","2","${account_begin_time}","${after_time}","${account_begin_time}","${account_begin_time}","0");</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.687" level="INFO">Executing : Execute SQL String  |  insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("100005","10000","1","2","2","2017-07-29 15:52:02.455","2017-08-28 15:52:02.455","2017-07-29 15:52:02.455","2017-07-29 15:52:02.455","0"); </msg>
+<status status="PASS" endtime="20170808 15:52:02.753" starttime="20170808 15:52:02.685"></status>
+</kw>
+<kw name="清数据" library="myResource">
+<arguments>
+<arg>888888</arg>
+</arguments>
+<kw name="参数配置" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.773" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170808 15:52:02.795" starttime="20170808 15:52:02.769"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:02.796" starttime="20170808 15:52:02.765"></status>
+</kw>
+<kw name="输入拥有不同类型账户的用户user_id" library="myResource">
+<arguments>
+<arg>10000</arg>
+<arg>10000</arg>
+<arg>123456781</arg>
+<arg>http://192.168.1.31:10003</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.800" level="INFO">${boss_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:02.801" starttime="20170808 15:52:02.799"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.803" level="INFO">${app_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:02.804" starttime="20170808 15:52:02.802"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${no_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.806" level="INFO">${no_user_account_id} = 123456781</msg>
+<status status="PASS" endtime="20170808 15:52:02.807" starttime="20170808 15:52:02.805"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${environment}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.810" level="INFO">${environment} = http://192.168.1.31:10003</msg>
+<status status="PASS" endtime="20170808 15:52:02.810" starttime="20170808 15:52:02.809"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${boss_user_account_id}' and channel_no=1</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.813" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=1 </msg>
+<msg timestamp="20170808 15:52:02.824" level="INFO">${boss_channel_no1} = ((17757, '32102151361501753586', 10000, 100005, 1, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 36), datetime.datetime(2017, 8, 8, 15, 40, 17)),)</msg>
+<status status="PASS" endtime="20170808 15:52:02.825" starttime="20170808 15:52:02.811"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${boss_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.827" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:02.828" starttime="20170808 15:52:02.826"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${app_user_account_id}' and channel_no=2</arg>
+</arguments>
+<assign>
+<var>${app_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.830" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=2 </msg>
+<msg timestamp="20170808 15:52:02.840" level="INFO">${app_channel_no1} = ((17756, '32102151361501753580', 10000, 100004, 2, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 24), datetime.datetime(2017, 8, 8, 15, 40, 14)),)</msg>
+<status status="PASS" endtime="20170808 15:52:02.841" starttime="20170808 15:52:02.829"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${app_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${app_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.844" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:02.845" starttime="20170808 15:52:02.843"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.847" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:02.848" starttime="20170808 15:52:02.846"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.850" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:02.851" starttime="20170808 15:52:02.849"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:02.853" starttime="20170808 15:52:02.797"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:02.855" starttime="20170808 15:52:02.761"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_transaction where id=${id_delete}</arg>
+</arguments>
+<assign>
+<var>${check}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.859" level="INFO">Executing : Query  |  select * from ajb_account_transaction where id=888888 </msg>
+<msg timestamp="20170808 15:52:02.869" level="INFO">${check} = ()</msg>
+<status status="PASS" endtime="20170808 15:52:02.871" starttime="20170808 15:52:02.857"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${check}</arg>
+</arguments>
+<assign>
+<var>${check_length}</var>
+</assign>
+<msg timestamp="20170808 15:52:02.875" level="INFO">Length is 0</msg>
+<msg timestamp="20170808 15:52:02.875" level="INFO">${check_length} = 0</msg>
+<status status="PASS" endtime="20170808 15:52:02.876" starttime="20170808 15:52:02.873"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${check_length} != 0</arg>
+<arg>execute sql string</arg>
+<arg>delete from ajb_account_transaction where id=${id_delete}</arg>
+<arg>ELSE</arg>
+<arg>log</arg>
+<arg>数据库之前没有数据</arg>
+</arguments>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>数据库之前没有数据</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.880" level="INFO">数据库之前没有数据</msg>
+<status status="PASS" endtime="20170808 15:52:02.881" starttime="20170808 15:52:02.879"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:02.882" starttime="20170808 15:52:02.877"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>数据库里面的这条数据清理成功啦。</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.886" level="INFO">数据库里面的这条数据清理成功啦。</msg>
+<status status="PASS" endtime="20170808 15:52:02.887" starttime="20170808 15:52:02.885"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${id_delete}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.889" level="INFO">${id_delete} = 888888</msg>
+<status status="PASS" endtime="20170808 15:52:02.890" starttime="20170808 15:52:02.888"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:02.891" starttime="20170808 15:52:02.757"></status>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>delete from ajb_account_transaction where order_num='32102151361500012119'</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.893" level="INFO">Executing : Execute SQL String  |  delete from ajb_account_transaction where order_num='32102151361500012119' </msg>
+<status status="PASS" endtime="20170808 15:52:02.914" starttime="20170808 15:52:02.892"></status>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361500975216","${boss_user_account_id}","${boss_channel_no}","1","32102151361500012119","","2","1","11","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.918" level="INFO">Executing : Execute SQL String  |  insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("888888","32102151361500975216","10000","100005","1","32102151361500012119","","2","1","11","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40"); </msg>
+<status status="PASS" endtime="20170808 15:52:02.978" starttime="20170808 15:52:02.915"></status>
+</kw>
+<kw name="输入入参值和接口地址" library="myResource">
+<arguments>
+<arg>32102151361500012119</arg>
+<arg>${environment}/ihome-api/settlement/cancelPay</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args11}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:02.993" level="INFO">${args11} = 32102151361500012119</msg>
+<status status="PASS" endtime="20170808 15:52:02.996" starttime="20170808 15:52:02.988"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args22}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.004" level="INFO">${args22} = </msg>
+<status status="PASS" endtime="20170808 15:52:03.007" starttime="20170808 15:52:02.999"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args33}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.019" level="INFO">${args33} = </msg>
+<status status="PASS" endtime="20170808 15:52:03.022" starttime="20170808 15:52:03.013"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args44}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.026" level="INFO">${args44} = </msg>
+<status status="PASS" endtime="20170808 15:52:03.027" starttime="20170808 15:52:03.025"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args55}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.030" level="INFO">${args55} = http://192.168.1.31:10003/ihome-api/settlement/cancelPay</msg>
+<status status="PASS" endtime="20170808 15:52:03.031" starttime="20170808 15:52:03.028"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.032" starttime="20170808 15:52:02.982"></status>
+</kw>
+<kw name="获得account_id" library="myResource">
+<kw name="Convert To String" library="BuiltIn">
+<doc>Converts the given item to a Unicode string.</doc>
+<arguments>
+<arg>${args55}</arg>
+</arguments>
+<assign>
+<var>${value}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.036" level="INFO">${value} = http://192.168.1.31:10003/ihome-api/settlement/cancelPay</msg>
+<status status="PASS" endtime="20170808 15:52:03.037" starttime="20170808 15:52:03.035"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/cancelPay</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/confirmPay</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund</arg>
+</arguments>
+<assign>
+<var>@{Link}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.041" level="INFO">@{Link} = [ http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel | http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm | http://192.168.1.31:10003/ihome-api/settlement/cancelPay | http...</msg>
+<status status="PASS" endtime="20170808 15:52:03.042" starttime="20170808 15:52:03.039"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbActivityRecharge"</arg>
+<arg>set variable</arg>
+<arg>2</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>1</arg>
+</arguments>
+<assign>
+<var>${channel_no}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>1</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.046" starttime="20170808 15:52:03.045"></status>
+</kw>
+<msg timestamp="20170808 15:52:03.047" level="INFO">${channel_no} = 1</msg>
+<status status="PASS" endtime="20170808 15:52:03.047" starttime="20170808 15:52:03.043"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}" in @{Link}</arg>
+<arg>set variable</arg>
+<arg>order_num</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>user_id</arg>
+</arguments>
+<assign>
+<var>${args11_after}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>order_num</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.052" starttime="20170808 15:52:03.050"></status>
+</kw>
+<msg timestamp="20170808 15:52:03.053" level="INFO">${args11_after} = order_num</msg>
+<status status="PASS" endtime="20170808 15:52:03.054" starttime="20170808 15:52:03.048"></status>
+</kw>
+<kw name="参数配置" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.061" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170808 15:52:03.093" starttime="20170808 15:52:03.058"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.094" starttime="20170808 15:52:03.056"></status>
+</kw>
+<kw name="输入拥有不同类型账户的用户user_id" library="myResource">
+<arguments>
+<arg>10000</arg>
+<arg>10000</arg>
+<arg>123456781</arg>
+<arg>http://192.168.1.31:10003</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.098" level="INFO">${boss_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:03.099" starttime="20170808 15:52:03.097"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.102" level="INFO">${app_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:03.103" starttime="20170808 15:52:03.100"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${no_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.106" level="INFO">${no_user_account_id} = 123456781</msg>
+<status status="PASS" endtime="20170808 15:52:03.107" starttime="20170808 15:52:03.104"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${environment}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.111" level="INFO">${environment} = http://192.168.1.31:10003</msg>
+<status status="PASS" endtime="20170808 15:52:03.112" starttime="20170808 15:52:03.109"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${boss_user_account_id}' and channel_no=1</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.114" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=1 </msg>
+<msg timestamp="20170808 15:52:03.127" level="INFO">${boss_channel_no1} = ((17757, '32102151361501753586', 10000, 100005, 1, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 36), datetime.datetime(2017, 8, 8, 15, 40, 17)),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.128" starttime="20170808 15:52:03.113"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${boss_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.130" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:03.131" starttime="20170808 15:52:03.129"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${app_user_account_id}' and channel_no=2</arg>
+</arguments>
+<assign>
+<var>${app_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.133" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=2 </msg>
+<msg timestamp="20170808 15:52:03.151" level="INFO">${app_channel_no1} = ((17756, '32102151361501753580', 10000, 100004, 2, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 24), datetime.datetime(2017, 8, 8, 15, 40, 14)),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.152" starttime="20170808 15:52:03.132"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${app_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${app_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.154" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:03.155" starttime="20170808 15:52:03.153"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.158" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:03.158" starttime="20170808 15:52:03.156"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.160" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:03.162" starttime="20170808 15:52:03.159"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.163" starttime="20170808 15:52:03.095"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.165" starttime="20170808 15:52:03.055"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_transaction where ${args11_after}='${args11}' and channel_no='${channel_no}'</arg>
+</arguments>
+<assign>
+<var>${database1}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.169" level="INFO">Executing : Query  |  select * from ajb_account_transaction where order_num='32102151361500012119' and channel_no='1' </msg>
+<msg timestamp="20170808 15:52:03.186" level="INFO">${database1} = ((888888, '32102151361500975216', 10000, 100005, 1, '32102151361500012119', '', Decimal('2.00'), 1, 11, 2, 0, datetime.datetime(2017, 7, 26, 16, 11, 40), datetime.datetime(2017, 7, 26, 16, 11, 40)),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.187" starttime="20170808 15:52:03.167"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from account_amount where account_id ='${database1[0][3]}'</arg>
+</arguments>
+<assign>
+<var>${database}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.189" level="INFO">Executing : Query  |  select * from account_amount where account_id ='100005' </msg>
+<msg timestamp="20170808 15:52:03.198" level="INFO">${database} = ((17827, 100005, Decimal('40.00'), Decimal('30.00'), Decimal('10.00'), datetime.datetime(2017, 8, 3, 16, 53, 36), datetime.datetime(2017, 8, 8, 15, 52, 13), 0),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.199" starttime="20170808 15:52:03.188"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${database1[0][2]}</arg>
+</arguments>
+<assign>
+<var>${user_id_real}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.203" level="INFO">${user_id_real} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:03.204" starttime="20170808 15:52:03.202"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${database[0][1]}</arg>
+</arguments>
+<assign>
+<var>${account_id}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.206" level="INFO">${account_id} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:03.207" starttime="20170808 15:52:03.205"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>获得account_id值为：${account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.209" level="INFO">获得account_id值为：100005</msg>
+<status status="PASS" endtime="20170808 15:52:03.210" starttime="20170808 15:52:03.208"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${database[0][2]}</arg>
+</arguments>
+<assign>
+<var>${total_amount_before}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.212" level="INFO">${total_amount_before} = 40.00</msg>
+<status status="PASS" endtime="20170808 15:52:03.212" starttime="20170808 15:52:03.211"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${database[0][3]}</arg>
+</arguments>
+<assign>
+<var>${balance_amount_before}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.215" level="INFO">${balance_amount_before} = 30.00</msg>
+<status status="PASS" endtime="20170808 15:52:03.215" starttime="20170808 15:52:03.213"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${database[0][4]}</arg>
+</arguments>
+<assign>
+<var>${frozen_amount_before}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.219" level="INFO">${frozen_amount_before} = 10.00</msg>
+<status status="PASS" endtime="20170808 15:52:03.220" starttime="20170808 15:52:03.217"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.222" level="INFO">${account_id} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:03.223" starttime="20170808 15:52:03.221"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${user_id_real}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.226" level="INFO">${user_id_real} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:03.228" starttime="20170808 15:52:03.225"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${total_amount_before}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.230" level="INFO">${total_amount_before} = 40.00</msg>
+<status status="PASS" endtime="20170808 15:52:03.231" starttime="20170808 15:52:03.229"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${balance_amount_before}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.234" level="INFO">${balance_amount_before} = 30.00</msg>
+<status status="PASS" endtime="20170808 15:52:03.235" starttime="20170808 15:52:03.232"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${frozen_amount_before}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.237" level="INFO">${frozen_amount_before} = 10.00</msg>
+<status status="PASS" endtime="20170808 15:52:03.238" starttime="20170808 15:52:03.236"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.240" level="INFO">${channel_no} = 1</msg>
+<status status="PASS" endtime="20170808 15:52:03.241" starttime="20170808 15:52:03.239"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>@{Link}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.245" level="INFO">@{Link} = [ http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel | http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm | http://192.168.1.31:10003/ihome-api/settlement/cancelPay | http...</msg>
+<status status="PASS" endtime="20170808 15:52:03.246" starttime="20170808 15:52:03.242"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${value}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.249" level="INFO">${value} = http://192.168.1.31:10003/ihome-api/settlement/cancelPay</msg>
+<status status="PASS" endtime="20170808 15:52:03.250" starttime="20170808 15:52:03.247"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${database}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.253" level="INFO">${database} = ((17827, 100005, Decimal('40.00'), Decimal('30.00'), Decimal('10.00'), datetime.datetime(2017, 8, 3, 16, 53, 36), datetime.datetime(2017, 8, 8, 15, 52, 13), 0),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.254" starttime="20170808 15:52:03.252"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.255" starttime="20170808 15:52:03.033"></status>
+</kw>
+<kw name="连接接口" library="myResource">
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbActivityRecharge"</arg>
+<arg>ajbActivityRecharge</arg>
+<arg>${args11}</arg>
+<arg>${args22}</arg>
+<arg>${args33}</arg>
+<arg>${args44}</arg>
+<arg>${args55}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}" in @{Link}</arg>
+<arg>ajbWithdrawCancel</arg>
+<arg>${args11}</arg>
+<arg>${args55}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>freezePay</arg>
+<arg>${args11}</arg>
+<arg>${args22}</arg>
+<arg>${args33}</arg>
+<arg>${args44}</arg>
+<arg>${args55}</arg>
+<arg>ELSE</arg>
+<arg>Data</arg>
+<arg>${args11}</arg>
+<arg>${args22}</arg>
+<arg>${args33}</arg>
+<arg>${args55}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<kw name="Ajb Withdraw Cancel" library="wjwTestLibrary">
+<arguments>
+<arg>${args11}</arg>
+<arg>${args55}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.371" starttime="20170808 15:52:03.259"></status>
+</kw>
+<msg timestamp="20170808 15:52:03.372" level="INFO">${data} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:03.373" starttime="20170808 15:52:03.257"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${data}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.375" level="INFO">${data} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:03.376" starttime="20170808 15:52:03.374"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.377" starttime="20170808 15:52:03.255"></status>
+</kw>
+<kw name="字段验证" library="myResource">
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${data.status_code}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.381" level="INFO">200</msg>
+<status status="PASS" endtime="20170808 15:52:03.381" starttime="20170808 15:52:03.379"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${data.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.386" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:03.387" starttime="20170808 15:52:03.384"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>接口的响应码正确</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.389" level="INFO">接口的响应码正确</msg>
+<status status="PASS" endtime="20170808 15:52:03.390" starttime="20170808 15:52:03.388"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${data.text}</arg>
+</arguments>
+<assign>
+<var>${toJson}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.392" level="INFO">To JSON using : content={"data":null,"msg":"成功","code":1,"success":true} </msg>
+<msg timestamp="20170808 15:52:03.393" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170808 15:52:03.394" level="INFO">${toJson} = {u'msg': u'\u6210\u529f', u'code': 1, u'data': None, u'success': True}</msg>
+<status status="PASS" endtime="20170808 15:52:03.395" starttime="20170808 15:52:03.391"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${toJson['success']}</arg>
+<arg>True</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.397" level="INFO">Argument types are:
+&lt;type 'bool'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:03.398" starttime="20170808 15:52:03.396"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${toJson['msg']}</arg>
+<arg>成功</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.400" starttime="20170808 15:52:03.399"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>接口中返回的值校验成功！</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.403" level="INFO">接口中返回的值校验成功！</msg>
+<status status="PASS" endtime="20170808 15:52:03.404" starttime="20170808 15:52:03.401"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/cancelPay</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/confirmPay</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/freezePay</arg>
+</arguments>
+<assign>
+<var>@{Link1}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.406" level="INFO">@{Link1} = [ http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel | http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm | http://192.168.1.31:10003/ihome-api/settlement/cancelPay | http...</msg>
+<status status="PASS" endtime="20170808 15:52:03.407" starttime="20170808 15:52:03.405"></status>
+</kw>
+<kw name="Run Keyword Unless" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is false.</doc>
+<arguments>
+<arg>"${value}" in @{Link1}</arg>
+<arg>Get From Dictionary</arg>
+<arg>${toJson['data']}</arg>
+<arg>orderNum</arg>
+</arguments>
+<assign>
+<var>${orderNum}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.409" level="INFO">${orderNum} = None</msg>
+<status status="PASS" endtime="20170808 15:52:03.410" starttime="20170808 15:52:03.408"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${orderNum}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.413" level="INFO">${orderNum} = None</msg>
+<status status="PASS" endtime="20170808 15:52:03.414" starttime="20170808 15:52:03.411"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.416" starttime="20170808 15:52:03.378"></status>
+</kw>
+<kw name="确认取消的金额数" library="myResource">
+<kw name="参数配置" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.423" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170808 15:52:03.434" starttime="20170808 15:52:03.422"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.436" starttime="20170808 15:52:03.420"></status>
+</kw>
+<kw name="输入拥有不同类型账户的用户user_id" library="myResource">
+<arguments>
+<arg>10000</arg>
+<arg>10000</arg>
+<arg>123456781</arg>
+<arg>http://192.168.1.31:10003</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.440" level="INFO">${boss_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:03.441" starttime="20170808 15:52:03.439"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.443" level="INFO">${app_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:03.443" starttime="20170808 15:52:03.441"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${no_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.446" level="INFO">${no_user_account_id} = 123456781</msg>
+<status status="PASS" endtime="20170808 15:52:03.447" starttime="20170808 15:52:03.444"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${environment}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.451" level="INFO">${environment} = http://192.168.1.31:10003</msg>
+<status status="PASS" endtime="20170808 15:52:03.452" starttime="20170808 15:52:03.449"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${boss_user_account_id}' and channel_no=1</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.454" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=1 </msg>
+<msg timestamp="20170808 15:52:03.463" level="INFO">${boss_channel_no1} = ((17757, '32102151361501753586', 10000, 100005, 1, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 36), datetime.datetime(2017, 8, 8, 15, 40, 17)),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.464" starttime="20170808 15:52:03.453"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${boss_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.468" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:03.469" starttime="20170808 15:52:03.465"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${app_user_account_id}' and channel_no=2</arg>
+</arguments>
+<assign>
+<var>${app_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.471" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=2 </msg>
+<msg timestamp="20170808 15:52:03.483" level="INFO">${app_channel_no1} = ((17756, '32102151361501753580', 10000, 100004, 2, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 24), datetime.datetime(2017, 8, 8, 15, 40, 14)),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.484" starttime="20170808 15:52:03.470"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${app_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${app_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.487" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:03.488" starttime="20170808 15:52:03.486"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.491" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:03.492" starttime="20170808 15:52:03.489"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.494" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:03.495" starttime="20170808 15:52:03.493"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.496" starttime="20170808 15:52:03.437"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.497" starttime="20170808 15:52:03.419"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/cancelPay"</arg>
+<arg>set variable</arg>
+<arg>11</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"</arg>
+<arg>set variable</arg>
+<arg>11</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund"</arg>
+<arg>set variable</arg>
+<arg>13</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund"</arg>
+<arg>set variable</arg>
+<arg>14</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>8</arg>
+</arguments>
+<assign>
+<var>${event_code_judge}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>11</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.501" starttime="20170808 15:52:03.500"></status>
+</kw>
+<msg timestamp="20170808 15:52:03.502" level="INFO">${event_code_judge} = 11</msg>
+<status status="PASS" endtime="20170808 15:52:03.503" starttime="20170808 15:52:03.497"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_transaction where order_num ='${args11}' and event_code=${event_code_judge}</arg>
+</arguments>
+<assign>
+<var>${search}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.505" level="INFO">Executing : Query  |  select * from ajb_account_transaction where order_num ='32102151361500012119' and event_code=11 </msg>
+<msg timestamp="20170808 15:52:03.524" level="INFO">${search} = ((888888, '32102151361500975216', 10000, 100005, 1, '32102151361500012119', '', Decimal('2.00'), 1, 11, 2, 0, datetime.datetime(2017, 7, 26, 16, 11, 40), datetime.datetime(2017, 7, 26, 16, 11, 40)),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.525" starttime="20170808 15:52:03.504"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${search[0][7]}</arg>
+</arguments>
+<assign>
+<var>${change_total_amount}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.528" level="INFO">${change_total_amount} = 2.00</msg>
+<status status="PASS" endtime="20170808 15:52:03.529" starttime="20170808 15:52:03.527"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${change_total_amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.531" level="INFO">${change_total_amount} = 2.00</msg>
+<status status="PASS" endtime="20170808 15:52:03.532" starttime="20170808 15:52:03.530"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.533" starttime="20170808 15:52:03.418"></status>
+</kw>
+<kw name="表account_unilateral_bill的校验" library="myResource">
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>现在开始校验表account_unilateral_bill</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.541" level="INFO">现在开始校验表account_unilateral_bill</msg>
+<status status="PASS" endtime="20170808 15:52:03.542" starttime="20170808 15:52:03.539"></status>
+</kw>
+<kw name="参数配置" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.546" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170808 15:52:03.559" starttime="20170808 15:52:03.545"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.560" starttime="20170808 15:52:03.544"></status>
+</kw>
+<kw name="输入拥有不同类型账户的用户user_id" library="myResource">
+<arguments>
+<arg>10000</arg>
+<arg>10000</arg>
+<arg>123456781</arg>
+<arg>http://192.168.1.31:10003</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.565" level="INFO">${boss_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:03.566" starttime="20170808 15:52:03.564"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.571" level="INFO">${app_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:03.572" starttime="20170808 15:52:03.568"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${no_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.575" level="INFO">${no_user_account_id} = 123456781</msg>
+<status status="PASS" endtime="20170808 15:52:03.575" starttime="20170808 15:52:03.573"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${environment}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.578" level="INFO">${environment} = http://192.168.1.31:10003</msg>
+<status status="PASS" endtime="20170808 15:52:03.578" starttime="20170808 15:52:03.576"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${boss_user_account_id}' and channel_no=1</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.580" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=1 </msg>
+<msg timestamp="20170808 15:52:03.589" level="INFO">${boss_channel_no1} = ((17757, '32102151361501753586', 10000, 100005, 1, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 36), datetime.datetime(2017, 8, 8, 15, 40, 17)),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.590" starttime="20170808 15:52:03.579"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${boss_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.592" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:03.593" starttime="20170808 15:52:03.591"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${app_user_account_id}' and channel_no=2</arg>
+</arguments>
+<assign>
+<var>${app_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.595" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=2 </msg>
+<msg timestamp="20170808 15:52:03.606" level="INFO">${app_channel_no1} = ((17756, '32102151361501753580', 10000, 100004, 2, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 24), datetime.datetime(2017, 8, 8, 15, 40, 14)),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.607" starttime="20170808 15:52:03.594"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${app_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${app_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.610" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:03.611" starttime="20170808 15:52:03.609"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.613" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:03.613" starttime="20170808 15:52:03.612"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.616" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:03.618" starttime="20170808 15:52:03.614"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.620" starttime="20170808 15:52:03.562"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.621" starttime="20170808 15:52:03.543"></status>
+</kw>
+<kw name="update_time校验" library="myResource">
+<arguments>
+<arg>account_unilateral_bill</arg>
+</arguments>
+<kw name="参数配置" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.628" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170808 15:52:03.636" starttime="20170808 15:52:03.627"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.638" starttime="20170808 15:52:03.625"></status>
+</kw>
+<kw name="输入拥有不同类型账户的用户user_id" library="myResource">
+<arguments>
+<arg>10000</arg>
+<arg>10000</arg>
+<arg>123456781</arg>
+<arg>http://192.168.1.31:10003</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.642" level="INFO">${boss_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:03.642" starttime="20170808 15:52:03.640"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.644" level="INFO">${app_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:03.645" starttime="20170808 15:52:03.643"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${no_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.647" level="INFO">${no_user_account_id} = 123456781</msg>
+<status status="PASS" endtime="20170808 15:52:03.648" starttime="20170808 15:52:03.646"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${environment}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.651" level="INFO">${environment} = http://192.168.1.31:10003</msg>
+<status status="PASS" endtime="20170808 15:52:03.652" starttime="20170808 15:52:03.649"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${boss_user_account_id}' and channel_no=1</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.655" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=1 </msg>
+<msg timestamp="20170808 15:52:03.663" level="INFO">${boss_channel_no1} = ((17757, '32102151361501753586', 10000, 100005, 1, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 36), datetime.datetime(2017, 8, 8, 15, 40, 17)),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.664" starttime="20170808 15:52:03.653"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${boss_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.666" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:03.667" starttime="20170808 15:52:03.665"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${app_user_account_id}' and channel_no=2</arg>
+</arguments>
+<assign>
+<var>${app_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.671" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=2 </msg>
+<msg timestamp="20170808 15:52:03.679" level="INFO">${app_channel_no1} = ((17756, '32102151361501753580', 10000, 100004, 2, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 24), datetime.datetime(2017, 8, 8, 15, 40, 14)),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.680" starttime="20170808 15:52:03.669"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${app_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${app_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.683" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:03.685" starttime="20170808 15:52:03.681"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.687" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:03.688" starttime="20170808 15:52:03.686"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.690" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:03.691" starttime="20170808 15:52:03.689"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.692" starttime="20170808 15:52:03.639"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.694" starttime="20170808 15:52:03.624"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<assign>
+<var>${current_time}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.696" level="INFO">${current_time} = 2017-08-08 15:52:03.696</msg>
+<status status="PASS" endtime="20170808 15:52:03.697" starttime="20170808 15:52:03.695"></status>
+</kw>
+<kw name="Subtract Time From Date" library="DateTime">
+<doc>Subtracts time from date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time}</arg>
+<arg>0 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_before_30}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.699" level="INFO">${current_time_before_30} = 2017-08-08 15:52:03.696</msg>
+<status status="PASS" endtime="20170808 15:52:03.700" starttime="20170808 15:52:03.698"></status>
+</kw>
+<kw name="Add Time To Date" library="DateTime">
+<doc>Adds time to date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time}</arg>
+<arg>100 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_after_30}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.703" level="INFO">${current_time_after_30} = 2017-08-08 15:53:43.696</msg>
+<status status="PASS" endtime="20170808 15:52:03.703" starttime="20170808 15:52:03.701"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ${args} where user_id='${user_id_real}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'</arg>
+</arguments>
+<assign>
+<var>${updatetime}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.706" level="INFO">Executing : Query  |  select * from account_unilateral_bill where user_id='10000' and update_time between' 2017-08-08 15:52:03.696' and '2017-08-08 15:53:43.696' </msg>
+<msg timestamp="20170808 15:52:03.726" level="INFO">${updatetime} = ((28520, '32102151361501760810', 10000, 100005, '32102151361501760809', 1, 12, 2, Decimal('2.00'), None, datetime.datetime(2017, 8, 8, 15, 52, 26), datetime.datetime(2017, 8, 8, 15, 52, 26), 0),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.727" starttime="20170808 15:52:03.704"></status>
+</kw>
+<kw name="Should Not Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is not empty.</doc>
+<arguments>
+<arg>${updatetime}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.730" level="INFO">Length is 1</msg>
+<status status="PASS" endtime="20170808 15:52:03.731" starttime="20170808 15:52:03.728"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${args}表里的update_time校验成功，满足要求！</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.734" level="INFO">account_unilateral_bill表里的update_time校验成功，满足要求！</msg>
+<status status="PASS" endtime="20170808 15:52:03.735" starttime="20170808 15:52:03.732"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${current_time_before_30}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.738" level="INFO">${current_time_before_30} = 2017-08-08 15:52:03.696</msg>
+<status status="PASS" endtime="20170808 15:52:03.739" starttime="20170808 15:52:03.736"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${current_time_after_30}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.741" level="INFO">${current_time_after_30} = 2017-08-08 15:53:43.696</msg>
+<status status="PASS" endtime="20170808 15:52:03.741" starttime="20170808 15:52:03.740"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.742" starttime="20170808 15:52:03.623"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from account_unilateral_bill where account_id ='${account_id} 'and update_time between' ${current_time_before_30}' and '${current_time_after_30}'</arg>
+</arguments>
+<assign>
+<var>${user_id}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.745" level="INFO">Executing : Query  |  select * from account_unilateral_bill where account_id ='100005 'and update_time between' 2017-08-08 15:52:03.696' and '2017-08-08 15:53:43.696' </msg>
+<msg timestamp="20170808 15:52:03.752" level="INFO">${user_id} = ((28520, '32102151361501760810', 10000, 100005, '32102151361501760809', 1, 12, 2, Decimal('2.00'), None, datetime.datetime(2017, 8, 8, 15, 52, 26), datetime.datetime(2017, 8, 8, 15, 52, 26), 0),)</msg>
+<status status="PASS" endtime="20170808 15:52:03.753" starttime="20170808 15:52:03.743"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${user_id[0][1]}</arg>
+</arguments>
+<assign>
+<var>${bill_no_length}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.757" level="INFO">Length is 20</msg>
+<msg timestamp="20170808 15:52:03.758" level="INFO">${bill_no_length} = 20</msg>
+<status status="PASS" endtime="20170808 15:52:03.760" starttime="20170808 15:52:03.754"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${bill_no_length}</arg>
+<arg>20</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.762" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:03.764" starttime="20170808 15:52:03.761"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>bill_no的数据长度正确，校验成功</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.768" level="INFO">bill_no的数据长度正确，校验成功</msg>
+<status status="PASS" endtime="20170808 15:52:03.770" starttime="20170808 15:52:03.765"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][2]}</arg>
+<arg>${user_id_real}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.774" starttime="20170808 15:52:03.772"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>当下user_id是正确的！</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.779" level="INFO">当下user_id是正确的！</msg>
+<status status="PASS" endtime="20170808 15:52:03.780" starttime="20170808 15:52:03.776"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${user_id[0][4]}</arg>
+</arguments>
+<assign>
+<var>${command_no_length}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.784" level="INFO">Length is 20</msg>
+<msg timestamp="20170808 15:52:03.786" level="INFO">${command_no_length} = 20</msg>
+<status status="PASS" endtime="20170808 15:52:03.787" starttime="20170808 15:52:03.782"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${command_no_length}</arg>
+<arg>20</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.791" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:03.792" starttime="20170808 15:52:03.789"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>commandl_no的数据长度正确，校验成功</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.795" level="INFO">commandl_no的数据长度正确，校验成功</msg>
+<status status="PASS" endtime="20170808 15:52:03.795" starttime="20170808 15:52:03.793"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][5]}</arg>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.798" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:03.799" starttime="20170808 15:52:03.796"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>product_code值是1，表示是艾佳币产品，表示正确</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.801" level="INFO">product_code值是1，表示是艾佳币产品，表示正确</msg>
+<status status="PASS" endtime="20170808 15:52:03.802" starttime="20170808 15:52:03.800"></status>
+</kw>
+<kw name="操作判断" library="myResource">
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"</arg>
+<arg>set variable</arg>
+<arg>8</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}" =="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel"</arg>
+<arg>set variable</arg>
+<arg>9</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm"</arg>
+<arg>set variable</arg>
+<arg>10</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>set variable</arg>
+<arg>11</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/cancelPay"</arg>
+<arg>set variable</arg>
+<arg>12</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"</arg>
+<arg>set variable</arg>
+<arg>13</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund"</arg>
+<arg>set variable</arg>
+<arg>14</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>7</arg>
+</arguments>
+<assign>
+<var>${event_code}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>12</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.834" starttime="20170808 15:52:03.831"></status>
+</kw>
+<msg timestamp="20170808 15:52:03.835" level="INFO">${event_code} = 12</msg>
+<status status="PASS" endtime="20170808 15:52:03.836" starttime="20170808 15:52:03.807"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>1</arg>
+<arg>2</arg>
+<arg>3</arg>
+<arg>4</arg>
+<arg>5</arg>
+<arg>6</arg>
+</arguments>
+<assign>
+<var>@{activity_code}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.838" level="INFO">@{activity_code} = [ 1 | 2 | 3 | 4 | 5 | 6 ]</msg>
+<status status="PASS" endtime="20170808 15:52:03.839" starttime="20170808 15:52:03.837"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${args44}" in @{activity_code}</arg>
+<arg>set variable</arg>
+<arg>${args44}</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>${event_code}</arg>
+</arguments>
+<assign>
+<var>${event_code_after}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${event_code}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.843" starttime="20170808 15:52:03.842"></status>
+</kw>
+<msg timestamp="20170808 15:52:03.844" level="INFO">${event_code_after} = 12</msg>
+<status status="PASS" endtime="20170808 15:52:03.844" starttime="20170808 15:52:03.840"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/cancelPay</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/confirmPay</arg>
+</arguments>
+<assign>
+<var>@{command_no_type}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.846" level="INFO">@{command_no_type} = [ http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel | http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm | http://192.168.1.31:10003/ihome-api/settlement/cancelPay | http...</msg>
+<status status="PASS" endtime="20170808 15:52:03.847" starttime="20170808 15:52:03.845"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"</arg>
+<arg>set variable</arg>
+<arg>1</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}" in @{command_no_type}</arg>
+<arg>set variable</arg>
+<arg>2</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>set variable</arg>
+<arg>1</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>3</arg>
+</arguments>
+<assign>
+<var>${command_type}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>2</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.853" starttime="20170808 15:52:03.852"></status>
+</kw>
+<msg timestamp="20170808 15:52:03.855" level="INFO">${command_type} = 2</msg>
+<status status="PASS" endtime="20170808 15:52:03.856" starttime="20170808 15:52:03.849"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}" in @{Link}</arg>
+<arg>set variable</arg>
+<arg>${change_total_amount}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>set variable</arg>
+<arg>${args33}</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>${args22}</arg>
+</arguments>
+<assign>
+<var>${amount}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${change_total_amount}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.861" starttime="20170808 15:52:03.859"></status>
+</kw>
+<msg timestamp="20170808 15:52:03.861" level="INFO">${amount} = 2.00</msg>
+<status status="PASS" endtime="20170808 15:52:03.862" starttime="20170808 15:52:03.858"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/freezePay</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/cancelPay</arg>
+</arguments>
+<assign>
+<var>@{pay_no_list}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.865" level="INFO">@{pay_no_list} = [ http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze | http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel | http://192.168.1.31:10003/ihome-api/settlement/freezePay | http:...</msg>
+<status status="PASS" endtime="20170808 15:52:03.867" starttime="20170808 15:52:03.863"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"in @{pay_no_list}</arg>
+<arg>set variable</arg>
+<arg>4</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>23</arg>
+</arguments>
+<assign>
+<var>${pay_no}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>4</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.870" starttime="20170808 15:52:03.869"></status>
+</kw>
+<msg timestamp="20170808 15:52:03.871" level="INFO">${pay_no} = 4</msg>
+<status status="PASS" endtime="20170808 15:52:03.872" starttime="20170808 15:52:03.868"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"in @{pay_no_list}</arg>
+<arg>set variable</arg>
+<arg>${total_amount_before}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm"</arg>
+<arg>evaluate</arg>
+<arg>${total_amount_before}-${amount}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"</arg>
+<arg>evaluate</arg>
+<arg>${total_amount_before}-${change_total_amount}</arg>
+<arg>ELSE</arg>
+<arg>evaluate</arg>
+<arg>${args22}+${total_amount_before}</arg>
+</arguments>
+<assign>
+<var>${total_amount}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${total_amount_before}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.876" starttime="20170808 15:52:03.875"></status>
+</kw>
+<msg timestamp="20170808 15:52:03.877" level="INFO">${total_amount} = 40.00</msg>
+<status status="PASS" endtime="20170808 15:52:03.877" starttime="20170808 15:52:03.873"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"</arg>
+<arg>evaluate</arg>
+<arg>${balance_amount_before}-${args22}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel"</arg>
+<arg>evaluate</arg>
+<arg>${change_total_amount}+${balance_amount_before}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/cancelPay"</arg>
+<arg>evaluate</arg>
+<arg>${change_total_amount}+${balance_amount_before}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm"</arg>
+<arg>set variable</arg>
+<arg>${balance_amount_before}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>evaluate</arg>
+<arg>${balance_amount_before}-${args33}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"</arg>
+<arg>set variable</arg>
+<arg>${balance_amount_before}</arg>
+<arg>ELSE</arg>
+<arg>evaluate</arg>
+<arg>${args22}+${balance_amount_before}</arg>
+</arguments>
+<assign>
+<var>${balance_amount}</var>
+</assign>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>${change_total_amount}+${balance_amount_before}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.882" starttime="20170808 15:52:03.881"></status>
+</kw>
+<msg timestamp="20170808 15:52:03.884" level="INFO">${balance_amount} = 32.0</msg>
+<status status="PASS" endtime="20170808 15:52:03.885" starttime="20170808 15:52:03.878"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"</arg>
+<arg>evaluate</arg>
+<arg>${frozen_amount_before}+${args22}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}" in @{Link}</arg>
+<arg>evaluate</arg>
+<arg>${frozen_amount_before}-${change_total_amount}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>evaluate</arg>
+<arg>${frozen_amount_before}+${args33}</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>${frozen_amount_before}</arg>
+</arguments>
+<assign>
+<var>${frozen_amount}</var>
+</assign>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>${frozen_amount_before}-${change_total_amount}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.890" starttime="20170808 15:52:03.888"></status>
+</kw>
+<msg timestamp="20170808 15:52:03.891" level="INFO">${frozen_amount} = 8.0</msg>
+<status status="PASS" endtime="20170808 15:52:03.891" starttime="20170808 15:52:03.886"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${event_code}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.894" level="INFO">${event_code} = 12</msg>
+<status status="PASS" endtime="20170808 15:52:03.894" starttime="20170808 15:52:03.893"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${command_type}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.897" level="INFO">${command_type} = 2</msg>
+<status status="PASS" endtime="20170808 15:52:03.898" starttime="20170808 15:52:03.895"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${pay_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.902" level="INFO">${pay_no} = 4</msg>
+<status status="PASS" endtime="20170808 15:52:03.903" starttime="20170808 15:52:03.899"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.905" level="INFO">${amount} = 2.00</msg>
+<status status="PASS" endtime="20170808 15:52:03.906" starttime="20170808 15:52:03.904"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${total_amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.908" level="INFO">${total_amount} = 40.00</msg>
+<status status="PASS" endtime="20170808 15:52:03.909" starttime="20170808 15:52:03.907"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${balance_amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.911" level="INFO">${balance_amount} = 32.0</msg>
+<status status="PASS" endtime="20170808 15:52:03.912" starttime="20170808 15:52:03.910"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${frozen_amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.915" level="INFO">${frozen_amount} = 8.0</msg>
+<status status="PASS" endtime="20170808 15:52:03.917" starttime="20170808 15:52:03.914"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${event_code_after}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.919" level="INFO">${event_code_after} = 12</msg>
+<status status="PASS" endtime="20170808 15:52:03.920" starttime="20170808 15:52:03.918"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:03.921" starttime="20170808 15:52:03.804"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][6]}</arg>
+<arg>${event_code_after}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.923" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:03.924" starttime="20170808 15:52:03.922"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>event_code值正确</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.926" level="INFO">event_code值正确</msg>
+<status status="PASS" endtime="20170808 15:52:03.927" starttime="20170808 15:52:03.925"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][7]}</arg>
+<arg>${command_type}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.930" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:03.930" starttime="20170808 15:52:03.928"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>command_type值正确</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.933" level="INFO">command_type值正确</msg>
+<status status="PASS" endtime="20170808 15:52:03.934" starttime="20170808 15:52:03.932"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][8]}</arg>
+<arg>${amount}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:03.937" starttime="20170808 15:52:03.935"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>change_amount的变化数值是正确的</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.938" level="INFO">change_amount的变化数值是正确的</msg>
+<status status="PASS" endtime="20170808 15:52:03.939" starttime="20170808 15:52:03.938"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>add_time和update_time时间保持一致</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.941" level="INFO">add_time和update_time时间保持一致</msg>
+<status status="PASS" endtime="20170808 15:52:03.942" starttime="20170808 15:52:03.940"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][12]}</arg>
+<arg>0</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.944" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:03.945" starttime="20170808 15:52:03.943"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>del_flag的值是0是未删除，是正确状态</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.949" level="INFO">del_flag的值是0是未删除，是正确状态</msg>
+<status status="PASS" endtime="20170808 15:52:03.951" starttime="20170808 15:52:03.947"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>表account_unilateral_bill校验成功</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.953" level="INFO">表account_unilateral_bill校验成功</msg>
+<status status="PASS" endtime="20170808 15:52:03.954" starttime="20170808 15:52:03.952"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${user_id[0][0]}</arg>
+</arguments>
+<assign>
+<var>${user_id[0][0]_unilateral}</var>
+</assign>
+<msg timestamp="20170808 15:52:03.956" level="INFO">${user_id[0][0]_unilateral} = 28520</msg>
+<status status="PASS" endtime="20170808 15:52:03.956" starttime="20170808 15:52:03.955"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${user_id[0][0]_unilateral}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.959" level="INFO">${user_id[0][0]_unilateral} = 28520</msg>
+<status status="PASS" endtime="20170808 15:52:03.960" starttime="20170808 15:52:03.958"></status>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>delete from account_unilateral_bill where id ='${user_id[0][0]_unilateral}'</arg>
+</arguments>
+<msg timestamp="20170808 15:52:03.962" level="INFO">Executing : Execute SQL String  |  delete from account_unilateral_bill where id ='28520' </msg>
+<status status="PASS" endtime="20170808 15:52:04.041" starttime="20170808 15:52:03.961"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.044" starttime="20170808 15:52:03.537"></status>
+</kw>
+<kw name="表ajb_account_transaction" library="myResource">
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>现在开始校验表ajb_account_transaction</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.048" level="INFO">现在开始校验表ajb_account_transaction</msg>
+<status status="PASS" endtime="20170808 15:52:04.049" starttime="20170808 15:52:04.047"></status>
+</kw>
+<kw name="参数配置" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.054" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170808 15:52:04.066" starttime="20170808 15:52:04.053"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.068" starttime="20170808 15:52:04.052"></status>
+</kw>
+<kw name="输入拥有不同类型账户的用户user_id" library="myResource">
+<arguments>
+<arg>10000</arg>
+<arg>10000</arg>
+<arg>123456781</arg>
+<arg>http://192.168.1.31:10003</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.072" level="INFO">${boss_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:04.073" starttime="20170808 15:52:04.071"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.075" level="INFO">${app_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:04.076" starttime="20170808 15:52:04.074"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${no_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.078" level="INFO">${no_user_account_id} = 123456781</msg>
+<status status="PASS" endtime="20170808 15:52:04.079" starttime="20170808 15:52:04.077"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${environment}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.082" level="INFO">${environment} = http://192.168.1.31:10003</msg>
+<status status="PASS" endtime="20170808 15:52:04.083" starttime="20170808 15:52:04.080"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${boss_user_account_id}' and channel_no=1</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.086" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=1 </msg>
+<msg timestamp="20170808 15:52:04.100" level="INFO">${boss_channel_no1} = ((17757, '32102151361501753586', 10000, 100005, 1, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 36), datetime.datetime(2017, 8, 8, 15, 40, 17)),)</msg>
+<status status="PASS" endtime="20170808 15:52:04.101" starttime="20170808 15:52:04.084"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${boss_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.104" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:04.105" starttime="20170808 15:52:04.102"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${app_user_account_id}' and channel_no=2</arg>
+</arguments>
+<assign>
+<var>${app_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.108" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=2 </msg>
+<msg timestamp="20170808 15:52:04.127" level="INFO">${app_channel_no1} = ((17756, '32102151361501753580', 10000, 100004, 2, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 24), datetime.datetime(2017, 8, 8, 15, 40, 14)),)</msg>
+<status status="PASS" endtime="20170808 15:52:04.127" starttime="20170808 15:52:04.107"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${app_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${app_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.130" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:04.130" starttime="20170808 15:52:04.128"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.133" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:04.135" starttime="20170808 15:52:04.131"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.138" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:04.139" starttime="20170808 15:52:04.136"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.140" starttime="20170808 15:52:04.069"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.141" starttime="20170808 15:52:04.050"></status>
+</kw>
+<kw name="update_time校验" library="myResource">
+<arguments>
+<arg>ajb_account_transaction</arg>
+</arguments>
+<kw name="参数配置" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.146" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170808 15:52:04.170" starttime="20170808 15:52:04.145"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.172" starttime="20170808 15:52:04.144"></status>
+</kw>
+<kw name="输入拥有不同类型账户的用户user_id" library="myResource">
+<arguments>
+<arg>10000</arg>
+<arg>10000</arg>
+<arg>123456781</arg>
+<arg>http://192.168.1.31:10003</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.175" level="INFO">${boss_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:04.176" starttime="20170808 15:52:04.174"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.178" level="INFO">${app_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:04.179" starttime="20170808 15:52:04.177"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${no_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.185" level="INFO">${no_user_account_id} = 123456781</msg>
+<status status="PASS" endtime="20170808 15:52:04.187" starttime="20170808 15:52:04.181"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${environment}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.190" level="INFO">${environment} = http://192.168.1.31:10003</msg>
+<status status="PASS" endtime="20170808 15:52:04.191" starttime="20170808 15:52:04.188"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${boss_user_account_id}' and channel_no=1</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.193" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=1 </msg>
+<msg timestamp="20170808 15:52:04.221" level="INFO">${boss_channel_no1} = ((17757, '32102151361501753586', 10000, 100005, 1, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 36), datetime.datetime(2017, 8, 8, 15, 40, 17)),)</msg>
+<status status="PASS" endtime="20170808 15:52:04.223" starttime="20170808 15:52:04.192"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${boss_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.226" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:04.227" starttime="20170808 15:52:04.224"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${app_user_account_id}' and channel_no=2</arg>
+</arguments>
+<assign>
+<var>${app_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.230" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=2 </msg>
+<msg timestamp="20170808 15:52:04.238" level="INFO">${app_channel_no1} = ((17756, '32102151361501753580', 10000, 100004, 2, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 24), datetime.datetime(2017, 8, 8, 15, 40, 14)),)</msg>
+<status status="PASS" endtime="20170808 15:52:04.239" starttime="20170808 15:52:04.228"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${app_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${app_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.242" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:04.242" starttime="20170808 15:52:04.240"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.245" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:04.245" starttime="20170808 15:52:04.243"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.248" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:04.250" starttime="20170808 15:52:04.247"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.251" starttime="20170808 15:52:04.173"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.252" starttime="20170808 15:52:04.143"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<assign>
+<var>${current_time}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.254" level="INFO">${current_time} = 2017-08-08 15:52:04.254</msg>
+<status status="PASS" endtime="20170808 15:52:04.254" starttime="20170808 15:52:04.253"></status>
+</kw>
+<kw name="Subtract Time From Date" library="DateTime">
+<doc>Subtracts time from date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time}</arg>
+<arg>0 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_before_30}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.257" level="INFO">${current_time_before_30} = 2017-08-08 15:52:04.254</msg>
+<status status="PASS" endtime="20170808 15:52:04.257" starttime="20170808 15:52:04.255"></status>
+</kw>
+<kw name="Add Time To Date" library="DateTime">
+<doc>Adds time to date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time}</arg>
+<arg>100 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_after_30}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.261" level="INFO">${current_time_after_30} = 2017-08-08 15:53:44.254</msg>
+<status status="PASS" endtime="20170808 15:52:04.262" starttime="20170808 15:52:04.259"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ${args} where user_id='${user_id_real}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'</arg>
+</arguments>
+<assign>
+<var>${updatetime}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.264" level="INFO">Executing : Query  |  select * from ajb_account_transaction where user_id='10000' and update_time between' 2017-08-08 15:52:04.254' and '2017-08-08 15:53:44.254' </msg>
+<msg timestamp="20170808 15:52:04.291" level="INFO">${updatetime} = ((88890084, '32102151361501760808', 10000, 100005, 1, '32102151361500012119', None, Decimal('2.00'), 1, 12, 2, 0, datetime.datetime(2017, 8, 8, 15, 52, 26), datetime.datetime(2017, 8, 8, 15, 52, 26)),...</msg>
+<status status="PASS" endtime="20170808 15:52:04.292" starttime="20170808 15:52:04.263"></status>
+</kw>
+<kw name="Should Not Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is not empty.</doc>
+<arguments>
+<arg>${updatetime}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.294" level="INFO">Length is 1</msg>
+<status status="PASS" endtime="20170808 15:52:04.295" starttime="20170808 15:52:04.293"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${args}表里的update_time校验成功，满足要求！</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.297" level="INFO">ajb_account_transaction表里的update_time校验成功，满足要求！</msg>
+<status status="PASS" endtime="20170808 15:52:04.298" starttime="20170808 15:52:04.296"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${current_time_before_30}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.301" level="INFO">${current_time_before_30} = 2017-08-08 15:52:04.254</msg>
+<status status="PASS" endtime="20170808 15:52:04.302" starttime="20170808 15:52:04.300"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${current_time_after_30}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.304" level="INFO">${current_time_after_30} = 2017-08-08 15:53:44.254</msg>
+<status status="PASS" endtime="20170808 15:52:04.305" starttime="20170808 15:52:04.303"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.306" starttime="20170808 15:52:04.142"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_transaction where account_id ='${account_id}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'</arg>
+</arguments>
+<assign>
+<var>${user_id}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.310" level="INFO">Executing : Query  |  select * from ajb_account_transaction where account_id ='100005' and update_time between' 2017-08-08 15:52:04.254' and '2017-08-08 15:53:44.254' </msg>
+<msg timestamp="20170808 15:52:04.323" level="INFO">${user_id} = ((88890084, '32102151361501760808', 10000, 100005, 1, '32102151361500012119', None, Decimal('2.00'), 1, 12, 2, 0, datetime.datetime(2017, 8, 8, 15, 52, 26), datetime.datetime(2017, 8, 8, 15, 52, 26)),...</msg>
+<status status="PASS" endtime="20170808 15:52:04.325" starttime="20170808 15:52:04.308"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${user_id[0][1]}</arg>
+</arguments>
+<assign>
+<var>${business_no_length}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.328" level="INFO">Length is 20</msg>
+<msg timestamp="20170808 15:52:04.329" level="INFO">${business_no_length} = 20</msg>
+<status status="PASS" endtime="20170808 15:52:04.330" starttime="20170808 15:52:04.326"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${business_no_length}</arg>
+<arg>20</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.332" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:04.334" starttime="20170808 15:52:04.331"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>business_no的数据长度正确，校验成功</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.337" level="INFO">business_no的数据长度正确，校验成功</msg>
+<status status="PASS" endtime="20170808 15:52:04.337" starttime="20170808 15:52:04.336"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][2]}</arg>
+<arg>${user_id_real}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.340" starttime="20170808 15:52:04.338"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>当下user_id是正确的！</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.342" level="INFO">当下user_id是正确的！</msg>
+<status status="PASS" endtime="20170808 15:52:04.342" starttime="20170808 15:52:04.341"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][4]}</arg>
+<arg>${channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.344" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:04.345" starttime="20170808 15:52:04.343"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>channel_no的值正确</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.347" level="INFO">channel_no的值正确</msg>
+<status status="PASS" endtime="20170808 15:52:04.348" starttime="20170808 15:52:04.346"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}" in @{Link}</arg>
+<arg>set variable</arg>
+<arg>${args11}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>set variable</arg>
+<arg>${args22}</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>${orderNum}</arg>
+</arguments>
+<assign>
+<var>${bill_order_num}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${args11}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.354" starttime="20170808 15:52:04.352"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.355" level="INFO">${bill_order_num} = 32102151361500012119</msg>
+<status status="PASS" endtime="20170808 15:52:04.356" starttime="20170808 15:52:04.350"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][5]}</arg>
+<arg>${bill_order_num}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.358" level="INFO">Argument types are:
+&lt;type 'str'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:04.359" starttime="20170808 15:52:04.357"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>order_num显示正确！</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.361" level="INFO">order_num显示正确！</msg>
+<status status="PASS" endtime="20170808 15:52:04.362" starttime="20170808 15:52:04.360"></status>
+</kw>
+<kw name="操作判断" library="myResource">
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"</arg>
+<arg>set variable</arg>
+<arg>8</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}" =="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel"</arg>
+<arg>set variable</arg>
+<arg>9</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm"</arg>
+<arg>set variable</arg>
+<arg>10</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>set variable</arg>
+<arg>11</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/cancelPay"</arg>
+<arg>set variable</arg>
+<arg>12</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"</arg>
+<arg>set variable</arg>
+<arg>13</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund"</arg>
+<arg>set variable</arg>
+<arg>14</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>7</arg>
+</arguments>
+<assign>
+<var>${event_code}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>12</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.368" starttime="20170808 15:52:04.367"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.370" level="INFO">${event_code} = 12</msg>
+<status status="PASS" endtime="20170808 15:52:04.370" starttime="20170808 15:52:04.364"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>1</arg>
+<arg>2</arg>
+<arg>3</arg>
+<arg>4</arg>
+<arg>5</arg>
+<arg>6</arg>
+</arguments>
+<assign>
+<var>@{activity_code}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.373" level="INFO">@{activity_code} = [ 1 | 2 | 3 | 4 | 5 | 6 ]</msg>
+<status status="PASS" endtime="20170808 15:52:04.373" starttime="20170808 15:52:04.372"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${args44}" in @{activity_code}</arg>
+<arg>set variable</arg>
+<arg>${args44}</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>${event_code}</arg>
+</arguments>
+<assign>
+<var>${event_code_after}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${event_code}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.377" starttime="20170808 15:52:04.376"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.378" level="INFO">${event_code_after} = 12</msg>
+<status status="PASS" endtime="20170808 15:52:04.379" starttime="20170808 15:52:04.374"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/cancelPay</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/confirmPay</arg>
+</arguments>
+<assign>
+<var>@{command_no_type}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.381" level="INFO">@{command_no_type} = [ http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel | http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm | http://192.168.1.31:10003/ihome-api/settlement/cancelPay | http...</msg>
+<status status="PASS" endtime="20170808 15:52:04.382" starttime="20170808 15:52:04.380"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"</arg>
+<arg>set variable</arg>
+<arg>1</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}" in @{command_no_type}</arg>
+<arg>set variable</arg>
+<arg>2</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>set variable</arg>
+<arg>1</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>3</arg>
+</arguments>
+<assign>
+<var>${command_type}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>2</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.388" starttime="20170808 15:52:04.386"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.389" level="INFO">${command_type} = 2</msg>
+<status status="PASS" endtime="20170808 15:52:04.390" starttime="20170808 15:52:04.384"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}" in @{Link}</arg>
+<arg>set variable</arg>
+<arg>${change_total_amount}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>set variable</arg>
+<arg>${args33}</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>${args22}</arg>
+</arguments>
+<assign>
+<var>${amount}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${change_total_amount}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.393" starttime="20170808 15:52:04.392"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.394" level="INFO">${amount} = 2.00</msg>
+<status status="PASS" endtime="20170808 15:52:04.395" starttime="20170808 15:52:04.391"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/freezePay</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/cancelPay</arg>
+</arguments>
+<assign>
+<var>@{pay_no_list}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.397" level="INFO">@{pay_no_list} = [ http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze | http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel | http://192.168.1.31:10003/ihome-api/settlement/freezePay | http:...</msg>
+<status status="PASS" endtime="20170808 15:52:04.398" starttime="20170808 15:52:04.396"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"in @{pay_no_list}</arg>
+<arg>set variable</arg>
+<arg>4</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>23</arg>
+</arguments>
+<assign>
+<var>${pay_no}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>4</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.403" starttime="20170808 15:52:04.402"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.404" level="INFO">${pay_no} = 4</msg>
+<status status="PASS" endtime="20170808 15:52:04.405" starttime="20170808 15:52:04.400"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"in @{pay_no_list}</arg>
+<arg>set variable</arg>
+<arg>${total_amount_before}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm"</arg>
+<arg>evaluate</arg>
+<arg>${total_amount_before}-${amount}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"</arg>
+<arg>evaluate</arg>
+<arg>${total_amount_before}-${change_total_amount}</arg>
+<arg>ELSE</arg>
+<arg>evaluate</arg>
+<arg>${args22}+${total_amount_before}</arg>
+</arguments>
+<assign>
+<var>${total_amount}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${total_amount_before}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.409" starttime="20170808 15:52:04.408"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.410" level="INFO">${total_amount} = 40.00</msg>
+<status status="PASS" endtime="20170808 15:52:04.411" starttime="20170808 15:52:04.406"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"</arg>
+<arg>evaluate</arg>
+<arg>${balance_amount_before}-${args22}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel"</arg>
+<arg>evaluate</arg>
+<arg>${change_total_amount}+${balance_amount_before}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/cancelPay"</arg>
+<arg>evaluate</arg>
+<arg>${change_total_amount}+${balance_amount_before}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm"</arg>
+<arg>set variable</arg>
+<arg>${balance_amount_before}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>evaluate</arg>
+<arg>${balance_amount_before}-${args33}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"</arg>
+<arg>set variable</arg>
+<arg>${balance_amount_before}</arg>
+<arg>ELSE</arg>
+<arg>evaluate</arg>
+<arg>${args22}+${balance_amount_before}</arg>
+</arguments>
+<assign>
+<var>${balance_amount}</var>
+</assign>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>${change_total_amount}+${balance_amount_before}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.418" starttime="20170808 15:52:04.416"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.419" level="INFO">${balance_amount} = 32.0</msg>
+<status status="PASS" endtime="20170808 15:52:04.420" starttime="20170808 15:52:04.413"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"</arg>
+<arg>evaluate</arg>
+<arg>${frozen_amount_before}+${args22}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}" in @{Link}</arg>
+<arg>evaluate</arg>
+<arg>${frozen_amount_before}-${change_total_amount}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>evaluate</arg>
+<arg>${frozen_amount_before}+${args33}</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>${frozen_amount_before}</arg>
+</arguments>
+<assign>
+<var>${frozen_amount}</var>
+</assign>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>${frozen_amount_before}-${change_total_amount}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.424" starttime="20170808 15:52:04.423"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.425" level="INFO">${frozen_amount} = 8.0</msg>
+<status status="PASS" endtime="20170808 15:52:04.426" starttime="20170808 15:52:04.421"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${event_code}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.428" level="INFO">${event_code} = 12</msg>
+<status status="PASS" endtime="20170808 15:52:04.429" starttime="20170808 15:52:04.427"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${command_type}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.433" level="INFO">${command_type} = 2</msg>
+<status status="PASS" endtime="20170808 15:52:04.434" starttime="20170808 15:52:04.431"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${pay_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.437" level="INFO">${pay_no} = 4</msg>
+<status status="PASS" endtime="20170808 15:52:04.438" starttime="20170808 15:52:04.436"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.440" level="INFO">${amount} = 2.00</msg>
+<status status="PASS" endtime="20170808 15:52:04.440" starttime="20170808 15:52:04.439"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${total_amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.442" level="INFO">${total_amount} = 40.00</msg>
+<status status="PASS" endtime="20170808 15:52:04.443" starttime="20170808 15:52:04.441"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${balance_amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.445" level="INFO">${balance_amount} = 32.0</msg>
+<status status="PASS" endtime="20170808 15:52:04.446" starttime="20170808 15:52:04.444"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${frozen_amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.450" level="INFO">${frozen_amount} = 8.0</msg>
+<status status="PASS" endtime="20170808 15:52:04.451" starttime="20170808 15:52:04.448"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${event_code_after}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.453" level="INFO">${event_code_after} = 12</msg>
+<status status="PASS" endtime="20170808 15:52:04.454" starttime="20170808 15:52:04.452"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.455" starttime="20170808 15:52:04.362"></status>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<doc>Converts the given item to a Unicode string.</doc>
+<arguments>
+<arg>${user_id[0][6]}</arg>
+</arguments>
+<assign>
+<var>${pay_no_after}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.459" level="INFO">${pay_no_after} = None</msg>
+<status status="PASS" endtime="20170808 15:52:04.461" starttime="20170808 15:52:04.456"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${pay_no_after}</arg>
+</arguments>
+<assign>
+<var>${pay_no_after_length}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.465" level="INFO">Length is 4</msg>
+<msg timestamp="20170808 15:52:04.466" level="INFO">${pay_no_after_length} = 4</msg>
+<status status="PASS" endtime="20170808 15:52:04.468" starttime="20170808 15:52:04.463"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${pay_no_after_length}</arg>
+<arg>${pay_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.471" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:04.473" starttime="20170808 15:52:04.470"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>pay_no表现正确</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.476" level="INFO">pay_no表现正确</msg>
+<status status="PASS" endtime="20170808 15:52:04.477" starttime="20170808 15:52:04.475"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][7]}</arg>
+<arg>${amount}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.479" starttime="20170808 15:52:04.478"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>amount的变化数值是正确的</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.483" level="INFO">amount的变化数值是正确的</msg>
+<status status="PASS" endtime="20170808 15:52:04.485" starttime="20170808 15:52:04.480"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][8]}</arg>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.487" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:04.489" starttime="20170808 15:52:04.486"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>product_code值是1，表示是艾佳币产品，表示正确</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.491" level="INFO">product_code值是1，表示是艾佳币产品，表示正确</msg>
+<status status="PASS" endtime="20170808 15:52:04.492" starttime="20170808 15:52:04.490"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][9]}</arg>
+<arg>${event_code_after}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.494" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:04.495" starttime="20170808 15:52:04.493"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>event_code值正确</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.497" level="INFO">event_code值正确</msg>
+<status status="PASS" endtime="20170808 15:52:04.498" starttime="20170808 15:52:04.496"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][10]}</arg>
+<arg>2</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.501" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:04.502" starttime="20170808 15:52:04.499"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>trade_status表示执行成功</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.503" level="INFO">trade_status表示执行成功</msg>
+<status status="PASS" endtime="20170808 15:52:04.504" starttime="20170808 15:52:04.503"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][11]}</arg>
+<arg>0</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.508" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:04.509" starttime="20170808 15:52:04.506"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>del_flag的值是0是未删除，是正确状态</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.511" level="INFO">del_flag的值是0是未删除，是正确状态</msg>
+<status status="PASS" endtime="20170808 15:52:04.512" starttime="20170808 15:52:04.510"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>add_time和update_time时间保持一致</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.514" level="INFO">add_time和update_time时间保持一致</msg>
+<status status="PASS" endtime="20170808 15:52:04.515" starttime="20170808 15:52:04.513"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>表ajb_account_transaction校验成功</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.518" level="INFO">表ajb_account_transaction校验成功</msg>
+<status status="PASS" endtime="20170808 15:52:04.518" starttime="20170808 15:52:04.517"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${user_id[0][0]}</arg>
+</arguments>
+<assign>
+<var>${user_id[0][0]_transaction}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.520" level="INFO">${user_id[0][0]_transaction} = 88890084</msg>
+<status status="PASS" endtime="20170808 15:52:04.521" starttime="20170808 15:52:04.519"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${user_id[0][0]_transaction}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.523" level="INFO">${user_id[0][0]_transaction} = 88890084</msg>
+<status status="PASS" endtime="20170808 15:52:04.525" starttime="20170808 15:52:04.522"></status>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>delete from ajb_account_transaction where id ='${user_id[0][0]}'</arg>
+</arguments>
+<assign>
+<var>${user_id_unilateral_delete1}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.527" level="INFO">Executing : Execute SQL String  |  delete from ajb_account_transaction where id ='88890084' </msg>
+<msg timestamp="20170808 15:52:04.575" level="INFO">${user_id_unilateral_delete1} = None</msg>
+<status status="PASS" endtime="20170808 15:52:04.577" starttime="20170808 15:52:04.526"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.578" starttime="20170808 15:52:04.045"></status>
+</kw>
+<kw name="表account_amount的校验" library="myResource">
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>现在开始校验表account_amount</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.581" level="INFO">现在开始校验表account_amount</msg>
+<status status="PASS" endtime="20170808 15:52:04.582" starttime="20170808 15:52:04.580"></status>
+</kw>
+<kw name="参数配置" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.589" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170808 15:52:04.602" starttime="20170808 15:52:04.587"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.604" starttime="20170808 15:52:04.585"></status>
+</kw>
+<kw name="输入拥有不同类型账户的用户user_id" library="myResource">
+<arguments>
+<arg>10000</arg>
+<arg>10000</arg>
+<arg>123456781</arg>
+<arg>http://192.168.1.31:10003</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.608" level="INFO">${boss_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:04.609" starttime="20170808 15:52:04.607"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.611" level="INFO">${app_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:04.612" starttime="20170808 15:52:04.610"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${no_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.616" level="INFO">${no_user_account_id} = 123456781</msg>
+<status status="PASS" endtime="20170808 15:52:04.617" starttime="20170808 15:52:04.614"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${environment}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.620" level="INFO">${environment} = http://192.168.1.31:10003</msg>
+<status status="PASS" endtime="20170808 15:52:04.621" starttime="20170808 15:52:04.619"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${boss_user_account_id}' and channel_no=1</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.623" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=1 </msg>
+<msg timestamp="20170808 15:52:04.633" level="INFO">${boss_channel_no1} = ((17757, '32102151361501753586', 10000, 100005, 1, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 36), datetime.datetime(2017, 8, 8, 15, 40, 17)),)</msg>
+<status status="PASS" endtime="20170808 15:52:04.634" starttime="20170808 15:52:04.622"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${boss_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.636" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:04.637" starttime="20170808 15:52:04.635"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${app_user_account_id}' and channel_no=2</arg>
+</arguments>
+<assign>
+<var>${app_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.639" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=2 </msg>
+<msg timestamp="20170808 15:52:04.646" level="INFO">${app_channel_no1} = ((17756, '32102151361501753580', 10000, 100004, 2, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 24), datetime.datetime(2017, 8, 8, 15, 40, 14)),)</msg>
+<status status="PASS" endtime="20170808 15:52:04.647" starttime="20170808 15:52:04.638"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${app_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${app_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.651" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:04.652" starttime="20170808 15:52:04.649"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.654" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:04.655" starttime="20170808 15:52:04.653"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.657" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:04.658" starttime="20170808 15:52:04.656"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.659" starttime="20170808 15:52:04.605"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.660" starttime="20170808 15:52:04.584"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<assign>
+<var>${current_time1}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.663" level="INFO">${current_time1} = 2017-08-08 15:52:04.663</msg>
+<status status="PASS" endtime="20170808 15:52:04.664" starttime="20170808 15:52:04.661"></status>
+</kw>
+<kw name="Subtract Time From Date" library="DateTime">
+<doc>Subtracts time from date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time1}</arg>
+<arg>60 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time1_before_30}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.668" level="INFO">${current_time1_before_30} = 2017-08-08 15:51:04.663</msg>
+<status status="PASS" endtime="20170808 15:52:04.669" starttime="20170808 15:52:04.666"></status>
+</kw>
+<kw name="Add Time To Date" library="DateTime">
+<doc>Adds time to date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time1}</arg>
+<arg>60 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time1_after_30}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.671" level="INFO">${current_time1_after_30} = 2017-08-08 15:53:04.663</msg>
+<status status="PASS" endtime="20170808 15:52:04.672" starttime="20170808 15:52:04.670"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from account_amount where account_id ='${account_id}'</arg>
+</arguments>
+<assign>
+<var>${user_id}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.674" level="INFO">Executing : Query  |  select * from account_amount where account_id ='100005' </msg>
+<msg timestamp="20170808 15:52:04.681" level="INFO">${user_id} = ((17827, 100005, Decimal('40.00'), Decimal('32.00'), Decimal('8.00'), datetime.datetime(2017, 8, 3, 16, 53, 36), datetime.datetime(2017, 8, 8, 15, 52, 26), 0),)</msg>
+<status status="PASS" endtime="20170808 15:52:04.682" starttime="20170808 15:52:04.673"></status>
+</kw>
+<kw name="操作判断" library="myResource">
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"</arg>
+<arg>set variable</arg>
+<arg>8</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}" =="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel"</arg>
+<arg>set variable</arg>
+<arg>9</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm"</arg>
+<arg>set variable</arg>
+<arg>10</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>set variable</arg>
+<arg>11</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/cancelPay"</arg>
+<arg>set variable</arg>
+<arg>12</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"</arg>
+<arg>set variable</arg>
+<arg>13</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund"</arg>
+<arg>set variable</arg>
+<arg>14</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>7</arg>
+</arguments>
+<assign>
+<var>${event_code}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>12</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.688" starttime="20170808 15:52:04.687"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.690" level="INFO">${event_code} = 12</msg>
+<status status="PASS" endtime="20170808 15:52:04.691" starttime="20170808 15:52:04.685"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>1</arg>
+<arg>2</arg>
+<arg>3</arg>
+<arg>4</arg>
+<arg>5</arg>
+<arg>6</arg>
+</arguments>
+<assign>
+<var>@{activity_code}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.695" level="INFO">@{activity_code} = [ 1 | 2 | 3 | 4 | 5 | 6 ]</msg>
+<status status="PASS" endtime="20170808 15:52:04.695" starttime="20170808 15:52:04.693"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${args44}" in @{activity_code}</arg>
+<arg>set variable</arg>
+<arg>${args44}</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>${event_code}</arg>
+</arguments>
+<assign>
+<var>${event_code_after}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${event_code}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.700" starttime="20170808 15:52:04.698"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.701" level="INFO">${event_code_after} = 12</msg>
+<status status="PASS" endtime="20170808 15:52:04.702" starttime="20170808 15:52:04.696"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/cancelPay</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/confirmPay</arg>
+</arguments>
+<assign>
+<var>@{command_no_type}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.704" level="INFO">@{command_no_type} = [ http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel | http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm | http://192.168.1.31:10003/ihome-api/settlement/cancelPay | http...</msg>
+<status status="PASS" endtime="20170808 15:52:04.705" starttime="20170808 15:52:04.703"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"</arg>
+<arg>set variable</arg>
+<arg>1</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}" in @{command_no_type}</arg>
+<arg>set variable</arg>
+<arg>2</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>set variable</arg>
+<arg>1</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>3</arg>
+</arguments>
+<assign>
+<var>${command_type}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>2</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.713" starttime="20170808 15:52:04.711"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.714" level="INFO">${command_type} = 2</msg>
+<status status="PASS" endtime="20170808 15:52:04.715" starttime="20170808 15:52:04.707"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}" in @{Link}</arg>
+<arg>set variable</arg>
+<arg>${change_total_amount}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>set variable</arg>
+<arg>${args33}</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>${args22}</arg>
+</arguments>
+<assign>
+<var>${amount}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${change_total_amount}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.722" starttime="20170808 15:52:04.720"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.723" level="INFO">${amount} = 2.00</msg>
+<status status="PASS" endtime="20170808 15:52:04.724" starttime="20170808 15:52:04.717"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/freezePay</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/cancelPay</arg>
+</arguments>
+<assign>
+<var>@{pay_no_list}</var>
+</assign>
+<msg timestamp="20170808 15:52:04.727" level="INFO">@{pay_no_list} = [ http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze | http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel | http://192.168.1.31:10003/ihome-api/settlement/freezePay | http:...</msg>
+<status status="PASS" endtime="20170808 15:52:04.728" starttime="20170808 15:52:04.726"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"in @{pay_no_list}</arg>
+<arg>set variable</arg>
+<arg>4</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>23</arg>
+</arguments>
+<assign>
+<var>${pay_no}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>4</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.734" starttime="20170808 15:52:04.732"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.735" level="INFO">${pay_no} = 4</msg>
+<status status="PASS" endtime="20170808 15:52:04.736" starttime="20170808 15:52:04.730"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"in @{pay_no_list}</arg>
+<arg>set variable</arg>
+<arg>${total_amount_before}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm"</arg>
+<arg>evaluate</arg>
+<arg>${total_amount_before}-${amount}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"</arg>
+<arg>evaluate</arg>
+<arg>${total_amount_before}-${change_total_amount}</arg>
+<arg>ELSE</arg>
+<arg>evaluate</arg>
+<arg>${args22}+${total_amount_before}</arg>
+</arguments>
+<assign>
+<var>${total_amount}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${total_amount_before}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.740" starttime="20170808 15:52:04.739"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.742" level="INFO">${total_amount} = 40.00</msg>
+<status status="PASS" endtime="20170808 15:52:04.743" starttime="20170808 15:52:04.737"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"</arg>
+<arg>evaluate</arg>
+<arg>${balance_amount_before}-${args22}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel"</arg>
+<arg>evaluate</arg>
+<arg>${change_total_amount}+${balance_amount_before}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/cancelPay"</arg>
+<arg>evaluate</arg>
+<arg>${change_total_amount}+${balance_amount_before}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm"</arg>
+<arg>set variable</arg>
+<arg>${balance_amount_before}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>evaluate</arg>
+<arg>${balance_amount_before}-${args33}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"</arg>
+<arg>set variable</arg>
+<arg>${balance_amount_before}</arg>
+<arg>ELSE</arg>
+<arg>evaluate</arg>
+<arg>${args22}+${balance_amount_before}</arg>
+</arguments>
+<assign>
+<var>${balance_amount}</var>
+</assign>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>${change_total_amount}+${balance_amount_before}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.749" starttime="20170808 15:52:04.747"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.751" level="INFO">${balance_amount} = 32.0</msg>
+<status status="PASS" endtime="20170808 15:52:04.752" starttime="20170808 15:52:04.745"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"</arg>
+<arg>evaluate</arg>
+<arg>${frozen_amount_before}+${args22}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}" in @{Link}</arg>
+<arg>evaluate</arg>
+<arg>${frozen_amount_before}-${change_total_amount}</arg>
+<arg>ELSE IF</arg>
+<arg>"${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"</arg>
+<arg>evaluate</arg>
+<arg>${frozen_amount_before}+${args33}</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>${frozen_amount_before}</arg>
+</arguments>
+<assign>
+<var>${frozen_amount}</var>
+</assign>
+<kw name="Evaluate" library="BuiltIn">
+<doc>Evaluates the given expression in Python and returns the results.</doc>
+<arguments>
+<arg>${frozen_amount_before}-${change_total_amount}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.756" starttime="20170808 15:52:04.754"></status>
+</kw>
+<msg timestamp="20170808 15:52:04.757" level="INFO">${frozen_amount} = 8.0</msg>
+<status status="PASS" endtime="20170808 15:52:04.757" starttime="20170808 15:52:04.753"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${event_code}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.761" level="INFO">${event_code} = 12</msg>
+<status status="PASS" endtime="20170808 15:52:04.761" starttime="20170808 15:52:04.759"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${command_type}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.763" level="INFO">${command_type} = 2</msg>
+<status status="PASS" endtime="20170808 15:52:04.764" starttime="20170808 15:52:04.762"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${pay_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.767" level="INFO">${pay_no} = 4</msg>
+<status status="PASS" endtime="20170808 15:52:04.768" starttime="20170808 15:52:04.766"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.771" level="INFO">${amount} = 2.00</msg>
+<status status="PASS" endtime="20170808 15:52:04.772" starttime="20170808 15:52:04.770"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${total_amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.774" level="INFO">${total_amount} = 40.00</msg>
+<status status="PASS" endtime="20170808 15:52:04.775" starttime="20170808 15:52:04.773"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${balance_amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.777" level="INFO">${balance_amount} = 32.0</msg>
+<status status="PASS" endtime="20170808 15:52:04.777" starttime="20170808 15:52:04.775"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${frozen_amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.779" level="INFO">${frozen_amount} = 8.0</msg>
+<status status="PASS" endtime="20170808 15:52:04.780" starttime="20170808 15:52:04.778"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${event_code_after}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.782" level="INFO">${event_code_after} = 12</msg>
+<status status="PASS" endtime="20170808 15:52:04.784" starttime="20170808 15:52:04.781"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.785" starttime="20170808 15:52:04.683"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][2]}</arg>
+<arg>${total_amount}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:04.789" starttime="20170808 15:52:04.787"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>total_amount变化前后的数目正确</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.792" level="INFO">total_amount变化前后的数目正确</msg>
+<status status="PASS" endtime="20170808 15:52:04.792" starttime="20170808 15:52:04.790"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][3]}</arg>
+<arg>${balance_amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.795" level="INFO">Argument types are:
+&lt;class 'decimal.Decimal'&gt;
+&lt;type 'float'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:04.796" starttime="20170808 15:52:04.793"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>balance_amount变化前后的数目正确</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.800" level="INFO">balance_amount变化前后的数目正确</msg>
+<status status="PASS" endtime="20170808 15:52:04.801" starttime="20170808 15:52:04.798"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][4]}</arg>
+<arg>${frozen_amount}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.803" level="INFO">Argument types are:
+&lt;class 'decimal.Decimal'&gt;
+&lt;type 'float'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:04.805" starttime="20170808 15:52:04.802"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>frozen_amount变化前后的数目正确</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.807" level="INFO">frozen_amount变化前后的数目正确</msg>
+<status status="PASS" endtime="20170808 15:52:04.808" starttime="20170808 15:52:04.806"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][7]}</arg>
+<arg>0</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.810" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170808 15:52:04.811" starttime="20170808 15:52:04.809"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>del_flag的值是0是未删除，是正确状态</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.812" level="INFO">del_flag的值是0是未删除，是正确状态</msg>
+<status status="PASS" endtime="20170808 15:52:04.813" starttime="20170808 15:52:04.812"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>表account_amount校验成功！</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.816" level="INFO">表account_amount校验成功！</msg>
+<status status="PASS" endtime="20170808 15:52:04.816" starttime="20170808 15:52:04.814"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.817" starttime="20170808 15:52:04.579"></status>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>delete from ajb_account_transaction where id=${id_delete}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.819" level="INFO">Executing : Execute SQL String  |  delete from ajb_account_transaction where id=888888 </msg>
+<status status="PASS" endtime="20170808 15:52:04.911" starttime="20170808 15:52:04.818"></status>
+</kw>
+<kw name="艾佳币恢复数目" library="myResource">
+<kw name="参数配置" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.924" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170808 15:52:04.983" starttime="20170808 15:52:04.922"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:04.986" starttime="20170808 15:52:04.920"></status>
+</kw>
+<kw name="输入拥有不同类型账户的用户user_id" library="myResource">
+<arguments>
+<arg>10000</arg>
+<arg>10000</arg>
+<arg>123456781</arg>
+<arg>http://192.168.1.31:10003</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:04.994" level="INFO">${boss_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:04.996" starttime="20170808 15:52:04.991"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:05.001" level="INFO">${app_user_account_id} = 10000</msg>
+<status status="PASS" endtime="20170808 15:52:05.003" starttime="20170808 15:52:04.998"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${no_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:05.006" level="INFO">${no_user_account_id} = 123456781</msg>
+<status status="PASS" endtime="20170808 15:52:05.007" starttime="20170808 15:52:05.005"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${environment}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:05.009" level="INFO">${environment} = http://192.168.1.31:10003</msg>
+<status status="PASS" endtime="20170808 15:52:05.009" starttime="20170808 15:52:05.008"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${boss_user_account_id}' and channel_no=1</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:05.013" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=1 </msg>
+<msg timestamp="20170808 15:52:05.036" level="INFO">${boss_channel_no1} = ((17757, '32102151361501753586', 10000, 100005, 1, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 36), datetime.datetime(2017, 8, 8, 15, 40, 17)),)</msg>
+<status status="PASS" endtime="20170808 15:52:05.038" starttime="20170808 15:52:05.010"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${boss_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:05.041" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:05.042" starttime="20170808 15:52:05.039"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${app_user_account_id}' and channel_no=2</arg>
+</arguments>
+<assign>
+<var>${app_channel_no1}</var>
+</assign>
+<msg timestamp="20170808 15:52:05.044" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='10000' and channel_no=2 </msg>
+<msg timestamp="20170808 15:52:05.061" level="INFO">${app_channel_no1} = ((17756, '32102151361501753580', 10000, 100004, 2, 2, 0, datetime.datetime(2017, 7, 3, 16, 53, 24), datetime.datetime(2017, 8, 8, 15, 40, 14)),)</msg>
+<status status="PASS" endtime="20170808 15:52:05.062" starttime="20170808 15:52:05.043"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${app_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${app_channel_no}</var>
+</assign>
+<msg timestamp="20170808 15:52:05.065" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:05.067" starttime="20170808 15:52:05.063"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:05.070" level="INFO">${boss_channel_no} = 100005</msg>
+<status status="PASS" endtime="20170808 15:52:05.071" starttime="20170808 15:52:05.068"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_channel_no}</arg>
+</arguments>
+<msg timestamp="20170808 15:52:05.073" level="INFO">${app_channel_no} = 100004</msg>
+<status status="PASS" endtime="20170808 15:52:05.074" starttime="20170808 15:52:05.072"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:05.075" starttime="20170808 15:52:04.988"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:05.075" starttime="20170808 15:52:04.917"></status>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>UPDATE account_amount \ SET total_amount=${database[0][2]},balance_amount=${database[0][3]},frozen_amount=${database[0][4]}where account_id="${account_id}";</arg>
+</arguments>
+<msg timestamp="20170808 15:52:05.078" level="INFO">Executing : Execute SQL String  |  UPDATE account_amount  SET total_amount=40.00,balance_amount=30.00,frozen_amount=10.00where account_id="100005"; </msg>
+<status status="PASS" endtime="20170808 15:52:05.174" starttime="20170808 15:52:05.076"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>成功</arg>
+</arguments>
+<msg timestamp="20170808 15:52:05.183" level="INFO">成功</msg>
+<status status="PASS" endtime="20170808 15:52:05.186" starttime="20170808 15:52:05.179"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:05.187" starttime="20170808 15:52:04.914"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from account_base where user_id="${boss_user_account_id}"</arg>
+</arguments>
+<assign>
+<var>${after_time_after}</var>
+</assign>
+<msg timestamp="20170808 15:52:05.190" level="INFO">Executing : Query  |  select * from account_base where user_id="10000" </msg>
+<msg timestamp="20170808 15:52:05.198" level="INFO">${after_time_after} = ((100004, 10000, 1, 2, 2, datetime.datetime(2017, 7, 29, 15, 52, 2), datetime.datetime(2017, 8, 28, 15, 52, 2), datetime.datetime(2017, 7, 29, 15, 52, 2), datetime.datetime(2017, 7, 29, 15, 52, 2), 0)...</msg>
+<status status="PASS" endtime="20170808 15:52:05.199" starttime="20170808 15:52:05.188"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${after_time_after[0][6]}</arg>
+<arg>${after_time_after[1][6]}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:05.202" starttime="20170808 15:52:05.200"></status>
+</kw>
+<kw name="Convert Date" library="DateTime">
+<doc>Converts between supported `date formats`.</doc>
+<arguments>
+<arg>${after_time_after[0][6]}</arg>
+<arg>datetime</arg>
+</arguments>
+<assign>
+<var>${after_time_after1}</var>
+</assign>
+<msg timestamp="20170808 15:52:05.204" level="INFO">${after_time_after1} = 2017-08-28 15:52:02</msg>
+<status status="PASS" endtime="20170808 15:52:05.205" starttime="20170808 15:52:05.203"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${after_time_after1.month}</arg>
+<arg>${after_time_check.month}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:05.208" starttime="20170808 15:52:05.206"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${after_time_after1.day}</arg>
+<arg>${after_time_check.day}</arg>
+</arguments>
+<status status="PASS" endtime="20170808 15:52:05.211" starttime="20170808 15:52:05.210"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>账户未过期，且有效期大于15天的时候，有效期不延长</arg>
+</arguments>
+<msg timestamp="20170808 15:52:05.214" level="INFO">账户未过期，且有效期大于15天的时候，有效期不延长</msg>
+<status status="PASS" endtime="20170808 15:52:05.215" starttime="20170808 15:52:05.212"></status>
+</kw>
+<status status="PASS" endtime="20170808 15:52:05.215" critical="yes" starttime="20170808 15:52:02.240"></status>
+</test>
+<status status="PASS" endtime="20170808 15:52:05.218" starttime="20170808 15:52:02.002"></status>
+</suite>
+<status status="PASS" endtime="20170808 15:52:05.224" starttime="20170808 15:52:01.997"></status>
+</suite>
+<status status="PASS" endtime="20170808 15:52:05.229" starttime="20170808 15:52:01.840"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="0" pass="1">Critical Tests</stat>
+<stat fail="0" pass="1">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="0" id="s1" name="账户中心" pass="1">账户中心</stat>
+<stat fail="0" id="s1-s1" name="订单" pass="1">账户中心.订单</stat>
+<stat fail="0" id="s1-s1-s1" name="订单取消支付（线上）" pass="1">账户中心.订单.订单取消支付（线上）</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

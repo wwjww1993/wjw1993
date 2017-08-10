@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170803 16:01:28.132" generator="Robot 3.0.2 (Python 2.7.8 on win32)">
+<suite source="F:\logs and reports\账户中心" id="s1" name="账户中心">
+<suite source="F:\logs and reports\账户中心\艾佳币" id="s1-s1" name="艾佳币">
+<suite source="F:\logs and reports\账户中心\艾佳币\艾佳币充值.txt" id="s1-s1-s1" name="艾佳币充值">
+<test id="s1-s1-s1-t1" name="艾佳币账户未过期，全品家订单交款赠送艾佳币，延长三个月">
+<kw name="参数配置" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170803 16:01:28.885" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170803 16:01:28.906" starttime="20170803 16:01:28.861"></status>
+</kw>
+<status status="PASS" endtime="20170803 16:01:28.908" starttime="20170803 16:01:28.859"></status>
+</kw>
+<kw name="输入拥有不同类型账户的用户user_id" library="myResource">
+<arguments>
+<arg>92</arg>
+<arg>100000</arg>
+<arg>123456781</arg>
+<arg>http://192.168.1.31:10003</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170803 16:01:28.913" level="INFO">${boss_user_account_id} = 92</msg>
+<status status="PASS" endtime="20170803 16:01:28.914" starttime="20170803 16:01:28.912"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170803 16:01:28.918" level="INFO">${app_user_account_id} = 100000</msg>
+<status status="PASS" endtime="20170803 16:01:28.919" starttime="20170803 16:01:28.915"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${no_user_account_id}</arg>
+</arguments>
+<msg timestamp="20170803 16:01:28.921" level="INFO">${no_user_account_id} = 123456781</msg>
+<status status="PASS" endtime="20170803 16:01:28.922" starttime="20170803 16:01:28.920"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${environment}</arg>
+</arguments>
+<msg timestamp="20170803 16:01:28.926" level="INFO">${environment} = http://192.168.1.31:10003</msg>
+<status status="PASS" endtime="20170803 16:01:28.927" starttime="20170803 16:01:28.924"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${boss_user_account_id}' and channel_no=1</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no1}</var>
+</assign>
+<msg timestamp="20170803 16:01:28.930" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='92' and channel_no=1 </msg>
+<msg timestamp="20170803 16:01:28.943" level="INFO">${boss_channel_no1} = ((9148, '676', 92, 686, 1, 2, 0, datetime.datetime(2017, 4, 19, 14, 4, 44), datetime.datetime(2017, 4, 26, 14, 3, 44)),)</msg>
+<status status="PASS" endtime="20170803 16:01:28.944" starttime="20170803 16:01:28.929"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${boss_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${boss_channel_no}</var>
+</assign>
+<msg timestamp="20170803 16:01:28.947" level="INFO">${boss_channel_no} = 686</msg>
+<status status="PASS" endtime="20170803 16:01:28.948" starttime="20170803 16:01:28.946"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${app_user_account_id}' and channel_no=2</arg>
+</arguments>
+<assign>
+<var>${app_channel_no1}</var>
+</assign>
+<msg timestamp="20170803 16:01:28.951" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='100000' and channel_no=2 </msg>
+<msg timestamp="20170803 16:01:28.962" level="INFO">${app_channel_no1} = ((17141, '1686241311501149931', 100000, 5756, 2, 2, 0, datetime.datetime(2017, 7, 27, 18, 28, 2), datetime.datetime(2017, 7, 27, 18, 28, 2)),)</msg>
+<status status="PASS" endtime="20170803 16:01:28.963" starttime="20170803 16:01:28.949"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${app_channel_no1[0][3]}</arg>
+</arguments>
+<assign>
+<var>${app_channel_no}</var>
+</assign>
+<msg timestamp="20170803 16:01:28.967" level="INFO">${app_channel_no} = 5756</msg>
+<status status="PASS" endtime="20170803 16:01:28.968" starttime="20170803 16:01:28.964"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${boss_channel_no}</arg>
+</arguments>
+<msg timestamp="20170803 16:01:28.971" level="INFO">${boss_channel_no} = 686</msg>
+<status status="PASS" endtime="20170803 16:01:28.971" starttime="20170803 16:01:28.969"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${app_channel_no}</arg>
+</arguments>
+<msg timestamp="20170803 16:01:28.976" level="INFO">${app_channel_no} = 5756</msg>
+<status status="PASS" endtime="20170803 16:01:28.978" starttime="20170803 16:01:28.973"></status>
+</kw>
+<status status="PASS" endtime="20170803 16:01:28.979" starttime="20170803 16:01:28.910"></status>
+</kw>
+<status status="PASS" endtime="20170803 16:01:28.980" starttime="20170803 16:01:28.856"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<assign>
+<var>${current_time}</var>
+</assign>
+<msg timestamp="20170803 16:01:28.984" level="INFO">${current_time} = 2017-08-03 16:01:28.983</msg>
+<status status="PASS" endtime="20170803 16:01:28.985" starttime="20170803 16:01:28.981"></status>
+</kw>
+<kw name="Subtract Time From Date" library="DateTime">
+<doc>Subtracts time from date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time}</arg>
+<arg>1 days</arg>
+</arguments>
+<assign>
+<var>${before_time}</var>
+</assign>
+<msg timestamp="20170803 16:01:28.993" level="INFO">${before_time} = 2017-08-02 16:01:28.983</msg>
+<status status="PASS" endtime="20170803 16:01:28.994" starttime="20170803 16:01:28.986"></status>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>delete from account_base where user_id="${boss_user_account_id}" and account_type="1"</arg>
+</arguments>
+<msg timestamp="20170803 16:01:28.997" level="INFO">Executing : Execute SQL String  |  delete from account_base where user_id="92" and account_type="1" </msg>
+<status status="PASS" endtime="20170803 16:01:29.010" starttime="20170803 16:01:28.995"></status>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("5754","${boss_user_account_id}","1","1","2","${before_time}","${before_time}","${before_time}","${before_time}","0");</arg>
+</arguments>
+<msg timestamp="20170803 16:01:29.013" level="INFO">Executing : Execute SQL String  |  insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("5754","92","1","1","2","2017-08-02 16:01:28.983","2017-08-02 16:01:28.983","2017-08-02 16:01:28.983","2017-08-02 16:01:28.983","0"); </msg>
+<msg timestamp="20170803 16:01:29.027" level="FAIL">IntegrityError: (1062, u"Duplicate entry '5754' for key 'PRIMARY'")</msg>
+<status status="FAIL" endtime="20170803 16:01:29.029" starttime="20170803 16:01:29.011"></status>
+</kw>
+<status status="FAIL" endtime="20170803 16:01:29.033" critical="yes" starttime="20170803 16:01:28.850">IntegrityError: (1062, u"Duplicate entry '5754' for key 'PRIMARY'")</status>
+</test>
+<status status="FAIL" endtime="20170803 16:01:29.036" starttime="20170803 16:01:28.438"></status>
+</suite>
+<status status="FAIL" endtime="20170803 16:01:29.043" starttime="20170803 16:01:28.432"></status>
+</suite>
+<status status="FAIL" endtime="20170803 16:01:29.047" starttime="20170803 16:01:28.169"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="1" pass="0">Critical Tests</stat>
+<stat fail="1" pass="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="1" id="s1" name="账户中心" pass="0">账户中心</stat>
+<stat fail="1" id="s1-s1" name="艾佳币" pass="0">账户中心.艾佳币</stat>
+<stat fail="1" id="s1-s1-s1" name="艾佳币充值" pass="0">账户中心.艾佳币.艾佳币充值</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

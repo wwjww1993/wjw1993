@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170727 10:54:48.767" generator="Robot 3.0.2 (Python 2.7.8 on win32)">
+<suite source="F:\logs and reports\账户中心" id="s1" name="账户中心">
+<suite source="F:\logs and reports\账户中心\订单确认支付（线上）.txt" id="s1-s1" name="订单确认支付（线上）">
+<test id="s1-s1-t1" name="输入库里面标记删除的订单号">
+<kw name="Conn Mysql" library="wjwTestLibrary">
+<arguments>
+<arg>insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("88800888","32102151361501122443","1000001","6240","1","32102151361501122443","","2","1","11","2","1","2017-07-26 16:11:40","2017-07-26 16:11:40");</arg>
+</arguments>
+<assign>
+<var>${cancelPay}</var>
+</assign>
+<msg timestamp="20170727 10:54:49.561" level="INFO">${cancelPay} = ()</msg>
+<status status="PASS" endtime="20170727 10:54:49.561" starttime="20170727 10:54:49.467"></status>
+</kw>
+<kw name="输入入参值和接口地址" library="myResource">
+<arguments>
+<arg>32102151361501122443</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/confirmPay</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args11}</arg>
+</arguments>
+<msg timestamp="20170727 10:54:49.563" level="INFO">${args11} = 32102151361501122443</msg>
+<status status="PASS" endtime="20170727 10:54:49.564" starttime="20170727 10:54:49.563"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args22}</arg>
+</arguments>
+<msg timestamp="20170727 10:54:49.566" level="INFO">${args22} = </msg>
+<status status="PASS" endtime="20170727 10:54:49.566" starttime="20170727 10:54:49.565"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args33}</arg>
+</arguments>
+<msg timestamp="20170727 10:54:49.567" level="INFO">${args33} = </msg>
+<status status="PASS" endtime="20170727 10:54:49.567" starttime="20170727 10:54:49.566"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args44}</arg>
+</arguments>
+<msg timestamp="20170727 10:54:49.569" level="INFO">${args44} = </msg>
+<status status="PASS" endtime="20170727 10:54:49.569" starttime="20170727 10:54:49.568"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args55}</arg>
+</arguments>
+<msg timestamp="20170727 10:54:49.570" level="INFO">${args55} = http://192.168.1.31:10003/ihome-api/settlement/confirmPay</msg>
+<status status="PASS" endtime="20170727 10:54:49.570" starttime="20170727 10:54:49.569"></status>
+</kw>
+<status status="PASS" endtime="20170727 10:54:49.571" starttime="20170727 10:54:49.562"></status>
+</kw>
+<kw name="order_num的校验" library="myResource">
+<kw name="Conn Mysql" library="wjwTestLibrary">
+<arguments>
+<arg>select * from ajb_account_transaction where order_num ='${args11}'</arg>
+</arguments>
+<assign>
+<var>${check_order_num}</var>
+</assign>
+<msg timestamp="20170727 10:54:49.628" level="INFO">${check_order_num} = ((88800888L, u'32102151361501122443', 1000001L, 6240L, 1, u'32102151361501122443', u'', Decimal('2.00'), 1L, 11L, 2, 1, datetime.datetime(2017, 7, 26, 16, 11, 40), datetime.datetime(2017, 7, 26, 16, 1...</msg>
+<status status="PASS" endtime="20170727 10:54:49.628" starttime="20170727 10:54:49.572"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${check_order_num}</arg>
+</arguments>
+<assign>
+<var>${check_order_num_length}</var>
+</assign>
+<msg timestamp="20170727 10:54:49.629" level="INFO">Length is 1</msg>
+<msg timestamp="20170727 10:54:49.630" level="INFO">${check_order_num_length} = 1</msg>
+<status status="PASS" endtime="20170727 10:54:49.630" starttime="20170727 10:54:49.629"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${check_order_num_length}==1 and ${check_order_num[0][9]}==8</arg>
+<arg>set variable</arg>
+<arg>该订单属于艾佳币回收冻结订单</arg>
+<arg>ELSE</arg>
+<arg>set variable</arg>
+<arg>该订单不属于艾佳币回收冻结订单</arg>
+</arguments>
+<assign>
+<var>${var}</var>
+</assign>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>该订单不属于艾佳币回收冻结订单</arg>
+</arguments>
+<status status="PASS" endtime="20170727 10:54:49.633" starttime="20170727 10:54:49.632"></status>
+</kw>
+<msg timestamp="20170727 10:54:49.634" level="INFO">${var} = 该订单不属于艾佳币回收冻结订单</msg>
+<status status="PASS" endtime="20170727 10:54:49.634" starttime="20170727 10:54:49.631"></status>
+</kw>
+<kw name="Exit For Loop If" library="BuiltIn">
+<doc>Stops executing the enclosing for loop if the ``condition`` is true.</doc>
+<arguments>
+<arg>'${var}'=='该订单不属于艾佳币回收冻结订单'</arg>
+</arguments>
+<msg timestamp="20170727 10:54:49.636" level="INFO">Exiting for loop altogether.</msg>
+<status status="PASS" endtime="20170727 10:54:49.636" starttime="20170727 10:54:49.635"></status>
+</kw>
+<status status="PASS" endtime="20170727 10:54:49.636" starttime="20170727 10:54:49.571"></status>
+</kw>
+<status status="FAIL" endtime="20170727 10:54:49.637" critical="yes" starttime="20170727 10:54:49.464">Invalid 'Exit For Loop' usage.</status>
+</test>
+<status status="FAIL" endtime="20170727 10:54:49.638" starttime="20170727 10:54:49.076"></status>
+</suite>
+<status status="FAIL" endtime="20170727 10:54:49.643" starttime="20170727 10:54:48.796"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="1" pass="0">Critical Tests</stat>
+<stat fail="1" pass="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="1" id="s1" name="账户中心" pass="0">账户中心</stat>
+<stat fail="1" id="s1-s1" name="订单确认支付（线上）" pass="0">账户中心.订单确认支付（线上）</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

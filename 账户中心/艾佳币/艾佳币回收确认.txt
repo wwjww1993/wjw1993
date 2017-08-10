@@ -1,0 +1,61 @@
+*** Settings ***
+Library           requests
+Library           Collections
+Library           json
+Library           demjson
+Library           urllib2
+Library           Selenium2Library
+Library           RequestsLibrary
+Library           wjwTestLibrary
+Resource          myResource.txt
+Library           DatabaseLibrary
+
+*** Test Cases ***
+BOSS确认退款，回收艾佳币调用，当输入的回收取消订单号正确无误，艾佳币退回用户账户接口返回成功。
+    参数配置
+    清数据    88888888
+    execute sql string    delete from ajb_account_transaction where order_num='32102151361501037341'
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361501037341","${boss_user_account_id}","${boss_channel_no}","1","32102151361501037341","","2","1","8","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #orderNum    接口地址
+    输入入参值和接口地址    32102151361501037341    \    \    \    ${environment}/ihome-api/settlement/ajbWithdrawConfirm
+    order_num的校验
+    获得account_id
+    连接接口
+    字段验证
+    确认取消的金额数
+    退款确认的account_unilateral_bill的校验
+    表ajb_account_transaction
+    表account_amount的校验
+    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    艾佳币恢复数目
+
+BOSS确认退款，回收艾佳币调用，当输入的回收取消的订单号不属于艾佳币回收确认，艾佳币退回用户账户接口返回成功。
+    参数配置
+    清数据    88800888
+    execute sql string    delete from ajb_account_transaction where order_num='32102151361500284846'
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361501037341","${boss_user_account_id}","${boss_channel_no}","1","32102151361500284846","","2","1","4","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #orderNum    \    \    \    接口地址
+    输入入参值和接口地址    32102151361500284846    \    \    \    ${environment}/ihome-api/settlement/ajbWithdrawConfirm
+    获得account_id
+    连接接口
+    错误时字段验证
+    amount和表里的校验
+    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    log    当订单号不属于回收冻结的订单，接口返回失败，也没有入数据库
+    艾佳币恢复数目
+
+BOSS确认退款，回收艾佳币调用，当输入的回收取消订单号是库里面标记删除的，艾佳币退回用户账户接口返回成功。
+    参数配置
+    清数据    88800888
+    execute sql string    delete from ajb_account_transaction where order_num='32102151361501122443'
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361501122443","${boss_user_account_id}","${boss_channel_no}","1","32102151361501122443","","2","1","8","2","1","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #orderNum    接口地址
+    输入入参值和接口地址    32102151361501122443    \    \    \    ${environment}/ihome-api/settlement/ajbWithdrawConfirm
+    order_num的校验
+    获得account_id
+    连接接口
+    错误时字段验证
+    amount和表里的校验
+    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    log    当订单号为库里面标记删除的时候，接口返回失败
+    艾佳币恢复数目

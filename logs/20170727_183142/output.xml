@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170727 18:32:14.418" generator="Robot 3.0.2 (Python 2.7.8 on win32)">
+<suite source="F:\logs and reports\账户中心" id="s1" name="账户中心">
+<suite source="F:\logs and reports\账户中心\订单" id="s1-s1" name="订单">
+<suite source="F:\logs and reports\账户中心\订单\订单取消支付（线上）.txt" id="s1-s1-s1" name="订单取消支付（线上）">
+<test id="s1-s1-s1-t1" name="test">
+<kw name="清数据" library="myResource">
+<kw name="数据库环境" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170727 18:32:15.011" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170727 18:32:15.024" starttime="20170727 18:32:14.983"></status>
+</kw>
+<status status="PASS" endtime="20170727 18:32:15.026" starttime="20170727 18:32:14.981"></status>
+</kw>
+<status status="PASS" endtime="20170727 18:32:15.028" starttime="20170727 18:32:14.979"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_transaction where id=888888</arg>
+</arguments>
+<assign>
+<var>${check}</var>
+</assign>
+<msg timestamp="20170727 18:32:15.031" level="INFO">Executing : Query  |  select * from ajb_account_transaction where id=888888 </msg>
+<msg timestamp="20170727 18:32:15.035" level="INFO">${check} = ()</msg>
+<status status="PASS" endtime="20170727 18:32:15.037" starttime="20170727 18:32:15.029"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${check}</arg>
+</arguments>
+<assign>
+<var>${check_length}</var>
+</assign>
+<msg timestamp="20170727 18:32:15.039" level="INFO">Length is 0</msg>
+<msg timestamp="20170727 18:32:15.041" level="INFO">${check_length} = 0</msg>
+<status status="PASS" endtime="20170727 18:32:15.042" starttime="20170727 18:32:15.038"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("888888","32102151361500975216","1000000","6131","1","32102151361500284867","","2","1","11","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");</arg>
+</arguments>
+<assign>
+<var>${check_length1}</var>
+</assign>
+<msg timestamp="20170727 18:32:15.044" level="INFO">${check_length1} = insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("888888","3210215136...</msg>
+<status status="PASS" endtime="20170727 18:32:15.045" starttime="20170727 18:32:15.043"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>delete from ajb_account_transaction where id=888888</arg>
+</arguments>
+<assign>
+<var>${check_length2}</var>
+</assign>
+<msg timestamp="20170727 18:32:15.047" level="INFO">${check_length2} = delete from ajb_account_transaction where id=888888</msg>
+<status status="PASS" endtime="20170727 18:32:15.048" starttime="20170727 18:32:15.046"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${check_length}'==0</arg>
+<arg>${check_length1}</arg>
+<arg>ELSE IF</arg>
+<arg>set variable</arg>
+<arg>${check_length2}</arg>
+</arguments>
+<assign>
+<var>${delete_command}</var>
+</assign>
+<msg timestamp="20170727 18:32:15.051" level="FAIL">Evaluating expression 'set variable' failed: SyntaxError: unexpected EOF while parsing (&lt;string&gt;, line 1)</msg>
+<status status="FAIL" endtime="20170727 18:32:15.051" starttime="20170727 18:32:15.049"></status>
+</kw>
+<status status="FAIL" endtime="20170727 18:32:15.052" starttime="20170727 18:32:14.976"></status>
+</kw>
+<status status="FAIL" endtime="20170727 18:32:15.053" critical="yes" starttime="20170727 18:32:14.973">Evaluating expression 'set variable' failed: SyntaxError: unexpected EOF while parsing (&lt;string&gt;, line 1)</status>
+</test>
+<status status="FAIL" endtime="20170727 18:32:15.057" starttime="20170727 18:32:14.673"></status>
+</suite>
+<status status="FAIL" endtime="20170727 18:32:15.065" starttime="20170727 18:32:14.668"></status>
+</suite>
+<status status="FAIL" endtime="20170727 18:32:15.069" starttime="20170727 18:32:14.453"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="1" pass="0">Critical Tests</stat>
+<stat fail="1" pass="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="1" id="s1" name="账户中心" pass="0">账户中心</stat>
+<stat fail="1" id="s1-s1" name="订单" pass="0">账户中心.订单</stat>
+<stat fail="1" id="s1-s1-s1" name="订单取消支付（线上）" pass="0">账户中心.订单.订单取消支付（线上）</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

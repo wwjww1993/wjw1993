@@ -1,0 +1,43 @@
+*** Settings ***
+Library           requests
+Library           Collections
+Library           json
+Library           demjson
+Library           urllib2
+Library           Selenium2Library
+Library           RequestsLibrary
+Library           wjwTestLibrary
+Resource          myResource.txt
+Library           DatabaseLibrary
+
+*** Test Cases ***
+APP在线支付完成后调用，艾佳币支付，输入正确的订单号，接口返回成功，数据入库
+    参数配置
+    清数据    888888
+    execute sql string    delete from ajb_account_transaction where order_num='32102151361501122443'
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361500975216","${boss_user_account_id}","${boss_channel_no}","1","32102151361500012119","","2","1","11","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #orderNum    接口地址
+    输入入参值和接口地址    32102151361500012119    \    \    \    ${environment}/ihome-api/settlement/confirmPay
+    获得account_id
+    连接接口
+    字段验证
+    确认取消的金额数
+    退款确认的account_unilateral_bill的校验
+    表ajb_account_transaction
+    表account_amount的校验
+    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    艾佳币恢复数目
+
+APP在线支付完成后调用，艾佳币支付，输入库里面标记删除的订单号，接口返回成功，但是数据并没有入库
+    参数配置
+    清数据    888888
+    execute sql string    delete from ajb_account_transaction where order_num='32102151361501122443'
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361500975216","${boss_user_account_id}","${boss_channel_no}","1","32102151361500012119","","2","1","11","2","1","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #orderNum    接口地址
+    输入入参值和接口地址    32102151361500012119    \    \    \    ${environment}/ihome-api/settlement/confirmPay
+    获得account_id
+    连接接口
+    字段验证
+    amount和表里的校验
+    execute sql string    delete from ajb_account_transaction where id=88800888
+    log    当订单号为库里面标记删除的时候，接口返回成功，但是数据没有入库

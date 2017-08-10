@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170727 19:01:54.741" generator="Robot 3.0.2 (Python 2.7.8 on win32)">
+<suite source="F:\logs and reports\账户中心" id="s1" name="账户中心">
+<suite source="F:\logs and reports\账户中心\订单" id="s1-s1" name="订单">
+<suite source="F:\logs and reports\账户中心\订单\订单取消支付（线上）.txt" id="s1-s1-s1" name="订单取消支付（线上）">
+<test id="s1-s1-s1-t1" name="test">
+<kw name="数据库环境" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170727 19:01:55.288" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170727 19:01:55.312" starttime="20170727 19:01:55.266"></status>
+</kw>
+<status status="PASS" endtime="20170727 19:01:55.313" starttime="20170727 19:01:55.265"></status>
+</kw>
+<status status="PASS" endtime="20170727 19:01:55.314" starttime="20170727 19:01:55.263"></status>
+</kw>
+<kw name="清数据" library="myResource">
+<kw name="数据库环境" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170727 19:01:55.320" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170727 19:01:55.342" starttime="20170727 19:01:55.319"></status>
+</kw>
+<status status="PASS" endtime="20170727 19:01:55.343" starttime="20170727 19:01:55.317"></status>
+</kw>
+<status status="PASS" endtime="20170727 19:01:55.344" starttime="20170727 19:01:55.316"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_transaction where id=88800888</arg>
+</arguments>
+<assign>
+<var>${check}</var>
+</assign>
+<msg timestamp="20170727 19:01:55.346" level="INFO">Executing : Query  |  select * from ajb_account_transaction where id=88800888 </msg>
+<msg timestamp="20170727 19:01:55.397" level="INFO">${check} = ((88800888, '32102151361500975216', 1000000, 6131, 1, '32102151361500284867', '', Decimal('2.00'), 1, 11, 2, 0, datetime.datetime(2017, 7, 26, 16, 11, 40), datetime.datetime(2017, 7, 26, 16, 11, 40)),...</msg>
+<status status="PASS" endtime="20170727 19:01:55.397" starttime="20170727 19:01:55.345"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${check}</arg>
+</arguments>
+<assign>
+<var>${check_length}</var>
+</assign>
+<msg timestamp="20170727 19:01:55.399" level="INFO">Length is 1</msg>
+<msg timestamp="20170727 19:01:55.400" level="INFO">${check_length} = 1</msg>
+<status status="PASS" endtime="20170727 19:01:55.400" starttime="20170727 19:01:55.398"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${check_length}==0</arg>
+<arg>execute sql string</arg>
+<arg>insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("88800888","32102151361500975216","1000000","6131","1","32102151361500284867","","2","1","11","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");</arg>
+<arg>ELSE</arg>
+<arg>execute sql string</arg>
+<arg>delete from ajb_account_transaction where id=88800888</arg>
+</arguments>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>delete from ajb_account_transaction where id=88800888</arg>
+</arguments>
+<msg timestamp="20170727 19:01:55.404" level="INFO">Executing : Execute SQL String  |  delete from ajb_account_transaction where id=88800888 </msg>
+<status status="PASS" endtime="20170727 19:01:55.525" starttime="20170727 19:01:55.402"></status>
+</kw>
+<status status="PASS" endtime="20170727 19:01:55.527" starttime="20170727 19:01:55.401"></status>
+</kw>
+<kw>
+<arguments>
+</arguments>
+<msg timestamp="20170727 19:01:55.531" level="FAIL">Keyword name cannot be empty.</msg>
+<status status="FAIL" endtime="20170727 19:01:55.532" starttime="20170727 19:01:55.529"></status>
+</kw>
+<status status="FAIL" endtime="20170727 19:01:55.534" starttime="20170727 19:01:55.315"></status>
+</kw>
+<status status="FAIL" endtime="20170727 19:01:55.535" critical="yes" starttime="20170727 19:01:55.262">Keyword name cannot be empty.</status>
+</test>
+<status status="FAIL" endtime="20170727 19:01:55.537" starttime="20170727 19:01:54.976"></status>
+</suite>
+<status status="FAIL" endtime="20170727 19:01:55.544" starttime="20170727 19:01:54.972"></status>
+</suite>
+<status status="FAIL" endtime="20170727 19:01:55.550" starttime="20170727 19:01:54.775"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="1" pass="0">Critical Tests</stat>
+<stat fail="1" pass="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="1" id="s1" name="账户中心" pass="0">账户中心</stat>
+<stat fail="1" id="s1-s1" name="订单" pass="0">账户中心.订单</stat>
+<stat fail="1" id="s1-s1-s1" name="订单取消支付（线上）" pass="0">账户中心.订单.订单取消支付（线上）</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

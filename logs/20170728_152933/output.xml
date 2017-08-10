@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170728 15:30:21.570" generator="Robot 3.0.2 (Python 2.7.8 on win32)">
+<suite source="F:\logs and reports\账户中心" id="s1" name="账户中心">
+<suite source="F:\logs and reports\账户中心\订单" id="s1-s1" name="订单">
+<suite source="F:\logs and reports\账户中心\订单\订单支付退款（线上）.txt" id="s1-s1-s1" name="订单支付退款（线上）">
+<test id="s1-s1-s1-t1" name="输入参数全部正确">
+<kw name="数据库环境" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.092" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170728 15:30:22.123" starttime="20170728 15:30:22.071"></status>
+</kw>
+<status status="PASS" endtime="20170728 15:30:22.124" starttime="20170728 15:30:22.070"></status>
+</kw>
+<status status="PASS" endtime="20170728 15:30:22.124" starttime="20170728 15:30:22.069"></status>
+</kw>
+<kw name="清数据" library="myResource">
+<arguments>
+<arg>888888</arg>
+</arguments>
+<kw name="数据库环境" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.132" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170728 15:30:22.153" starttime="20170728 15:30:22.131"></status>
+</kw>
+<status status="PASS" endtime="20170728 15:30:22.154" starttime="20170728 15:30:22.128"></status>
+</kw>
+<status status="PASS" endtime="20170728 15:30:22.155" starttime="20170728 15:30:22.127"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_transaction where id=${id_delete}</arg>
+</arguments>
+<assign>
+<var>${check}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.157" level="INFO">Executing : Query  |  select * from ajb_account_transaction where id=888888 </msg>
+<msg timestamp="20170728 15:30:22.172" level="INFO">${check} = ()</msg>
+<status status="PASS" endtime="20170728 15:30:22.173" starttime="20170728 15:30:22.155"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${check}</arg>
+</arguments>
+<assign>
+<var>${check_length}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.175" level="INFO">Length is 0</msg>
+<msg timestamp="20170728 15:30:22.176" level="INFO">${check_length} = 0</msg>
+<status status="PASS" endtime="20170728 15:30:22.176" starttime="20170728 15:30:22.174"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${check_length} != 0</arg>
+<arg>execute sql string</arg>
+<arg>delete from ajb_account_transaction where id=${id_delete}</arg>
+<arg>ELSE</arg>
+<arg>log</arg>
+<arg>数据库之前没有数据</arg>
+</arguments>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>数据库之前没有数据</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.180" level="INFO">数据库之前没有数据</msg>
+<status status="PASS" endtime="20170728 15:30:22.181" starttime="20170728 15:30:22.179"></status>
+</kw>
+<status status="PASS" endtime="20170728 15:30:22.181" starttime="20170728 15:30:22.177"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>数据库里面的这条数据清理成功啦。</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.183" level="INFO">数据库里面的这条数据清理成功啦。</msg>
+<status status="PASS" endtime="20170728 15:30:22.184" starttime="20170728 15:30:22.182"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${id_delete}</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.186" level="INFO">${id_delete} = 888888</msg>
+<status status="PASS" endtime="20170728 15:30:22.186" starttime="20170728 15:30:22.185"></status>
+</kw>
+<status status="PASS" endtime="20170728 15:30:22.187" starttime="20170728 15:30:22.125"></status>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361500885834","100000","6135","1","32102151361500885834","","2","1","13","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.188" level="INFO">Executing : Execute SQL String  |  insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("888888","32102151361500885834","100000","6135","1","32102151361500885834","","2","1","13","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40"); </msg>
+<status status="PASS" endtime="20170728 15:30:22.277" starttime="20170728 15:30:22.187"></status>
+</kw>
+<kw name="输入入参值和接口地址" library="myResource">
+<arguments>
+<arg>32102151361500885834</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args11}</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.282" level="INFO">${args11} = 32102151361500885834</msg>
+<status status="PASS" endtime="20170728 15:30:22.284" starttime="20170728 15:30:22.281"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args22}</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.287" level="INFO">${args22} = </msg>
+<status status="PASS" endtime="20170728 15:30:22.288" starttime="20170728 15:30:22.285"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args33}</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.290" level="INFO">${args33} = </msg>
+<status status="PASS" endtime="20170728 15:30:22.292" starttime="20170728 15:30:22.289"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args44}</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.294" level="INFO">${args44} = </msg>
+<status status="PASS" endtime="20170728 15:30:22.295" starttime="20170728 15:30:22.293"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args55}</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.297" level="INFO">${args55} = http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund</msg>
+<status status="PASS" endtime="20170728 15:30:22.297" starttime="20170728 15:30:22.296"></status>
+</kw>
+<status status="PASS" endtime="20170728 15:30:22.298" starttime="20170728 15:30:22.279"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_transaction where order_num='${args11}' and event_code=13</arg>
+</arguments>
+<assign>
+<var>${user_id_refund}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.299" level="INFO">Executing : Query  |  select * from ajb_account_transaction where order_num='32102151361500885834' and event_code=13 </msg>
+<msg timestamp="20170728 15:30:22.314" level="INFO">${user_id_refund} = ((888888, '32102151361500885834', 100000, 6135, 1, '32102151361500885834', '', Decimal('2.00'), 1, 13, 2, 0, datetime.datetime(2017, 7, 26, 16, 11, 40), datetime.datetime(2017, 7, 26, 16, 11, 40)),)</msg>
+<status status="PASS" endtime="20170728 15:30:22.315" starttime="20170728 15:30:22.299"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${user_id_refund[0][2]}' and channel_no=1</arg>
+</arguments>
+<assign>
+<var>${account_id_bos}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.317" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='100000' and channel_no=1 </msg>
+<msg timestamp="20170728 15:30:22.330" level="INFO">${account_id_bos} = ((6090, '32102151361499943856', 100000, 6135, 1, 2, 0, datetime.datetime(2017, 7, 13, 23, 57, 26), datetime.datetime(2017, 7, 13, 23, 57, 26)),)</msg>
+<status status="PASS" endtime="20170728 15:30:22.331" starttime="20170728 15:30:22.316"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${account_id_bos[0][3]}</arg>
+</arguments>
+<assign>
+<var>${account_id_boss}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.334" level="INFO">${account_id_boss} = 6135</msg>
+<status status="PASS" endtime="20170728 15:30:22.335" starttime="20170728 15:30:22.332"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id='${user_id_refund[0][2]}' and channel_no=2</arg>
+</arguments>
+<assign>
+<var>${account_id_ap}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.337" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id='100000' and channel_no=2 </msg>
+<msg timestamp="20170728 15:30:22.356" level="INFO">${account_id_ap} = ((100000000010L, '32102151361501206852', 100000, 6273, 2, 2, 0, datetime.datetime(2017, 7, 28, 10, 46, 53), datetime.datetime(2017, 7, 28, 10, 46, 53)),)</msg>
+<status status="PASS" endtime="20170728 15:30:22.357" starttime="20170728 15:30:22.336"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${account_id_ap[0][3]}</arg>
+</arguments>
+<assign>
+<var>${account_id_app}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.361" level="INFO">${account_id_app} = 6273</msg>
+<status status="PASS" endtime="20170728 15:30:22.361" starttime="20170728 15:30:22.359"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from account_amount where account_id='${account_id_boss}'</arg>
+</arguments>
+<assign>
+<var>${amount_boss}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.363" level="INFO">Executing : Query  |  select * from account_amount where account_id='6135' </msg>
+<msg timestamp="20170728 15:30:22.396" level="INFO">${amount_boss} = ((12449, 6135, Decimal('50425.00'), Decimal('49603.00'), Decimal('822.00'), datetime.datetime(2017, 7, 13, 23, 57, 26), datetime.datetime(2017, 7, 28, 15, 21, 54), 0),)</msg>
+<status status="PASS" endtime="20170728 15:30:22.397" starttime="20170728 15:30:22.362"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from account_amount where account_id='${account_id_app}'</arg>
+</arguments>
+<assign>
+<var>${amount_app}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.399" level="INFO">Executing : Query  |  select * from account_amount where account_id='6273' </msg>
+<msg timestamp="20170728 15:30:22.419" level="INFO">${amount_app} = ((12587, 6273, Decimal('50418.00'), Decimal('49596.00'), Decimal('822.00'), datetime.datetime(2017, 7, 28, 10, 46, 53), datetime.datetime(2017, 7, 28, 14, 27, 14), 0),)</msg>
+<status status="PASS" endtime="20170728 15:30:22.420" starttime="20170728 15:30:22.398"></status>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<doc>Converts the given item to a Unicode string.</doc>
+<arguments>
+<arg>${args55}</arg>
+</arguments>
+<assign>
+<var>${value}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.422" level="INFO">${value} = http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund</msg>
+<status status="PASS" endtime="20170728 15:30:22.422" starttime="20170728 15:30:22.420"></status>
+</kw>
+<kw name="Ajb Withdraw Cancel" library="wjwTestLibrary">
+<arguments>
+<arg>${args11}</arg>
+<arg>${args55}</arg>
+</arguments>
+<assign>
+<var>${data}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.853" level="INFO">${data} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170728 15:30:22.854" starttime="20170728 15:30:22.423"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>${data.status_code}</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.859" level="INFO">200</msg>
+<status status="PASS" endtime="20170728 15:30:22.861" starttime="20170728 15:30:22.856"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${data.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.866" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170728 15:30:22.867" starttime="20170728 15:30:22.863"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>接口的响应码正确</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.871" level="INFO">接口的响应码正确</msg>
+<status status="PASS" endtime="20170728 15:30:22.873" starttime="20170728 15:30:22.869"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${data.text}</arg>
+</arguments>
+<assign>
+<var>${toJson}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.878" level="INFO">To JSON using : content={"data":null,"msg":"成功","code":1,"success":true} </msg>
+<msg timestamp="20170728 15:30:22.879" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170728 15:30:22.880" level="INFO">${toJson} = {u'msg': u'\u6210\u529f', u'code': 1, u'data': None, u'success': True}</msg>
+<status status="PASS" endtime="20170728 15:30:22.881" starttime="20170728 15:30:22.874"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${toJson['success']}</arg>
+<arg>True</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.887" level="INFO">Argument types are:
+&lt;type 'bool'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170728 15:30:22.889" starttime="20170728 15:30:22.884"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${toJson['msg']}</arg>
+<arg>成功</arg>
+</arguments>
+<status status="PASS" endtime="20170728 15:30:22.890" starttime="20170728 15:30:22.889"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>接口中返回的值校验成功！</arg>
+</arguments>
+<msg timestamp="20170728 15:30:22.892" level="INFO">接口中返回的值校验成功！</msg>
+<status status="PASS" endtime="20170728 15:30:22.893" starttime="20170728 15:30:22.891"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<assign>
+<var>${current_time}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.894" level="INFO">${current_time} = 2017-07-28 15:30:22.894</msg>
+<status status="PASS" endtime="20170728 15:30:22.895" starttime="20170728 15:30:22.893"></status>
+</kw>
+<kw name="Subtract Time From Date" library="DateTime">
+<doc>Subtracts time from date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time}</arg>
+<arg>5 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_before_30}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.902" level="INFO">${current_time_before_30} = 2017-07-28 15:30:17.894</msg>
+<status status="PASS" endtime="20170728 15:30:22.903" starttime="20170728 15:30:22.895"></status>
+</kw>
+<kw name="Add Time To Date" library="DateTime">
+<doc>Adds time to date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time}</arg>
+<arg>65 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_after_30}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.905" level="INFO">${current_time_after_30} = 2017-07-28 15:31:27.894</msg>
+<status status="PASS" endtime="20170728 15:30:22.905" starttime="20170728 15:30:22.904"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from account_unilateral_bill where event_code=14 and user_id='${user_id_refund[0][2]}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'</arg>
+</arguments>
+<assign>
+<var>${user_id}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.907" level="INFO">Executing : Query  |  select * from account_unilateral_bill where event_code=14 and user_id='100000' and update_time between' 2017-07-28 15:30:17.894' and '2017-07-28 15:31:27.894' </msg>
+<msg timestamp="20170728 15:30:22.923" level="INFO">${user_id} = ()</msg>
+<status status="PASS" endtime="20170728 15:30:22.924" starttime="20170728 15:30:22.906"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${user_id[0][1]}</arg>
+</arguments>
+<assign>
+<var>${bill_no_length}</var>
+</assign>
+<msg timestamp="20170728 15:30:22.927" level="FAIL">Resolving variable '${user_id[0][1]}' failed: IndexError: tuple index out of range</msg>
+<status status="FAIL" endtime="20170728 15:30:22.928" starttime="20170728 15:30:22.925"></status>
+</kw>
+<status status="FAIL" endtime="20170728 15:30:22.928" critical="yes" starttime="20170728 15:30:22.064">Resolving variable '${user_id[0][1]}' failed: IndexError: tuple index out of range</status>
+</test>
+<status status="FAIL" endtime="20170728 15:30:22.930" starttime="20170728 15:30:21.786"></status>
+</suite>
+<status status="FAIL" endtime="20170728 15:30:22.934" starttime="20170728 15:30:21.781"></status>
+</suite>
+<status status="FAIL" endtime="20170728 15:30:22.937" starttime="20170728 15:30:21.598"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="1" pass="0">Critical Tests</stat>
+<stat fail="1" pass="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="1" id="s1" name="账户中心" pass="0">账户中心</stat>
+<stat fail="1" id="s1-s1" name="订单" pass="0">账户中心.订单</stat>
+<stat fail="1" id="s1-s1-s1" name="订单支付退款（线上）" pass="0">账户中心.订单.订单支付退款（线上）</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

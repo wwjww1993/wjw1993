@@ -1,0 +1,393 @@
+*** Settings ***
+Library           wjwTestLibrary
+Library           requests
+Library           json
+Library           DatabaseLibrary
+Library           RequestsLibrary
+Library           Collections
+Library           DateTime
+Library           MongoDBLibrary
+
+*** Keywords ***
+字段验证
+    log    ${data.status_code}
+    should be equal as strings    ${data.status_code}    200
+    log    接口的响应码正确
+    ${toJson}    to json    ${data.text}
+    should be equal as strings    ${toJson['success']}    True
+    should be equal as strings    ${toJson['msg']}    成功
+    log    接口中返回的值校验成功！
+    @{Link1}    create list    http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel    http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm    http://192.168.1.31:10003/ihome-api/settlement/cancelPay    http://192.168.1.31:10003/ihome-api/settlement/confirmPay    http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund
+    ...    http://192.168.1.31:10003/ihome-api/settlement/freezePay
+    ${orderNum}    run keyword unless    "${value}" in @{Link1}    Get From Dictionary    ${toJson['data']}    orderNum
+    set suite variable    ${orderNum}
+
+连接接口
+    ${value}    convert to string    ${args55}
+    ${data}    run keyword if    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbActivityRecharge"    ajbActivityRecharge    ${args11}    ${args22}    ${args33}
+    ...    ${args44}    ${args55}
+    ...    ELSE IF    "${value}" in @{Link}    ajbWithdrawCancel    ${args11}    ${args55}
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"    freezePay    ${args11}    ${args22}    ${args33}
+    ...    ${args44}    ${args55}
+    ...    ELSE    Data    ${args11}    ${args22}    ${args33}    ${args55}
+    set suite variable    ${data}
+
+获得account_id
+    ${value}    convert to string    ${args55}
+    @{Link}    create list    http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel    http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm    http://192.168.1.31:10003/ihome-api/settlement/cancelPay    http://192.168.1.31:10003/ihome-api/settlement/confirmPay    http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund
+    ${channel_no}    run keyword if    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbActivityRecharge"    set variable    2
+    ...    ELSE    set variable    1
+    ${args11_after}    run keyword if    "${value}" in @{Link}    set variable    order_num
+    ...    ELSE    set variable    user_id
+    参数配置
+    ${database1}    query    select * from ajb_account_transaction where ${args11_after}='${args11}' and channel_no='${channel_no}'
+    ${database}    query    select * from account_amount where account_id ='${database1[0][3]}'
+    #获得account_id和${user_id_real}
+    ${user_id_real}    set variable    ${database1[0][2]}
+    ${account_id}    set variable    ${database[0][1]}
+    log    获得account_id值为：${account_id}
+    ${total_amount_before}    set variable    ${database[0][2]}
+    ${balance_amount_before}    set variable    ${database[0][3]}
+    ${frozen_amount_before}    set variable    ${database[0][4]}
+    set suite variable    ${account_id}
+    set suite variable    ${user_id_real}
+    set suite variable    ${total_amount_before}
+    set suite variable    ${balance_amount_before}
+    set suite variable    ${frozen_amount_before}
+    set suite variable    ${channel_no}
+    set suite variable    @{Link}
+    set suite variable    ${value}
+    set suite variable    ${database}
+
+输入入参值和接口地址
+    [Arguments]    ${args11}    ${args22}    ${args33}    ${args44}    ${args55}
+    set suite variable    ${args11}
+    set suite variable    ${args22}
+    set suite variable    ${args33}
+    set suite variable    ${args44}
+    set suite variable    ${args55}    #专业输入接口的地方
+
+update_time校验
+    [Arguments]    ${args}
+    #填入表里,除了ajb_account_open_record
+    参数配置
+    ${current_time}    get_current_date
+    ${current_time_before_30}    subtract time from date    ${current_time}    0 seconds
+    ${current_time_after_30}    Add Time To Date    ${current_time}    100 seconds
+    ${updatetime}    query    select * from ${args} where user_id='${user_id_real}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    should not be empty    ${updatetime}
+    log    ${args}表里的update_time校验成功，满足要求！
+    set suite variable    ${current_time_before_30}
+    set suite variable    ${current_time_after_30}
+
+表account_unilateral_bill的校验
+    log    现在开始校验表account_unilateral_bill
+    参数配置
+    update_time校验    account_unilateral_bill
+    ${user_id}    query    select * from account_unilateral_bill where account_id ='${account_id} 'and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    ${bill_no_length}    get length    ${user_id[0][1]}
+    should be equal as integers    ${bill_no_length}    20
+    log    bill_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][2]}    ${user_id_real}
+    log    当下user_id是正确的！
+    ${command_no_length}    get length    ${user_id[0][4]}
+    should be equal as integers    ${command_no_length}    20
+    log    commandl_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][5]}    1    #1是艾佳币产品
+    log    product_code值是1，表示是艾佳币产品，表示正确
+    操作判断
+    should be equal as integers    ${user_id[0][6]}    ${event_code_after}    #8表示退款艾佳币冻结
+    log    event_code值正确
+    should be equal as integers    ${user_id[0][7]}    ${command_type}
+    log    command_type值正确
+    should be equal as integers    ${user_id[0][8]}    ${amount}
+    log    change_amount的变化数值是正确的
+    log    add_time和update_time时间保持一致
+    should be equal as integers    ${user_id[0][12]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    表account_unilateral_bill校验成功
+    ${user_id[0][0]_unilateral}    set variable    ${user_id[0][0]}
+    set suite variable    ${user_id[0][0]_unilateral}
+    execute sql string    delete from account_unilateral_bill where id ='${user_id[0][0]_unilateral}'
+
+表account_base的校验
+    log    现在开始校验表account_base
+    参数配置
+    ${user_id}    query    select * from account_base where user_id ='${args11}'
+    log    账户的account_id为${user_id[0][0]}
+    should be equal as integers    ${user_id[0][2]}    1    #其中1是个人
+    log    role_type的值为1是个人，是正确的
+    should be equal as integers    ${user_id[0][3]}    2    #其中2是艾佳币
+    log    account_type的值为2是艾佳币，是正确的
+    should be equal as integers    ${user_id[0][4]}    2    #其中2表示是生效
+    log    account_type的值是2是生效，是正确的
+    update_time校验    account_base
+    should be equal as integers    ${user_id[0][7]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    表account_base校验成功
+
+表ajb_account_open_record的校验
+    log    现在开始校验表ajb_account_open_record
+    参数配置
+    ${user_id}    query    select * from ajb_account_open_record where account_id ='${account_id}'
+    ${business_no_length}    get length    ${user_id[0][1]}
+    should be equal as integers    ${business_no_length}    20
+    log    business_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][2]}    ${args11}
+    log    当下user_id是正确的！
+    should be equal as integers    ${user_id[0][4]}    ${channel_no}    #1表示为艾佳币账户渠道是boss收款
+    log    channel_no正确反映艾佳币账户渠道
+    should be equal as integers    ${user_id[0][5]}    2
+    log    status的值为2,表示生效，是正确的
+    should be equal as integers    ${user_id[0][6]}    0
+    log    del_flag的值是0是未删除，是正确状态
+    log    表里面的add_time和update_time的时间是一致的。校验正确。
+    log    表ajb_account_open_record的校验成功！
+
+操作判断
+    ${event_code}    run keyword if    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"    set variable    8
+    ...    ELSE IF    "${value}" =="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel"    set variable    9
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm"    set variable    10
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"    set variable    11
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/cancelPay"    set variable    12
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"    set variable    13
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund"    set variable    14
+    ...    ELSE    set variable    7
+    @{activity_code}    create list    1    2    3    4    5
+    ...    6
+    ${event_code_after}    run keyword if    "${args44}" in @{activity_code}    set variable    ${args44}
+    ...    ELSE    set variable    ${event_code}
+    @{command_no_type}    create list    http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel    http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm    http://192.168.1.31:10003/ihome-api/settlement/cancelPay    http://192.168.1.31:10003/ihome-api/settlement/confirmPay
+    ${command_type}    run keyword if    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"    set variable    1
+    ...    ELSE IF    "${value}" in @{command_no_type}    set variable    2
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"    set variable    1
+    ...    ELSE    set variable    3
+    ${amount}    run keyword if    "${value}" in @{Link}    set variable    ${change_total_amount}
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"    set variable    ${args33}
+    ...    ELSE    set variable    ${args22}
+    @{pay_no_list}    create list    http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze    http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel    http://192.168.1.31:10003/ihome-api/settlement/freezePay    http://192.168.1.31:10003/ihome-api/settlement/cancelPay
+    ${pay_no}    run keyword if    "${value}"in @{pay_no_list}    set variable    4
+    ...    ELSE    set variable    23
+    ${total_amount}    run keyword if    "${value}"in @{pay_no_list}    set variable    ${total_amount_before}
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm"    evaluate    ${total_amount_before}-${amount}
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"    evaluate    ${total_amount_before}-${change_total_amount}
+    ...    ELSE    evaluate    ${args22}+${total_amount_before}
+    ${balance_amount}    run keyword if    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"    evaluate    ${balance_amount_before}-${args22}
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel"    evaluate    ${change_total_amount}+${balance_amount_before}
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/cancelPay"    evaluate    ${change_total_amount}+${balance_amount_before}
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm"    set variable    ${balance_amount_before}
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"    evaluate    ${balance_amount_before}-${args33}
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"    set variable    ${balance_amount_before}
+    ...    ELSE    evaluate    ${args22}+${balance_amount_before}
+    ${frozen_amount}    run keyword if    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze"    evaluate    ${frozen_amount_before}+${args22}
+    ...    ELSE IF    "${value}" in @{Link}    evaluate    ${frozen_amount_before}-${change_total_amount}
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"    evaluate    ${frozen_amount_before}+${args33}
+    ...    ELSE    set variable    ${frozen_amount_before}
+    set suite variable    ${event_code}
+    set suite variable    ${command_type}
+    set suite variable    ${pay_no}
+    set suite variable    ${amount}
+    set suite variable    ${total_amount}
+    set suite variable    ${balance_amount}
+    set suite variable    ${frozen_amount}
+    set suite variable    ${event_code_after}
+
+表ajb_account_transaction
+    log    现在开始校验表ajb_account_transaction
+    参数配置
+    update_time校验    ajb_account_transaction
+    ${user_id}    query    select * from ajb_account_transaction where account_id ='${account_id}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    ${business_no_length}    get length    ${user_id[0][1]}
+    should be equal as integers    ${business_no_length}    20
+    log    business_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][2]}    ${user_id_real}
+    log    当下user_id是正确的！
+    should be equal as integers    ${user_id[0][4]}    ${channel_no}
+    log    channel_no的值正确
+    ${bill_order_num}    run keyword if    "${value}" in @{Link}    set variable    ${args11}
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"    set variable    ${args22}
+    ...    ELSE    set variable    ${orderNum}
+    should be equal as integers    ${user_id[0][5]}    ${bill_order_num}
+    log    order_num显示正确！
+    操作判断
+    ${pay_no_after}    convert to string    ${user_id[0][6]}
+    ${pay_no_after_length}    get length    ${pay_no_after}
+    should be equal as integers    ${pay_no_after_length}    ${pay_no}
+    log    pay_no表现正确
+    should be equal as integers    ${user_id[0][7]}    ${amount}
+    log    amount的变化数值是正确的
+    should be equal as integers    ${user_id[0][8]}    1    #1是艾佳币产品
+    log    product_code值是1，表示是艾佳币产品，表示正确
+    should be equal as integers    ${user_id[0][9]}    ${event_code_after}    #8表示退款艾佳币冻结
+    log    event_code值正确
+    should be equal as integers    ${user_id[0][10]}    2    #执行成功
+    log    trade_status表示执行成功
+    should be equal as integers    ${user_id[0][11]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    add_time和update_time时间保持一致
+    log    表ajb_account_transaction校验成功
+    ${user_id[0][0]_transaction}    set variable    ${user_id[0][0]}
+    set suite variable    ${user_id[0][0]_transaction}
+    ${user_id_unilateral_delete1}    execute sql string    delete from ajb_account_transaction where id ='${user_id[0][0]}'
+
+表account_amount的校验
+    log    现在开始校验表account_amount
+    参数配置
+    ${current_time1}    get_current_date
+    ${current_time1_before_30}    subtract time from date    ${current_time1}    60 seconds
+    ${current_time1_after_30}    Add Time To Date    ${current_time1}    60 seconds
+    ${user_id}    query    select * from account_amount where account_id ='${account_id}'
+    操作判断
+    should be equal as integers    ${user_id[0][2]}    ${total_amount}
+    log    total_amount变化前后的数目正确
+    should be equal as integers    ${user_id[0][3]}    ${balance_amount}
+    log    balance_amount变化前后的数目正确
+    should be equal as integers    ${user_id[0][4]}    ${frozen_amount}
+    log    frozen_amount变化前后的数目正确
+    should be equal as integers    ${user_id[0][7]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    表account_amount校验成功！
+
+错误时字段验证
+    log    ${data.status_code}
+    should be equal as strings    ${data.status_code}    200
+    log    接口的响应码正确
+    ${toJson}    to json    ${data.text}
+    should be equal as strings    ${toJson['success']}    False
+    should be equal as strings    ${toJson['data']}    None
+    should be equal as integers    ${toJson['code']}    0
+    log    接口中返回的值校验成功！
+
+amount和表里的校验
+    参数配置
+    ${user_id}    query    select * from account_amount where account_id ='${account_id}'
+    should be equal as integers    ${user_id[0][2]}    ${total_amount_before}
+    log    total_amount数目没有变化
+    should be equal as integers    ${user_id[0][3]}    ${balance_amount_before}
+    log    balance_amount数目没有变化
+    should be equal as integers    ${user_id[0][4]}    ${frozen_amount_before}
+    log    frozen_amount数目没有变化
+    log    amounts的数据没有变化正确的
+    should be equal as integers    ${user_id[0][7]}    0
+    log    表account_amount内容没有发生变化
+    ${current_time}    get_current_date
+    ${current_time_before_30}    subtract time from date    ${current_time}    0 seconds
+    ${current_time_after_30}    Add Time To Date    ${current_time}    100 seconds
+    ${bill_check}    query    select * from account_unilateral_bill where account_id ='${account_id}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    ${bill_check_length}    get length    ${bill_check}
+    should be equal as strings    ${bill_check_length}    0
+    log    account_unilateral_bill里的没有相关数据
+    ${transaction_check}    query    select * from ajb_account_transaction where order_num ='${args11}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    ${transaction_check_length}    get length    ${transaction_check}
+    should be equal as strings    ${transaction_check_length}    0
+    log    ajb_account_transaction里的没有相关数据
+    log    数据库表里数据调用接口前后没有发生变化
+
+确认取消的金额数
+    #搜索冻结订单中amount数目：
+    参数配置
+    ${event_code_judge}    run keyword if    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/cancelPay"    set variable    11
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/confirmPay"    set variable    11
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund"    set variable    13
+    ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund"    set variable    14
+    ...    ELSE    set variable    8
+    ${search}    query    select * from ajb_account_transaction where order_num ='${args11}' and event_code=${event_code_judge}
+    ${change_total_amount}    set variable    ${search[0][7]}
+    set suite variable    ${change_total_amount}
+
+order_num的校验
+    参数配置
+    ${check_order_num}    query    select * from ajb_account_transaction where order_num ='${args11}'
+    ${check_order_num_length}    get length    ${check_order_num}
+    ${var}    run keyword if    ${check_order_num_length}==1 and ${check_order_num[0][9]}==8    set variable    该订单属于艾佳币回收冻结订单
+    ...    ELSE    set variable    该订单不属于艾佳币回收冻结订单
+    Exit For Loop if    '${var}'=='该订单不属于艾佳币回收冻结订单'
+    log    ${var}
+
+退款确认的account_unilateral_bill的校验
+    log    现在开始校验表account_unilateral_bill
+    参数配置
+    update_time校验    account_unilateral_bill
+    ${user_id}    query    select * from account_unilateral_bill where account_id ='${account_id} 'and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    ${bill_no_length}    get length    ${user_id[0][1]}
+    ${bill_no_length2}    get length    ${user_id[1][1]}
+    should be equal as integers    ${bill_no_length}    20
+    should be equal    ${bill_no_length}    ${bill_no_length2}
+    should not be equal    ${user_id[0][1]}    ${user_id[1][1]}
+    log    bill_no的数据长度正确，且不是相同bill_no,此时校验成功
+    should be equal as integers    ${user_id[0][2]}    ${user_id_real}
+    should be equal    ${user_id[0][2]}    ${user_id[1][2]}
+    log    当下user_id是正确的！
+    ${command_no_length}    get length    ${user_id[0][4]}
+    should be equal as integers    ${command_no_length}    20
+    should be equal    ${user_id[0][4]}    ${user_id[1][4]}
+    log    commandl_no的数据长度正确，且此时是同一个command_no,校验成功
+    should be equal as integers    ${user_id[0][5]}    1    #1是艾佳币产品
+    should be equal    ${user_id[0][5]}    ${user_id[1][5]}
+    log    product_code值是1，表示是艾佳币产品，表示正确
+    操作判断
+    should be equal as integers    ${user_id[0][6]}    ${event_code_after}    #8表示退款艾佳币冻结
+    should be equal    ${user_id[0][6]}    ${user_id[1][6]}
+    log    event_code值正确
+    should be equal as integers    ${user_id[0][7]}    ${command_type}
+    should be equal as integers    ${user_id[1][7]}    3
+    log    command_type俩者值正确
+    should be equal as integers    ${user_id[0][8]}    ${amount}
+    ${amount_after}    evaluate    0-${amount}
+    should be equal    ${user_id[1][8]}    ${amount_after}
+    log    change_amount的变化数值是正确的
+    should be equal as strings    ${user_id[0][10]}    ${user_id[0][11]}
+    log    add_time和update_time时间保持一致
+    should be equal    ${user_id[0][10]}    ${user_id[0][10]}
+    log    则调用艾佳币回收确认的接口时，则直接同时发生解冻和转账俩步
+    should be equal as integers    ${user_id[0][12]}    0    #其中0表示未删除
+    should be equal    ${user_id[0][12]}    ${user_id[1][12]}
+    log    del_flag的值是0是未删除，是正确状态
+    log    表account_unilateral_bill校验成功
+    @{delete_unilateral_bill}    create list    ${user_id[1][0]}    ${user_id[0][0]}
+    set suite variable    @{delete_unilateral_bill}
+    execute sql string    delete from account_unilateral_bill where id ='${user_id[1][0]}'
+    execute sql string    delete from account_unilateral_bill where id ='${user_id[0][0]}'
+
+mysql数据库的连接
+    [Arguments]    ${mysql_host}
+    connect to Database Using Custom Params    pymysql    host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'
+
+参数配置
+    mysql数据库的连接    192.168.1.32
+    \    #BOSS端有账户    app端有账户    没有账户    环境的地址
+    输入拥有不同类型账户的用户user_id    10000    10000    123456781    http://192.168.1.31:10003
+
+清数据
+    [Arguments]    ${id_delete}
+    参数配置
+    ${check}    query    select * from ajb_account_transaction where id=${id_delete}
+    ${check_length}    get length    ${check}
+    run keyword if    ${check_length} != 0    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    ...    ELSE    log    数据库之前没有数据
+    log    数据库里面的这条数据清理成功啦。
+    set suite variable    ${id_delete}
+
+艾佳币恢复数目
+    参数配置
+    execute sql string    UPDATE account_amount \ SET total_amount=${database[0][2]},balance_amount=${database[0][3]},frozen_amount=${database[0][4]}where account_id="${account_id}";
+    log    成功
+
+输入拥有不同类型账户的用户user_id
+    [Arguments]    ${boss_user_account_id}    ${app_user_account_id}    ${no_user_account_id}    ${environment}
+    set suite variable    ${boss_user_account_id}
+    set suite variable    ${app_user_account_id}
+    set suite variable    ${no_user_account_id}
+    set suite variable    ${environment}
+    ${boss_channel_no1}    query    select * from ajb_account_open_record where user_id='${boss_user_account_id}' and channel_no=1
+    ${boss_channel_no}    set variable    ${boss_channel_no1[0][3]}
+    ${app_channel_no1}    query    select * from ajb_account_open_record where user_id='${app_user_account_id}' and channel_no=2
+    ${app_channel_no}    set variable    ${app_channel_no1[0][3]}
+    set suite variable    ${boss_channel_no}
+    set suite variable    ${app_channel_no}
+
+校验mongodb短信发放情况
+    connect to mongodb    192.168.1.32    25019
+    ${result}    get mongodb collections    test
+    ${allresults}    retrieve some mongodb records    test    push_sms_message    {"phoneNum" : "18888888888"}
+    should contain x times    ${allresults}    {"phoneNum" : "18888888888"}    24

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170726 15:45:01.500" generator="Robot 3.0.2 (Python 2.7.8 on win32)">
+<suite source="F:\logs and reports\账户中心" id="s1" name="账户中心">
+<suite source="F:\logs and reports\账户中心\艾佳币回收冻结.txt" id="s1-s1" name="艾佳币回收冻结">
+<test id="s1-s1-t1" name="输入木有的user_id和正确的amount参数">
+<kw name="输入入参值和接口地址" library="myResource">
+<arguments>
+<arg>123456786</arg>
+<arg>1</arg>
+<arg>2</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args11}</arg>
+</arguments>
+<msg timestamp="20170726 15:45:02.090" level="INFO">${args11} = 123456786</msg>
+<status status="PASS" endtime="20170726 15:45:02.091" starttime="20170726 15:45:02.088"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args22}</arg>
+</arguments>
+<msg timestamp="20170726 15:45:02.093" level="INFO">${args22} = 1</msg>
+<status status="PASS" endtime="20170726 15:45:02.094" starttime="20170726 15:45:02.092"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args33}</arg>
+</arguments>
+<msg timestamp="20170726 15:45:02.096" level="INFO">${args33} = 2</msg>
+<status status="PASS" endtime="20170726 15:45:02.097" starttime="20170726 15:45:02.095"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args44}</arg>
+</arguments>
+<msg timestamp="20170726 15:45:02.099" level="INFO">${args44} = </msg>
+<status status="PASS" endtime="20170726 15:45:02.100" starttime="20170726 15:45:02.098"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args55}</arg>
+</arguments>
+<msg timestamp="20170726 15:45:02.103" level="INFO">${args55} = http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze</msg>
+<status status="PASS" endtime="20170726 15:45:02.104" starttime="20170726 15:45:02.101"></status>
+</kw>
+<status status="PASS" endtime="20170726 15:45:02.105" starttime="20170726 15:45:02.085"></status>
+</kw>
+<kw name="Conn Mysql" library="wjwTestLibrary">
+<arguments>
+<arg>select * from ajb_account_open_record where user_id ='${args11}'</arg>
+</arguments>
+<assign>
+<var>${no_user_id}</var>
+</assign>
+<msg timestamp="20170726 15:45:02.135" level="INFO">${no_user_id} = ()</msg>
+<status status="PASS" endtime="20170726 15:45:02.136" starttime="20170726 15:45:02.106"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${no_user_id}</arg>
+</arguments>
+<msg timestamp="20170726 15:45:02.138" level="INFO">Length is 0</msg>
+<status status="PASS" endtime="20170726 15:45:02.139" starttime="20170726 15:45:02.137"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>此user_id不存在</arg>
+</arguments>
+<msg timestamp="20170726 15:45:02.141" level="INFO">此user_id不存在</msg>
+<status status="PASS" endtime="20170726 15:45:02.142" starttime="20170726 15:45:02.140"></status>
+</kw>
+<kw name="Data" library="wjwTestLibrary">
+<arguments>
+<arg>${args11}</arg>
+<arg>${args22}</arg>
+<arg>${args33}</arg>
+<arg>${args55}</arg>
+</arguments>
+<assign>
+<var>${data_no_user_id}</var>
+</assign>
+<msg timestamp="20170726 15:45:02.161" level="INFO">${data_no_user_id} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170726 15:45:02.163" starttime="20170726 15:45:02.144"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${data_no_user_id.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20170726 15:45:02.166" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:45:02.167" starttime="20170726 15:45:02.164"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>接口的响应码正确</arg>
+</arguments>
+<msg timestamp="20170726 15:45:02.170" level="INFO">接口的响应码正确</msg>
+<status status="PASS" endtime="20170726 15:45:02.171" starttime="20170726 15:45:02.169"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${data_no_user_id.text}</arg>
+</arguments>
+<assign>
+<var>${toJson1}</var>
+</assign>
+<msg timestamp="20170726 15:45:02.173" level="INFO">To JSON using : content={"data":{"orderNum":null},"msg":"成功","code":1,"success":true} </msg>
+<msg timestamp="20170726 15:45:02.175" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170726 15:45:02.177" level="INFO">${toJson1} = {u'msg': u'\u6210\u529f', u'code': 1, u'data': {u'orderNum': None}, u'success': True}</msg>
+<status status="PASS" endtime="20170726 15:45:02.178" starttime="20170726 15:45:02.172"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${toJson1['success']}</arg>
+<arg>True</arg>
+</arguments>
+<msg timestamp="20170726 15:45:02.180" level="INFO">Argument types are:
+&lt;type 'bool'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:45:02.181" starttime="20170726 15:45:02.179"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${toJson1['msg']}</arg>
+<arg>成功</arg>
+</arguments>
+<status status="PASS" endtime="20170726 15:45:02.184" starttime="20170726 15:45:02.182"></status>
+</kw>
+<kw name="Get From Dictionary" library="Collections">
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<arguments>
+<arg>${toJson1['data']}</arg>
+<arg>orderNum</arg>
+</arguments>
+<assign>
+<var>${no_user_id_orderNum}</var>
+</assign>
+<msg timestamp="20170726 15:45:02.186" level="INFO">${no_user_id_orderNum} = None</msg>
+<status status="PASS" endtime="20170726 15:45:02.187" starttime="20170726 15:45:02.185"></status>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<doc>Converts the given item to a Unicode string.</doc>
+<arguments>
+<arg>${no_user_id_orderNum}</arg>
+</arguments>
+<assign>
+<var>${no_user_id_orderNum_length}</var>
+</assign>
+<msg timestamp="20170726 15:45:02.189" level="INFO">${no_user_id_orderNum_length} = None</msg>
+<status status="PASS" endtime="20170726 15:45:02.190" starttime="20170726 15:45:02.188"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${no_user_id_orderNum_length}</arg>
+<arg>None</arg>
+</arguments>
+<status status="PASS" endtime="20170726 15:45:02.192" starttime="20170726 15:45:02.191"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>接口中返回的值校验成功！</arg>
+</arguments>
+<msg timestamp="20170726 15:45:02.195" level="INFO">接口中返回的值校验成功！</msg>
+<status status="PASS" endtime="20170726 15:45:02.195" starttime="20170726 15:45:02.194"></status>
+</kw>
+<status status="PASS" endtime="20170726 15:45:02.196" critical="yes" starttime="20170726 15:45:02.081"></status>
+</test>
+<status status="PASS" endtime="20170726 15:45:02.197" starttime="20170726 15:45:01.807"></status>
+</suite>
+<status status="PASS" endtime="20170726 15:45:02.203" starttime="20170726 15:45:01.554"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="0" pass="1">Critical Tests</stat>
+<stat fail="0" pass="1">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="0" id="s1" name="账户中心" pass="1">账户中心</stat>
+<stat fail="0" id="s1-s1" name="艾佳币回收冻结" pass="1">账户中心.艾佳币回收冻结</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

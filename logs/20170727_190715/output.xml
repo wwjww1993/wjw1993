@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170727 19:07:50.119" generator="Robot 3.0.2 (Python 2.7.8 on win32)">
+<suite source="F:\logs and reports\账户中心" id="s1" name="账户中心">
+<suite source="F:\logs and reports\账户中心\订单" id="s1-s1" name="订单">
+<suite source="F:\logs and reports\账户中心\订单\订单取消支付（线上）.txt" id="s1-s1-s1" name="订单取消支付（线上）">
+<test id="s1-s1-s1-t1" name="test">
+<kw name="数据库环境" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170727 19:07:50.675" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170727 19:07:50.734" starttime="20170727 19:07:50.648"></status>
+</kw>
+<status status="PASS" endtime="20170727 19:07:50.735" starttime="20170727 19:07:50.646"></status>
+</kw>
+<status status="PASS" endtime="20170727 19:07:50.735" starttime="20170727 19:07:50.644"></status>
+</kw>
+<kw name="清数据" library="myResource">
+<kw name="数据库环境" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170727 19:07:50.740" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170727 19:07:50.779" starttime="20170727 19:07:50.739"></status>
+</kw>
+<status status="PASS" endtime="20170727 19:07:50.780" starttime="20170727 19:07:50.738"></status>
+</kw>
+<status status="PASS" endtime="20170727 19:07:50.781" starttime="20170727 19:07:50.737"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_transaction where id=88800888</arg>
+</arguments>
+<assign>
+<var>${check}</var>
+</assign>
+<msg timestamp="20170727 19:07:50.783" level="INFO">Executing : Query  |  select * from ajb_account_transaction where id=88800888 </msg>
+<msg timestamp="20170727 19:07:50.792" level="INFO">${check} = ((88800888, '32102151361500975216', 1000000, 6131, 1, '32102151361500284867', '', Decimal('2.00'), 1, 11, 2, 0, datetime.datetime(2017, 7, 26, 16, 11, 40), datetime.datetime(2017, 7, 26, 16, 11, 40)),...</msg>
+<status status="PASS" endtime="20170727 19:07:50.793" starttime="20170727 19:07:50.782"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${check}</arg>
+</arguments>
+<assign>
+<var>${check_length}</var>
+</assign>
+<msg timestamp="20170727 19:07:50.795" level="INFO">Length is 1</msg>
+<msg timestamp="20170727 19:07:50.795" level="INFO">${check_length} = 1</msg>
+<status status="PASS" endtime="20170727 19:07:50.796" starttime="20170727 19:07:50.794"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${check_length}==0</arg>
+<arg>execute sql string</arg>
+<arg>insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("88800888","32102151361500975216","1000000","6131","1","32102151361500284867","","2","1","11","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");</arg>
+<arg>ELSE</arg>
+<arg>execute sql string</arg>
+<arg>delete from ajb_account_transaction where id=88800888</arg>
+</arguments>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>delete from ajb_account_transaction where id=88800888</arg>
+</arguments>
+<msg timestamp="20170727 19:07:50.799" level="INFO">Executing : Execute SQL String  |  delete from ajb_account_transaction where id=88800888 </msg>
+<status status="PASS" endtime="20170727 19:07:50.967" starttime="20170727 19:07:50.798"></status>
+</kw>
+<status status="PASS" endtime="20170727 19:07:50.968" starttime="20170727 19:07:50.797"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>数据库里面的这条数据清理成功啦。</arg>
+</arguments>
+<msg timestamp="20170727 19:07:50.970" level="INFO">数据库里面的这条数据清理成功啦。</msg>
+<status status="PASS" endtime="20170727 19:07:50.970" starttime="20170727 19:07:50.969"></status>
+</kw>
+<status status="PASS" endtime="20170727 19:07:50.971" starttime="20170727 19:07:50.736"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>test</arg>
+</arguments>
+<msg timestamp="20170727 19:07:50.972" level="INFO">test</msg>
+<status status="PASS" endtime="20170727 19:07:50.973" starttime="20170727 19:07:50.971"></status>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to</doc>
+<arguments>
+<arg>delete from ajb_account_transaction where id=88800888</arg>
+<arg>True</arg>
+</arguments>
+<msg timestamp="20170727 19:07:50.974" level="INFO">Executing : Execute SQL String  |  delete from ajb_account_transaction where id=88800888 </msg>
+<status status="PASS" endtime="20170727 19:07:50.982" starttime="20170727 19:07:50.973"></status>
+</kw>
+<status status="PASS" endtime="20170727 19:07:50.983" critical="yes" starttime="20170727 19:07:50.643"></status>
+</test>
+<status status="PASS" endtime="20170727 19:07:50.985" starttime="20170727 19:07:50.353"></status>
+</suite>
+<status status="PASS" endtime="20170727 19:07:50.990" starttime="20170727 19:07:50.349"></status>
+</suite>
+<status status="PASS" endtime="20170727 19:07:50.994" starttime="20170727 19:07:50.151"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="0" pass="1">Critical Tests</stat>
+<stat fail="0" pass="1">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="0" id="s1" name="账户中心" pass="1">账户中心</stat>
+<stat fail="0" id="s1-s1" name="订单" pass="1">账户中心.订单</stat>
+<stat fail="0" id="s1-s1-s1" name="订单取消支付（线上）" pass="1">账户中心.订单.订单取消支付（线上）</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

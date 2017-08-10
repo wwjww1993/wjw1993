@@ -1,0 +1,999 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170726 15:18:14.869" generator="Robot 3.0.2 (Python 2.7.8 on win32)">
+<suite source="F:\logs and reports\账户中心" id="s1" name="账户中心">
+<suite source="F:\logs and reports\账户中心\艾佳币充值.txt" id="s1-s1" name="艾佳币充值">
+<test id="s1-s1-t1" name="输入未有的user_id和正确的amount参数">
+<kw name="输入入参值和接口地址" library="myResource">
+<arguments>
+<arg>1234562</arg>
+<arg>1</arg>
+<arg>2</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbRecharge</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args11}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.357" level="INFO">${args11} = 1234562</msg>
+<status status="PASS" endtime="20170726 15:18:15.358" starttime="20170726 15:18:15.356"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args22}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.362" level="INFO">${args22} = 1</msg>
+<status status="PASS" endtime="20170726 15:18:15.362" starttime="20170726 15:18:15.360"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args33}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.365" level="INFO">${args33} = 2</msg>
+<status status="PASS" endtime="20170726 15:18:15.365" starttime="20170726 15:18:15.364"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args44}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.367" level="INFO">${args44} = </msg>
+<status status="PASS" endtime="20170726 15:18:15.368" starttime="20170726 15:18:15.366"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args55}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.370" level="INFO">${args55} = http://192.168.1.31:10003/ihome-api/settlement/ajbRecharge</msg>
+<status status="PASS" endtime="20170726 15:18:15.371" starttime="20170726 15:18:15.369"></status>
+</kw>
+<status status="PASS" endtime="20170726 15:18:15.372" starttime="20170726 15:18:15.354"></status>
+</kw>
+<kw name="Conn Mysql" library="wjwTestLibrary">
+<arguments>
+<arg>select * from ajb_account_open_record where user_id ='${args11}'</arg>
+</arguments>
+<assign>
+<var>${no_user_id}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.405" level="INFO">${no_user_id} = ()</msg>
+<status status="PASS" endtime="20170726 15:18:15.405" starttime="20170726 15:18:15.373"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${no_user_id}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.407" level="INFO">Length is 0</msg>
+<status status="PASS" endtime="20170726 15:18:15.408" starttime="20170726 15:18:15.406"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>此user_id不存在</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.409" level="INFO">此user_id不存在</msg>
+<status status="PASS" endtime="20170726 15:18:15.410" starttime="20170726 15:18:15.408"></status>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<doc>Converts the given item to a Unicode string.</doc>
+<arguments>
+<arg>${args55}</arg>
+</arguments>
+<assign>
+<var>${value}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.412" level="INFO">${value} = http://192.168.1.31:10003/ihome-api/settlement/ajbRecharge</msg>
+<status status="PASS" endtime="20170726 15:18:15.412" starttime="20170726 15:18:15.411"></status>
+</kw>
+<kw name="Data" library="wjwTestLibrary">
+<arguments>
+<arg>${args11}</arg>
+<arg>${args22}</arg>
+<arg>${args33}</arg>
+<arg>${args55}</arg>
+</arguments>
+<assign>
+<var>${data_no_user_id}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.581" level="INFO">${data_no_user_id} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.583" starttime="20170726 15:18:15.413"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${data_no_user_id.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.590" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.592" starttime="20170726 15:18:15.587"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>接口的响应码正确</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.599" level="INFO">接口的响应码正确</msg>
+<status status="PASS" endtime="20170726 15:18:15.600" starttime="20170726 15:18:15.595"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${data_no_user_id.text}</arg>
+</arguments>
+<assign>
+<var>${toJson1}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.603" level="INFO">To JSON using : content={"data":{"orderNum":"32102151361501036776"},"msg":"成功","code":1,"success":true} </msg>
+<msg timestamp="20170726 15:18:15.604" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170726 15:18:15.604" level="INFO">${toJson1} = {u'msg': u'\u6210\u529f', u'code': 1, u'data': {u'orderNum': u'32102151361501036776'}, u'success': True}</msg>
+<status status="PASS" endtime="20170726 15:18:15.605" starttime="20170726 15:18:15.601"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${toJson1['success']}</arg>
+<arg>True</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.607" level="INFO">Argument types are:
+&lt;type 'bool'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.608" starttime="20170726 15:18:15.606"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${toJson1['msg']}</arg>
+<arg>成功</arg>
+</arguments>
+<status status="PASS" endtime="20170726 15:18:15.610" starttime="20170726 15:18:15.609"></status>
+</kw>
+<kw name="Get From Dictionary" library="Collections">
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<arguments>
+<arg>${toJson1['data']}</arg>
+<arg>orderNum</arg>
+</arguments>
+<assign>
+<var>${no_user_id_orderNum}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.612" level="INFO">${no_user_id_orderNum} = 32102151361501036776</msg>
+<status status="PASS" endtime="20170726 15:18:15.613" starttime="20170726 15:18:15.611"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>接口中返回的值校验成功！</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.615" level="INFO">接口中返回的值校验成功！</msg>
+<status status="PASS" endtime="20170726 15:18:15.615" starttime="20170726 15:18:15.614"></status>
+</kw>
+<kw name="Conn Mysql" library="wjwTestLibrary">
+<arguments>
+<arg>select * from ajb_account_open_record where user_id ='${args11}'</arg>
+</arguments>
+<assign>
+<var>${no_user_id_after}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.632" level="INFO">${no_user_id_after} = ((10234L, u'32102151361501036775', 1234562L, 6191L, 1, 2, 0, datetime.datetime(2017, 7, 26, 15, 19, 16), datetime.datetime(2017, 7, 26, 15, 19, 16)),)</msg>
+<status status="PASS" endtime="20170726 15:18:15.633" starttime="20170726 15:18:15.616"></status>
+</kw>
+<kw name="Should Not Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is not empty.</doc>
+<arguments>
+<arg>${no_user_id_after}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.635" level="INFO">Length is 1</msg>
+<status status="PASS" endtime="20170726 15:18:15.636" starttime="20170726 15:18:15.634"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>调用艾佳币充值接口自动生成boss的账号</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.639" level="INFO">调用艾佳币充值接口自动生成boss的账号</msg>
+<status status="PASS" endtime="20170726 15:18:15.640" starttime="20170726 15:18:15.638"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${no_user_id_after[0][3]}</arg>
+</arguments>
+<assign>
+<var>${no_user_id_account_id}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.643" level="INFO">${no_user_id_account_id} = 6191</msg>
+<status status="PASS" endtime="20170726 15:18:15.644" starttime="20170726 15:18:15.642"></status>
+</kw>
+<kw name="Conn Mysql" library="wjwTestLibrary">
+<arguments>
+<arg>delete from ajb_account_open_record where user_id ='${args11}'</arg>
+</arguments>
+<assign>
+<var>${no_user_id_after}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.723" level="INFO">${no_user_id_after} = ()</msg>
+<status status="PASS" endtime="20170726 15:18:15.723" starttime="20170726 15:18:15.646"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>已删除该账号！</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.725" level="INFO">已删除该账号！</msg>
+<status status="PASS" endtime="20170726 15:18:15.725" starttime="20170726 15:18:15.724"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>现在开始校验表account_unilateral_bill</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.727" level="INFO">现在开始校验表account_unilateral_bill</msg>
+<status status="PASS" endtime="20170726 15:18:15.727" starttime="20170726 15:18:15.726"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<assign>
+<var>${current_time_no}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.728" level="INFO">${current_time_no} = 2017-07-26 15:18:15.728</msg>
+<status status="PASS" endtime="20170726 15:18:15.729" starttime="20170726 15:18:15.728"></status>
+</kw>
+<kw name="Subtract Time From Date" library="DateTime">
+<doc>Subtracts time from date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time_no}</arg>
+<arg>15 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_before_301}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.736" level="INFO">${current_time_before_301} = 2017-07-26 15:18:00.728</msg>
+<status status="PASS" endtime="20170726 15:18:15.736" starttime="20170726 15:18:15.729"></status>
+</kw>
+<kw name="Add Time To Date" library="DateTime">
+<doc>Adds time to date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time_no}</arg>
+<arg>61 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_after_302}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.738" level="INFO">${current_time_after_302} = 2017-07-26 15:19:16.728</msg>
+<status status="PASS" endtime="20170726 15:18:15.739" starttime="20170726 15:18:15.737"></status>
+</kw>
+<kw name="Conn Mysql" library="wjwTestLibrary">
+<arguments>
+<arg>select * from account_unilateral_bill where account_id ='${no_user_id_account_id}'and update_time between' ${current_time_before_301}' and '${current_time_after_302}'</arg>
+</arguments>
+<assign>
+<var>${user_id}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.753" level="INFO">${user_id} = ((4771L, u'32102151361501036780', 1234562L, 6191L, u'32102151361501036777', 1L, 7L, 3, Decimal('1.00'), None, datetime.datetime(2017, 7, 26, 15, 19, 16), datetime.datetime(2017, 7, 26, 15, 19, 16), 0)...</msg>
+<status status="PASS" endtime="20170726 15:18:15.753" starttime="20170726 15:18:15.739"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${user_id[0][1]}</arg>
+</arguments>
+<assign>
+<var>${bill_no_length}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.755" level="INFO">Length is 20</msg>
+<msg timestamp="20170726 15:18:15.755" level="INFO">${bill_no_length} = 20</msg>
+<status status="PASS" endtime="20170726 15:18:15.756" starttime="20170726 15:18:15.754"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${bill_no_length}</arg>
+<arg>20</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.757" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.758" starttime="20170726 15:18:15.757"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>bill_no的数据长度正确，校验成功</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.760" level="INFO">bill_no的数据长度正确，校验成功</msg>
+<status status="PASS" endtime="20170726 15:18:15.761" starttime="20170726 15:18:15.759"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][2]}</arg>
+<arg>${args11}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.764" level="INFO">Argument types are:
+&lt;type 'long'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.765" starttime="20170726 15:18:15.762"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>当下user_id是正确的！</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.766" level="INFO">当下user_id是正确的！</msg>
+<status status="PASS" endtime="20170726 15:18:15.767" starttime="20170726 15:18:15.766"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${user_id[0][4]}</arg>
+</arguments>
+<assign>
+<var>${command_no_length}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.768" level="INFO">Length is 20</msg>
+<msg timestamp="20170726 15:18:15.769" level="INFO">${command_no_length} = 20</msg>
+<status status="PASS" endtime="20170726 15:18:15.769" starttime="20170726 15:18:15.767"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${command_no_length}</arg>
+<arg>20</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.770" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.771" starttime="20170726 15:18:15.770"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>commandl_no的数据长度正确，校验成功</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.772" level="INFO">commandl_no的数据长度正确，校验成功</msg>
+<status status="PASS" endtime="20170726 15:18:15.773" starttime="20170726 15:18:15.771"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][5]}</arg>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.775" level="INFO">Argument types are:
+&lt;type 'long'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.776" starttime="20170726 15:18:15.774"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>product_code值是1，表示是艾佳币产品，表示正确</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.777" level="INFO">product_code值是1，表示是艾佳币产品，表示正确</msg>
+<status status="PASS" endtime="20170726 15:18:15.778" starttime="20170726 15:18:15.776"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][6]}</arg>
+<arg>7</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.779" level="INFO">Argument types are:
+&lt;type 'long'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.780" starttime="20170726 15:18:15.778"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>event_code值正确</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.782" level="INFO">event_code值正确</msg>
+<status status="PASS" endtime="20170726 15:18:15.782" starttime="20170726 15:18:15.781"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][7]}</arg>
+<arg>3</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.784" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.784" starttime="20170726 15:18:15.783"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>command_type值正确</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.785" level="INFO">command_type值正确</msg>
+<status status="PASS" endtime="20170726 15:18:15.786" starttime="20170726 15:18:15.785"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][8]}</arg>
+<arg>${args22}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.787" level="INFO">Argument types are:
+&lt;class 'decimal.Decimal'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.788" starttime="20170726 15:18:15.786"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>change_amount的变化数值是正确的</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.789" level="INFO">change_amount的变化数值是正确的</msg>
+<status status="PASS" endtime="20170726 15:18:15.790" starttime="20170726 15:18:15.788"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${user_id[0][10]}</arg>
+<arg>${user_id[0][11]}</arg>
+</arguments>
+<status status="PASS" endtime="20170726 15:18:15.791" starttime="20170726 15:18:15.790"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>add_time和update_time时间保持一致</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.794" level="INFO">add_time和update_time时间保持一致</msg>
+<status status="PASS" endtime="20170726 15:18:15.795" starttime="20170726 15:18:15.793"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id[0][12]}</arg>
+<arg>0</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.797" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.798" starttime="20170726 15:18:15.796"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>del_flag的值是0是未删除，是正确状态</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.799" level="INFO">del_flag的值是0是未删除，是正确状态</msg>
+<status status="PASS" endtime="20170726 15:18:15.800" starttime="20170726 15:18:15.799"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>表account_unilateral_bill校验成功</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.801" level="INFO">表account_unilateral_bill校验成功</msg>
+<status status="PASS" endtime="20170726 15:18:15.802" starttime="20170726 15:18:15.800"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${user_id[0][0]}</arg>
+</arguments>
+<assign>
+<var>${user_id[0][0]_unilateral}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.803" level="INFO">${user_id[0][0]_unilateral} = 4771</msg>
+<status status="PASS" endtime="20170726 15:18:15.803" starttime="20170726 15:18:15.802"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${user_id[0][0]_unilateral}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.806" level="INFO">${user_id[0][0]_unilateral} = 4771</msg>
+<status status="PASS" endtime="20170726 15:18:15.807" starttime="20170726 15:18:15.805"></status>
+</kw>
+<kw name="Conn Mysql" library="wjwTestLibrary">
+<arguments>
+<arg>delete from account_unilateral_bill where id ='${user_id[0][0]_unilateral}'</arg>
+</arguments>
+<assign>
+<var>${user_id_unilateral_delete}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.866" level="INFO">${user_id_unilateral_delete} = ()</msg>
+<status status="PASS" endtime="20170726 15:18:15.867" starttime="20170726 15:18:15.807"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>现在开始校验表ajb_account_transaction</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.868" level="INFO">现在开始校验表ajb_account_transaction</msg>
+<status status="PASS" endtime="20170726 15:18:15.869" starttime="20170726 15:18:15.868"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<assign>
+<var>${current_time_nouser}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.870" level="INFO">${current_time_nouser} = 2017-07-26 15:18:15.870</msg>
+<status status="PASS" endtime="20170726 15:18:15.870" starttime="20170726 15:18:15.869"></status>
+</kw>
+<kw name="Subtract Time From Date" library="DateTime">
+<doc>Subtracts time from date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time_no}</arg>
+<arg>15 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_before_3011}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.873" level="INFO">${current_time_before_3011} = 2017-07-26 15:18:00.728</msg>
+<status status="PASS" endtime="20170726 15:18:15.873" starttime="20170726 15:18:15.871"></status>
+</kw>
+<kw name="Add Time To Date" library="DateTime">
+<doc>Adds time to date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time_no}</arg>
+<arg>61 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_after_3022}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.875" level="INFO">${current_time_after_3022} = 2017-07-26 15:19:16.728</msg>
+<status status="PASS" endtime="20170726 15:18:15.875" starttime="20170726 15:18:15.874"></status>
+</kw>
+<kw name="Conn Mysql" library="wjwTestLibrary">
+<arguments>
+<arg>select * from ajb_account_transaction where account_id ='${no_user_id_account_id}' and update_time between' ${current_time_before_3011}' and '${current_time_after_3022}'</arg>
+</arguments>
+<assign>
+<var>${user_id_no}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.890" level="INFO">${user_id_no} = ((10495L, u'32102151361501036776', 1234562L, 6191L, 1, u'32102151361501036776', u'20170726151913QTV048857', Decimal('1.00'), 1L, 7L, 2, 0, datetime.datetime(2017, 7, 26, 15, 19, 16), datetime.datetime...</msg>
+<status status="PASS" endtime="20170726 15:18:15.891" starttime="20170726 15:18:15.876"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${user_id_no[0][1]}</arg>
+</arguments>
+<assign>
+<var>${business_no_length}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.893" level="INFO">Length is 20</msg>
+<msg timestamp="20170726 15:18:15.894" level="INFO">${business_no_length} = 20</msg>
+<status status="PASS" endtime="20170726 15:18:15.894" starttime="20170726 15:18:15.892"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${business_no_length}</arg>
+<arg>20</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.896" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.898" starttime="20170726 15:18:15.895"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>business_no的数据长度正确，校验成功</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.900" level="INFO">business_no的数据长度正确，校验成功</msg>
+<status status="PASS" endtime="20170726 15:18:15.900" starttime="20170726 15:18:15.899"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id_no[0][2]}</arg>
+<arg>${args11}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.902" level="INFO">Argument types are:
+&lt;type 'long'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.902" starttime="20170726 15:18:15.901"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>当下user_id是正确的！</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.904" level="INFO">当下user_id是正确的！</msg>
+<status status="PASS" endtime="20170726 15:18:15.904" starttime="20170726 15:18:15.903"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id_no[0][4]}</arg>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.906" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.906" starttime="20170726 15:18:15.905"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>channel_no的值正确</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.907" level="INFO">channel_no的值正确</msg>
+<status status="PASS" endtime="20170726 15:18:15.908" starttime="20170726 15:18:15.907"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id_no[0][5]}</arg>
+<arg>${no_user_id_orderNum}</arg>
+</arguments>
+<status status="PASS" endtime="20170726 15:18:15.910" starttime="20170726 15:18:15.909"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>order_num显示正确！</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.913" level="INFO">order_num显示正确！</msg>
+<status status="PASS" endtime="20170726 15:18:15.914" starttime="20170726 15:18:15.912"></status>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<doc>Converts the given item to a Unicode string.</doc>
+<arguments>
+<arg>${user_id_no[0][6]}</arg>
+</arguments>
+<assign>
+<var>${pay_no_after}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.916" level="INFO">${pay_no_after} = 20170726151913QTV048857</msg>
+<status status="PASS" endtime="20170726 15:18:15.917" starttime="20170726 15:18:15.915"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${pay_no_after}</arg>
+</arguments>
+<assign>
+<var>${pay_no_after_length}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.918" level="INFO">Length is 23</msg>
+<msg timestamp="20170726 15:18:15.919" level="INFO">${pay_no_after_length} = 23</msg>
+<status status="PASS" endtime="20170726 15:18:15.919" starttime="20170726 15:18:15.917"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${pay_no_after_length}</arg>
+<arg>23</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.920" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.921" starttime="20170726 15:18:15.920"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>pay_no表现正确</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.922" level="INFO">pay_no表现正确</msg>
+<status status="PASS" endtime="20170726 15:18:15.923" starttime="20170726 15:18:15.922"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id_no[0][7]}</arg>
+<arg>${args22}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.924" level="INFO">Argument types are:
+&lt;class 'decimal.Decimal'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.925" starttime="20170726 15:18:15.923"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>amount的变化数值是正确的</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.926" level="INFO">amount的变化数值是正确的</msg>
+<status status="PASS" endtime="20170726 15:18:15.927" starttime="20170726 15:18:15.926"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id_no[0][8]}</arg>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.928" level="INFO">Argument types are:
+&lt;type 'long'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.929" starttime="20170726 15:18:15.927"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>product_code值是1，表示是艾佳币产品，表示正确</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.931" level="INFO">product_code值是1，表示是艾佳币产品，表示正确</msg>
+<status status="PASS" endtime="20170726 15:18:15.931" starttime="20170726 15:18:15.930"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id_no[0][9]}</arg>
+<arg>7</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.933" level="INFO">Argument types are:
+&lt;type 'long'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.934" starttime="20170726 15:18:15.932"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>event_code值正确</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.936" level="INFO">event_code值正确</msg>
+<status status="PASS" endtime="20170726 15:18:15.936" starttime="20170726 15:18:15.935"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id_no[0][10]}</arg>
+<arg>2</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.938" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.938" starttime="20170726 15:18:15.937"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>trade_status表示执行成功</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.940" level="INFO">trade_status表示执行成功</msg>
+<status status="PASS" endtime="20170726 15:18:15.940" starttime="20170726 15:18:15.939"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id_no[0][11]}</arg>
+<arg>0</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.942" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:15.943" starttime="20170726 15:18:15.941"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>del_flag的值是0是未删除，是正确状态</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.945" level="INFO">del_flag的值是0是未删除，是正确状态</msg>
+<status status="PASS" endtime="20170726 15:18:15.946" starttime="20170726 15:18:15.944"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${user_id_no[0][12]}</arg>
+<arg>${user_id_no[0][13]}</arg>
+</arguments>
+<status status="PASS" endtime="20170726 15:18:15.950" starttime="20170726 15:18:15.948"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>add_time和update_time时间保持一致</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.951" level="INFO">add_time和update_time时间保持一致</msg>
+<status status="PASS" endtime="20170726 15:18:15.952" starttime="20170726 15:18:15.950"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>表ajb_account_transaction校验成功</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.953" level="INFO">表ajb_account_transaction校验成功</msg>
+<status status="PASS" endtime="20170726 15:18:15.953" starttime="20170726 15:18:15.952"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${user_id_no[0][0]}</arg>
+</arguments>
+<assign>
+<var>${user_id[0][0]_transaction}</var>
+</assign>
+<msg timestamp="20170726 15:18:15.955" level="INFO">${user_id[0][0]_transaction} = 10495</msg>
+<status status="PASS" endtime="20170726 15:18:15.955" starttime="20170726 15:18:15.954"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${user_id[0][0]_transaction}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:15.957" level="INFO">${user_id[0][0]_transaction} = 10495</msg>
+<status status="PASS" endtime="20170726 15:18:15.957" starttime="20170726 15:18:15.956"></status>
+</kw>
+<kw name="Conn Mysql" library="wjwTestLibrary">
+<arguments>
+<arg>delete from ajb_account_transaction where id ='${user_id_no[0][0]}'</arg>
+</arguments>
+<assign>
+<var>${user_id_unilateral_delete1}</var>
+</assign>
+<msg timestamp="20170726 15:18:16.031" level="INFO">${user_id_unilateral_delete1} = ()</msg>
+<status status="PASS" endtime="20170726 15:18:16.031" starttime="20170726 15:18:15.958"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>现在开始校验表account_amount</arg>
+</arguments>
+<msg timestamp="20170726 15:18:16.034" level="INFO">现在开始校验表account_amount</msg>
+<status status="PASS" endtime="20170726 15:18:16.034" starttime="20170726 15:18:16.033"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<assign>
+<var>${current_time1}</var>
+</assign>
+<msg timestamp="20170726 15:18:16.036" level="INFO">${current_time1} = 2017-07-26 15:18:16.035</msg>
+<status status="PASS" endtime="20170726 15:18:16.036" starttime="20170726 15:18:16.035"></status>
+</kw>
+<kw name="Subtract Time From Date" library="DateTime">
+<doc>Subtracts time from date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time1}</arg>
+<arg>60 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time1_before_30}</var>
+</assign>
+<msg timestamp="20170726 15:18:16.038" level="INFO">${current_time1_before_30} = 2017-07-26 15:17:16.035</msg>
+<status status="PASS" endtime="20170726 15:18:16.038" starttime="20170726 15:18:16.037"></status>
+</kw>
+<kw name="Add Time To Date" library="DateTime">
+<doc>Adds time to date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time1}</arg>
+<arg>60 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time1_after_30}</var>
+</assign>
+<msg timestamp="20170726 15:18:16.040" level="INFO">${current_time1_after_30} = 2017-07-26 15:19:16.035</msg>
+<status status="PASS" endtime="20170726 15:18:16.040" starttime="20170726 15:18:16.039"></status>
+</kw>
+<kw name="Conn Mysql" library="wjwTestLibrary">
+<arguments>
+<arg>select * from account_amount where account_id ='${no_user_id_account_id}'</arg>
+</arguments>
+<assign>
+<var>${user_id_t}</var>
+</assign>
+<msg timestamp="20170726 15:18:16.052" level="INFO">${user_id_t} = ((12505L, 6191L, Decimal('1.00'), Decimal('1.00'), Decimal('0.00'), datetime.datetime(2017, 7, 26, 15, 19, 16), datetime.datetime(2017, 7, 26, 15, 19, 16), 0),)</msg>
+<status status="PASS" endtime="20170726 15:18:16.053" starttime="20170726 15:18:16.041"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id_t[0][2]}</arg>
+<arg>${args22}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:16.055" level="INFO">Argument types are:
+&lt;class 'decimal.Decimal'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:16.055" starttime="20170726 15:18:16.054"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>total_amount变化前后的数目正确</arg>
+</arguments>
+<msg timestamp="20170726 15:18:16.057" level="INFO">total_amount变化前后的数目正确</msg>
+<status status="PASS" endtime="20170726 15:18:16.057" starttime="20170726 15:18:16.056"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id_t[0][3]}</arg>
+<arg>${args22}</arg>
+</arguments>
+<msg timestamp="20170726 15:18:16.059" level="INFO">Argument types are:
+&lt;class 'decimal.Decimal'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:16.059" starttime="20170726 15:18:16.058"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>balance_amount变化前后的数目正确</arg>
+</arguments>
+<msg timestamp="20170726 15:18:16.061" level="INFO">balance_amount变化前后的数目正确</msg>
+<status status="PASS" endtime="20170726 15:18:16.062" starttime="20170726 15:18:16.060"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id_t[0][4]}</arg>
+<arg>0</arg>
+</arguments>
+<msg timestamp="20170726 15:18:16.064" level="INFO">Argument types are:
+&lt;class 'decimal.Decimal'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:16.065" starttime="20170726 15:18:16.063"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>frozen_amount变化前后的数目正确</arg>
+</arguments>
+<msg timestamp="20170726 15:18:16.067" level="INFO">frozen_amount变化前后的数目正确</msg>
+<status status="PASS" endtime="20170726 15:18:16.067" starttime="20170726 15:18:16.066"></status>
+</kw>
+<kw name="Should Be Equal As Integers" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<arguments>
+<arg>${user_id_t[0][7]}</arg>
+<arg>0</arg>
+</arguments>
+<msg timestamp="20170726 15:18:16.070" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170726 15:18:16.071" starttime="20170726 15:18:16.068"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>del_flag的值是0是未删除，是正确状态</arg>
+</arguments>
+<msg timestamp="20170726 15:18:16.073" level="INFO">del_flag的值是0是未删除，是正确状态</msg>
+<status status="PASS" endtime="20170726 15:18:16.074" starttime="20170726 15:18:16.072"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>表account_amount校验成功！</arg>
+</arguments>
+<msg timestamp="20170726 15:18:16.075" level="INFO">表account_amount校验成功！</msg>
+<status status="PASS" endtime="20170726 15:18:16.076" starttime="20170726 15:18:16.075"></status>
+</kw>
+<kw name="Conn Mysql" library="wjwTestLibrary">
+<arguments>
+<arg>delete from account_amount where account_id ='${no_user_id_account_id}'</arg>
+</arguments>
+<assign>
+<var>${user_id_unilateral_delete_amount}</var>
+</assign>
+<msg timestamp="20170726 15:18:16.173" level="INFO">${user_id_unilateral_delete_amount} = ()</msg>
+<status status="PASS" endtime="20170726 15:18:16.175" starttime="20170726 15:18:16.076"></status>
+</kw>
+<status status="PASS" endtime="20170726 15:18:16.179" critical="yes" starttime="20170726 15:18:15.350"></status>
+</test>
+<status status="PASS" endtime="20170726 15:18:16.184" starttime="20170726 15:18:15.086"></status>
+</suite>
+<status status="PASS" endtime="20170726 15:18:16.198" starttime="20170726 15:18:14.899"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="0" pass="1">Critical Tests</stat>
+<stat fail="0" pass="1">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="0" id="s1" name="账户中心" pass="1">账户中心</stat>
+<stat fail="0" id="s1-s1" name="艾佳币充值" pass="1">账户中心.艾佳币充值</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

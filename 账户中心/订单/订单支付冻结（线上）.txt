@@ -1,0 +1,58 @@
+*** Settings ***
+Library           requests
+Library           Collections
+Library           json
+Library           demjson
+Library           urllib2
+Library           Selenium2Library
+Library           RequestsLibrary
+Library           wjwTestLibrary
+Resource          myResource.txt
+Library           DatabaseLibrary
+
+*** Test Cases ***
+APP下单时调用，支付未完成艾佳币支付冻结，输入正确的userId和orderNum，ajbAmount，订单被冻结。
+    参数配置
+    清数据    8880888
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361500284867","${boss_user_account_id}","${boss_channel_no}","1","32102151361500284867","","2000","1","6","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #userId    orderNum    ajbAmount    remark    接口地址
+    输入入参值和接口地址    ${boss_user_account_id}    32102151361500284867    10    \    ${environment}/ihome-api/settlement/freezePay
+    获得account_id
+    连接接口
+    字段验证
+    表account_unilateral_bill的校验
+    表ajb_account_transaction
+    表account_amount的校验
+    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    艾佳币恢复数目
+
+APP下单时调用，支付未完成艾佳币支付冻结，当输入艾佳币数目为0的时候，接口返回成功，但没有入库里
+    参数配置
+    清数据    8880888
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361500284867","${boss_user_account_id}","${boss_channel_no}","1","32102151361500284867","","2000","1","6","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #userId    orderNum    ajbAmount    remark    接口地址
+    输入入参值和接口地址    ${boss_user_account_id}    32102151361500284867    0    \    ${environment}/ihome-api/settlement/freezePay
+    获得account_id
+    连接接口
+    字段验证
+    amount和表里的校验
+    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    log    当输入艾佳币的数量为0的时候，接口返回成功，但是数据不入库里
+    艾佳币恢复数目
+
+APP下单时调用，支付未完成艾佳币支付冻结，当输入艾佳币为字符的时候，报错，接口返回400
+    参数配置
+    清数据    8880888
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361500284867","${boss_user_account_id}","${boss_channel_no}","1","32102151361500284867","","2000","1","6","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #userId    orderNum    ajbAmount    remark    接口地址
+    输入入参值和接口地址    ${boss_user_account_id}    32102151361500284867    str    \    ${environment}/ihome-api/settlement/freezePay
+    获得account_id
+    连接接口
+    log    ${data.status_code}
+    should be equal as strings    ${data.status_code}    400
+    log    400由于语法格式有误，服务器无法理解此请求。
+    log    接口的响应码正确
+    amount和表里的校验
+    log    输入已有的user_id和amount为字符的时候，语法错误，报400
+    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    艾佳币恢复数目

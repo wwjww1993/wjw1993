@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generated="20170728 10:49:23.584" generator="Robot 3.0.2 (Python 2.7.8 on win32)">
+<suite source="F:\logs and reports\账户中心" id="s1" name="账户中心">
+<suite source="F:\logs and reports\账户中心\艾佳币" id="s1-s1" name="艾佳币">
+<suite source="F:\logs and reports\账户中心\艾佳币\艾佳币回收冻结.txt" id="s1-s1-s1" name="艾佳币回收冻结">
+<test id="s1-s1-s1-t1" name="输入木有的user_id和正确的amount参数">
+<kw name="输入入参值和接口地址" library="myResource">
+<arguments>
+<arg>123456784</arg>
+<arg>1</arg>
+<arg>2</arg>
+<arg>http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze</arg>
+</arguments>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args11}</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.143" level="INFO">${args11} = 123456784</msg>
+<status status="PASS" endtime="20170728 10:49:24.144" starttime="20170728 10:49:24.142"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args22}</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.147" level="INFO">${args22} = 1</msg>
+<status status="PASS" endtime="20170728 10:49:24.148" starttime="20170728 10:49:24.145"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args33}</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.150" level="INFO">${args33} = 2</msg>
+<status status="PASS" endtime="20170728 10:49:24.150" starttime="20170728 10:49:24.149"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args44}</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.152" level="INFO">${args44} = </msg>
+<status status="PASS" endtime="20170728 10:49:24.152" starttime="20170728 10:49:24.151"></status>
+</kw>
+<kw name="Set Suite Variable" library="BuiltIn">
+<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
+<arguments>
+<arg>${args55}</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.154" level="INFO">${args55} = http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze</msg>
+<status status="PASS" endtime="20170728 10:49:24.154" starttime="20170728 10:49:24.153"></status>
+</kw>
+<status status="PASS" endtime="20170728 10:49:24.155" starttime="20170728 10:49:24.140"></status>
+</kw>
+<kw name="数据库环境" library="myResource">
+<kw name="mysql数据库的连接" library="myResource">
+<arguments>
+<arg>192.168.1.32</arg>
+</arguments>
+<kw name="Connect To Database Using Custom Params" library="DatabaseLibrary">
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to</doc>
+<arguments>
+<arg>pymysql</arg>
+<arg>host='${mysql_host}',port=3306,user='root',passwd='aijia1234567',db='account'</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.181" level="INFO">Executing : Connect To Database Using Custom Params : pymysql.connect(db_api_2.connect(host='192.168.1.32',port=3306,user='root',passwd='aijia1234567',db='account')) </msg>
+<status status="PASS" endtime="20170728 10:49:24.198" starttime="20170728 10:49:24.157"></status>
+</kw>
+<status status="PASS" endtime="20170728 10:49:24.199" starttime="20170728 10:49:24.156"></status>
+</kw>
+<status status="PASS" endtime="20170728 10:49:24.200" starttime="20170728 10:49:24.156"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id ='${args11}'</arg>
+</arguments>
+<assign>
+<var>${no_user_id}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.201" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id ='123456784' </msg>
+<msg timestamp="20170728 10:49:24.249" level="INFO">${no_user_id} = ()</msg>
+<status status="PASS" endtime="20170728 10:49:24.251" starttime="20170728 10:49:24.200"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${no_user_id}</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.254" level="INFO">Length is 0</msg>
+<status status="PASS" endtime="20170728 10:49:24.256" starttime="20170728 10:49:24.252"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>此user_id不存在</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.262" level="INFO">此user_id不存在</msg>
+<status status="PASS" endtime="20170728 10:49:24.265" starttime="20170728 10:49:24.259"></status>
+</kw>
+<kw name="Data" library="wjwTestLibrary">
+<arguments>
+<arg>${args11}</arg>
+<arg>${args22}</arg>
+<arg>${args33}</arg>
+<arg>${args55}</arg>
+</arguments>
+<assign>
+<var>${data_no_user_id}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.312" level="INFO">${data_no_user_id} = &lt;Response [200]&gt;</msg>
+<status status="PASS" endtime="20170728 10:49:24.312" starttime="20170728 10:49:24.268"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${data_no_user_id.status_code}</arg>
+<arg>200</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.316" level="INFO">Argument types are:
+&lt;type 'int'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170728 10:49:24.317" starttime="20170728 10:49:24.314"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>接口的响应码正确</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.320" level="INFO">接口的响应码正确</msg>
+<status status="PASS" endtime="20170728 10:49:24.320" starttime="20170728 10:49:24.318"></status>
+</kw>
+<kw name="To Json" library="RequestsLibrary">
+<doc>Convert a string to a JSON object</doc>
+<arguments>
+<arg>${data_no_user_id.text}</arg>
+</arguments>
+<assign>
+<var>${toJson1}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.322" level="INFO">To JSON using : content={"data":{"orderNum":null},"msg":"成功","code":1,"success":true} </msg>
+<msg timestamp="20170728 10:49:24.323" level="INFO">To JSON using : pretty_print=False </msg>
+<msg timestamp="20170728 10:49:24.323" level="INFO">${toJson1} = {u'msg': u'\u6210\u529f', u'code': 1, u'data': {u'orderNum': None}, u'success': True}</msg>
+<status status="PASS" endtime="20170728 10:49:24.323" starttime="20170728 10:49:24.321"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${toJson1['success']}</arg>
+<arg>True</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.325" level="INFO">Argument types are:
+&lt;type 'bool'&gt;
+&lt;type 'unicode'&gt;</msg>
+<status status="PASS" endtime="20170728 10:49:24.325" starttime="20170728 10:49:24.324"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${toJson1['msg']}</arg>
+<arg>成功</arg>
+</arguments>
+<status status="PASS" endtime="20170728 10:49:24.327" starttime="20170728 10:49:24.326"></status>
+</kw>
+<kw name="Get From Dictionary" library="Collections">
+<doc>Returns a value from the given ``dictionary`` based on the given ``key``.</doc>
+<arguments>
+<arg>${toJson1['data']}</arg>
+<arg>orderNum</arg>
+</arguments>
+<assign>
+<var>${no_user_id_orderNum}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.330" level="INFO">${no_user_id_orderNum} = None</msg>
+<status status="PASS" endtime="20170728 10:49:24.331" starttime="20170728 10:49:24.328"></status>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<doc>Converts the given item to a Unicode string.</doc>
+<arguments>
+<arg>${no_user_id_orderNum}</arg>
+</arguments>
+<assign>
+<var>${no_user_id_orderNum_length}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.335" level="INFO">${no_user_id_orderNum_length} = None</msg>
+<status status="PASS" endtime="20170728 10:49:24.335" starttime="20170728 10:49:24.334"></status>
+</kw>
+<kw name="Should Be Equal As Strings" library="BuiltIn">
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<arguments>
+<arg>${no_user_id_orderNum_length}</arg>
+<arg>None</arg>
+</arguments>
+<status status="PASS" endtime="20170728 10:49:24.338" starttime="20170728 10:49:24.337"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>接口中返回的值校验成功！</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.339" level="INFO">接口中返回的值校验成功！</msg>
+<status status="PASS" endtime="20170728 10:49:24.340" starttime="20170728 10:49:24.339"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_open_record where user_id ='${args11}'</arg>
+</arguments>
+<assign>
+<var>${no_user_id_after}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.341" level="INFO">Executing : Query  |  select * from ajb_account_open_record where user_id ='123456784' </msg>
+<msg timestamp="20170728 10:49:24.350" level="INFO">${no_user_id_after} = ()</msg>
+<status status="PASS" endtime="20170728 10:49:24.351" starttime="20170728 10:49:24.340"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${no_user_id_after}</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.352" level="INFO">Length is 0</msg>
+<status status="PASS" endtime="20170728 10:49:24.353" starttime="20170728 10:49:24.352"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>此用户不存在，调用接口也不能创建账户</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.355" level="INFO">此用户不存在，调用接口也不能创建账户</msg>
+<status status="PASS" endtime="20170728 10:49:24.356" starttime="20170728 10:49:24.354"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<assign>
+<var>${current_time_no}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.357" level="INFO">${current_time_no} = 2017-07-28 10:49:24.357</msg>
+<status status="PASS" endtime="20170728 10:49:24.357" starttime="20170728 10:49:24.356"></status>
+</kw>
+<kw name="Subtract Time From Date" library="DateTime">
+<doc>Subtracts time from date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time_no}</arg>
+<arg>15 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_before_301}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.364" level="INFO">${current_time_before_301} = 2017-07-28 10:49:09.357</msg>
+<status status="PASS" endtime="20170728 10:49:24.365" starttime="20170728 10:49:24.358"></status>
+</kw>
+<kw name="Add Time To Date" library="DateTime">
+<doc>Adds time to date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time_no}</arg>
+<arg>61 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_after_302}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.367" level="INFO">${current_time_after_302} = 2017-07-28 10:50:25.357</msg>
+<status status="PASS" endtime="20170728 10:49:24.368" starttime="20170728 10:49:24.366"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from account_unilateral_bill where user_id ='${args11}' and update_time between' ${current_time_before_301}' and '${current_time_after_302}'</arg>
+</arguments>
+<assign>
+<var>${user_id}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.370" level="INFO">Executing : Query  |  select * from account_unilateral_bill where user_id ='123456784' and update_time between' 2017-07-28 10:49:09.357' and '2017-07-28 10:50:25.357' </msg>
+<msg timestamp="20170728 10:49:24.379" level="INFO">${user_id} = ()</msg>
+<status status="PASS" endtime="20170728 10:49:24.380" starttime="20170728 10:49:24.369"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${user_id}</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.382" level="INFO">Length is 0</msg>
+<status status="PASS" endtime="20170728 10:49:24.383" starttime="20170728 10:49:24.381"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>表account_unilateral_bill里是空的</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.384" level="INFO">表account_unilateral_bill里是空的</msg>
+<status status="PASS" endtime="20170728 10:49:24.385" starttime="20170728 10:49:24.383"></status>
+</kw>
+<kw name="Get Current Date" library="DateTime">
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<assign>
+<var>${current_time_nouser}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.386" level="INFO">${current_time_nouser} = 2017-07-28 10:49:24.386</msg>
+<status status="PASS" endtime="20170728 10:49:24.386" starttime="20170728 10:49:24.385"></status>
+</kw>
+<kw name="Subtract Time From Date" library="DateTime">
+<doc>Subtracts time from date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time_nouser}</arg>
+<arg>15 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_before_3011}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.389" level="INFO">${current_time_before_3011} = 2017-07-28 10:49:09.386</msg>
+<status status="PASS" endtime="20170728 10:49:24.389" starttime="20170728 10:49:24.387"></status>
+</kw>
+<kw name="Add Time To Date" library="DateTime">
+<doc>Adds time to date and returns the resulting date.</doc>
+<arguments>
+<arg>${current_time_nouser}</arg>
+<arg>61 seconds</arg>
+</arguments>
+<assign>
+<var>${current_time_after_3022}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.391" level="INFO">${current_time_after_3022} = 2017-07-28 10:50:25.386</msg>
+<status status="PASS" endtime="20170728 10:49:24.392" starttime="20170728 10:49:24.390"></status>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional</doc>
+<arguments>
+<arg>select * from ajb_account_transaction where user_id ='${args11}' and update_time between' ${current_time_before_3011}' and '${current_time_after_3022}'</arg>
+</arguments>
+<assign>
+<var>${user_id_no}</var>
+</assign>
+<msg timestamp="20170728 10:49:24.395" level="INFO">Executing : Query  |  select * from ajb_account_transaction where user_id ='123456784' and update_time between' 2017-07-28 10:49:09.386' and '2017-07-28 10:50:25.386' </msg>
+<msg timestamp="20170728 10:49:24.410" level="INFO">${user_id_no} = ()</msg>
+<status status="PASS" endtime="20170728 10:49:24.411" starttime="20170728 10:49:24.393"></status>
+</kw>
+<kw name="Should Be Empty" library="BuiltIn">
+<doc>Verifies that the given item is empty.</doc>
+<arguments>
+<arg>${user_id_no}</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.413" level="INFO">Length is 0</msg>
+<status status="PASS" endtime="20170728 10:49:24.414" starttime="20170728 10:49:24.412"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>ajb_account_transaction里是空的</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.416" level="INFO">ajb_account_transaction里是空的</msg>
+<status status="PASS" endtime="20170728 10:49:24.417" starttime="20170728 10:49:24.415"></status>
+</kw>
+<kw name="Log" library="BuiltIn">
+<doc>Logs the given message with the given level.</doc>
+<arguments>
+<arg>调用艾佳币回收冻结，没有user_id,也不能创建新的账号。</arg>
+</arguments>
+<msg timestamp="20170728 10:49:24.419" level="INFO">调用艾佳币回收冻结，没有user_id,也不能创建新的账号。</msg>
+<status status="PASS" endtime="20170728 10:49:24.419" starttime="20170728 10:49:24.418"></status>
+</kw>
+<status status="PASS" endtime="20170728 10:49:24.420" critical="yes" starttime="20170728 10:49:24.137"></status>
+</test>
+<status status="PASS" endtime="20170728 10:49:24.422" starttime="20170728 10:49:23.856"></status>
+</suite>
+<status status="PASS" endtime="20170728 10:49:24.428" starttime="20170728 10:49:23.852"></status>
+</suite>
+<status status="PASS" endtime="20170728 10:49:24.431" starttime="20170728 10:49:23.652"></status>
+</suite>
+<statistics>
+<total>
+<stat fail="0" pass="1">Critical Tests</stat>
+<stat fail="0" pass="1">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat fail="0" id="s1" name="账户中心" pass="1">账户中心</stat>
+<stat fail="0" id="s1-s1" name="艾佳币" pass="1">账户中心.艾佳币</stat>
+<stat fail="0" id="s1-s1-s1" name="艾佳币回收冻结" pass="1">账户中心.艾佳币.艾佳币回收冻结</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

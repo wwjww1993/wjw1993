@@ -1,0 +1,4 @@
+*** Settings ***
+Library           wjwTestLibrary
+
+*** Keywords ***

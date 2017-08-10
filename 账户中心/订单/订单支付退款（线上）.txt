@@ -1,0 +1,557 @@
+*** Settings ***
+Library           requests
+Library           Collections
+Library           json
+Library           demjson
+Library           urllib2
+Library           Selenium2Library
+Library           RequestsLibrary
+Library           wjwTestLibrary
+Resource          myResource.txt
+Library           DatabaseLibrary
+
+*** Test Cases ***
+APP订单退款时调用，输入正确的订单号，交易已经完成退款，艾佳币退回用户账户
+    参数配置
+    清数据    888888
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361500885834","${boss_user_account_id}","${boss_channel_no}","1","32102151361500885834","","2","1","13","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #orderNum    接口地址
+    输入入参值和接口地址    32102151361500885834    \    \    \    ${environment}/ihome-api/settlement/orderPayRefund
+    #获取俩个账户的余额
+    ${user_id_refund}    query    select * from ajb_account_transaction where order_num='${args11}' and event_code=13
+    ${account_id_bos}    query    select * from ajb_account_open_record where user_id='${user_id_refund[0][2]}' and channel_no=1
+    ${account_id_boss}    set variable    ${account_id_bos[0][3]}
+    ${account_id_ap}    query    select * from ajb_account_open_record where user_id='${user_id_refund[0][2]}' and channel_no=2
+    ${account_id_app}    set variable    ${account_id_ap[0][3]}
+    ${amount_boss}    query    select * from account_amount where account_id='${account_id_boss}'
+    ${amount_app}    query    select * from account_amount where account_id='${account_id_app}'
+    ${value}    convert to string    ${args55}
+    ${data}    ajbWithdrawCancel    ${args11}    ${args55}
+    log    ${data.status_code}
+    should be equal as strings    ${data.status_code}    200
+    log    接口的响应码正确
+    ${toJson}    to json    ${data.text}
+    should be equal as strings    ${toJson['success']}    True
+    should be equal as strings    ${toJson['msg']}    成功
+    log    接口中返回的值校验成功！
+    ${current_time}    get_current_date
+    ${current_time_before_30}    subtract time from date    ${current_time}    5 seconds
+    ${current_time_after_30}    Add Time To Date    ${current_time}    100 seconds
+    ${user_id}    query    select * from account_unilateral_bill where event_code=14 and user_id='${user_id_refund[0][2]}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    ${bill_no_length}    get length    ${user_id[0][1]}
+    should be equal as integers    ${bill_no_length}    20
+    log    bill_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][2]}    ${user_id_refund[0][2]}
+    log    当下user_id是正确的！
+    ${command_no_length}    get length    ${user_id[0][4]}
+    should be equal as integers    ${command_no_length}    20
+    log    commandl_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][5]}    1    #1是艾佳币产品
+    log    product_code值是1，表示是艾佳币产品，表示正确
+    should be equal as integers    ${user_id[0][6]}    14    #8表示退款艾佳币冻结
+    log    event_code值正确
+    should be equal as integers    ${user_id[0][7]}    3
+    log    command_type值正确
+    should be equal as integers    ${user_id[0][8]}    ${user_id_refund[0][7]}
+    log    change_amount的变化数值是正确的
+    should be equal as integers    ${user_id[0][12]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    表account_unilateral_bill校验成功
+    ${user_id_unilateral_delete}    ConnMysql    delete from account_unilateral_bill where id ='${user_id[0][0]}'
+    log    现在开始校验表ajb_account_transaction
+    ${current_time1}    get_current_date
+    ${current_time_before_301}    subtract time from date    ${current_time1}    5 seconds
+    ${current_time_after_301}    Add Time To Date    ${current_time1}    100 seconds
+    ${user_id1}    query    select * from ajb_account_transaction where event_code=14 and user_id='${user_id_refund[0][2]}' and update_time between' ${current_time_before_301}' and '${current_time_after_301}'
+    ${business_no_length}    get length    ${user_id1[0][1]}
+    should be equal as integers    ${business_no_length}    20
+    log    business_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id1[0][2]}    ${user_id_refund[0][2]}
+    log    当下user_id是正确的！
+    should be equal as integers    ${user_id1[0][5]}    ${args11}
+    log    order_num显示正确！
+    ${pay_no_after}    convert to string    ${user_id1[0][6]}
+    ${pay_no_after_length}    get length    ${pay_no_after}
+    should be equal as integers    ${pay_no_after_length}    23
+    log    pay_no表现正确
+    should be equal as integers    ${user_id1[0][7]}    ${user_id_refund[0][7]}
+    log    amount的变化数值是正确的
+    should be equal as integers    ${user_id1[0][8]}    1    #1是艾佳币产品
+    log    product_code值是1，表示是艾佳币产品，表示正确
+    should be equal as integers    ${user_id1[0][9]}    14    #8表示退款艾佳币冻结
+    log    event_code值正确
+    should be equal as integers    ${user_id1[0][10]}    2    #执行成功
+    log    trade_status表示执行成功
+    should be equal as integers    ${user_id1[0][11]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    表ajb_account_transaction校验成功
+    ${user_id[0][0]_transaction}    set variable    ${user_id[0][0]}
+    set suite variable    ${user_id[0][0]_transaction}
+    execute sql string    delete from ajb_account_transaction where id ='${user_id1[0][0]}'
+    log    检验表account_amount
+    ${amount_app_after}    query    select * from account_amount where account_id='${account_id_app}'
+    ${amount_boss_after}    query    select * from account_amount where account_id='${account_id_boss}'
+    ${total_amount_check}    evaluate    ${amount_boss_after[0][2]}+${amount_app_after[0][2]}-${amount_boss[0][2]}-${amount_app[0][2]}
+    should be equal as integers    ${total_amount_check}    ${user_id_refund[0][7]}
+    log    total_amount正确
+    ${balance_amount_check}    evaluate    ${amount_boss_after[0][3]}+${amount_app_after[0][3]}-${amount_boss[0][3]}-${amount_app[0][3]}
+    should be equal as integers    ${balance_amount_check}    ${user_id_refund[0][7]}
+    log    balance_amount正确
+    ${frozen_amount_check}    evaluate    ${amount_boss[0][4]}+${amount_app[0][4]}-${amount_boss_after[0][4]}-${amount_app_after[0][4]}
+    should be equal as integers    ${frozen_amount_check}    0
+    log    frozen_amount正确
+    log    检验表account_amount成功
+    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    execute sql string    UPDATE account_amount SET total_amount =${amount_boss[0][2]},balance_amount=${amount_boss[0][3]},frozen_amount=${amount_boss[0][4]} where account_id="${account_id_boss}";
+    execute sql string    UPDATE account_amount SET total_amount=${amount_boss[0][2]},balance_amount=${amount_boss[0][3]},frozen_amount=${amount_boss[0][4]} where account_id="${account_id_app}";
+    log    成功
+
+APP订单退款时调用，输入库里面标记删除的订单号，接口返回失败，数据没有入库
+    参数配置
+    清数据    88800888
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361501122443","${boss_user_account_id}","${boss_channel_no}","1","32102151361501122443","","2","1","11","2","1","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #orderNum    接口地址
+    输入入参值和接口地址    32102151361501122443    \    \    \    ${environment}/ihome-api/settlement/orderPayRefund
+    获得account_id
+    连接接口
+    错误时字段验证
+    amount和表里的校验
+    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    log    当订单号为库里面标记删除的时候，接口返回失败
+
+艾佳币账户未过期，支付订单后取消顶大，解冻艾佳币，有效期小于15天的延长15天
+    参数配置
+    ${current_time}=    get current date
+    ${after_time}=    add time to date    ${current_time}    1 days
+    ${account_begin_time}=    subtract time from date    ${current_time}    10 days
+    ${after_time_check1}=    add time to date    ${current_time}    15 days
+    ${after_time_check}=    convert date    ${after_time_check1}    datetime
+    ${id}    query    select * from ajb_account_open_record where user_id="${boss_user_account_id}"
+    execute sql string    delete from account_base where user_id="${boss_user_account_id}"
+    execute sql string    insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("${id[0][3]}","${boss_user_account_id}","1","2","2","${account_begin_time}","${after_time}","${account_begin_time}","${account_begin_time}","0");
+    execute sql string    insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("${id[1][3]}","${boss_user_account_id}","1","2","2","${account_begin_time}","${after_time}","${account_begin_time}","${account_begin_time}","0");
+    清数据    888888
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361500885834","${boss_user_account_id}","${boss_channel_no}","1","32102151361500885834","","2","1","13","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #orderNum    接口地址
+    输入入参值和接口地址    32102151361500885834    \    \    \    ${environment}/ihome-api/settlement/orderPayRefund
+    ${user_id_refund}    query    select * from ajb_account_transaction where order_num='${args11}' and event_code=13
+    ${account_id_bos}    query    select * from ajb_account_open_record where user_id='${user_id_refund[0][2]}' and channel_no=1
+    ${account_id_boss}    set variable    ${account_id_bos[0][3]}
+    ${account_id_ap}    query    select * from ajb_account_open_record where user_id='${user_id_refund[0][2]}' and channel_no=2
+    ${account_id_app}    set variable    ${account_id_ap[0][3]}
+    ${amount_boss}    query    select * from account_amount where account_id='${account_id_boss}'
+    ${amount_app}    query    select * from account_amount where account_id='${account_id_app}'
+    ${value}    convert to string    ${args55}
+    ${data}    ajbWithdrawCancel    ${args11}    ${args55}
+    log    ${data.status_code}
+    should be equal as strings    ${data.status_code}    200
+    log    接口的响应码正确
+    ${toJson}    to json    ${data.text}
+    should be equal as strings    ${toJson['success']}    True
+    should be equal as strings    ${toJson['msg']}    成功
+    log    接口中返回的值校验成功！
+    ${current_time}    get_current_date
+    ${current_time_before_30}    subtract time from date    ${current_time}    5 seconds
+    ${current_time_after_30}    Add Time To Date    ${current_time}    100 seconds
+    ${user_id}    query    select * from account_unilateral_bill where event_code=14 and user_id='${user_id_refund[0][2]}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    ${bill_no_length}    get length    ${user_id[0][1]}
+    should be equal as integers    ${bill_no_length}    20
+    log    bill_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][2]}    ${user_id_refund[0][2]}
+    log    当下user_id是正确的！
+    ${command_no_length}    get length    ${user_id[0][4]}
+    should be equal as integers    ${command_no_length}    20
+    log    commandl_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][5]}    1    #1是艾佳币产品
+    log    product_code值是1，表示是艾佳币产品，表示正确
+    should be equal as integers    ${user_id[0][6]}    14    #8表示退款艾佳币冻结
+    log    event_code值正确
+    should be equal as integers    ${user_id[0][7]}    3
+    log    command_type值正确
+    should be equal as integers    ${user_id[0][8]}    ${user_id_refund[0][7]}
+    log    change_amount的变化数值是正确的
+    should be equal as integers    ${user_id[0][12]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    表account_unilateral_bill校验成功
+    ${user_id_unilateral_delete}    ConnMysql    delete from account_unilateral_bill where id ='${user_id[0][0]}'
+    log    现在开始校验表ajb_account_transaction
+    ${current_time1}    get_current_date
+    ${current_time_before_301}    subtract time from date    ${current_time1}    5 seconds
+    ${current_time_after_301}    Add Time To Date    ${current_time1}    100 seconds
+    ${user_id1}    query    select * from ajb_account_transaction where event_code=14 and user_id='${user_id_refund[0][2]}' and update_time between' ${current_time_before_301}' and '${current_time_after_301}'
+    ${business_no_length}    get length    ${user_id1[0][1]}
+    should be equal as integers    ${business_no_length}    20
+    log    business_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id1[0][2]}    ${user_id_refund[0][2]}
+    log    当下user_id是正确的！
+    should be equal as integers    ${user_id1[0][5]}    ${args11}
+    log    order_num显示正确！
+    ${pay_no_after}    convert to string    ${user_id1[0][6]}
+    ${pay_no_after_length}    get length    ${pay_no_after}
+    should be equal as integers    ${pay_no_after_length}    23
+    log    pay_no表现正确
+    should be equal as integers    ${user_id1[0][7]}    ${user_id_refund[0][7]}
+    log    amount的变化数值是正确的
+    should be equal as integers    ${user_id1[0][8]}    1    #1是艾佳币产品
+    log    product_code值是1，表示是艾佳币产品，表示正确
+    should be equal as integers    ${user_id1[0][9]}    14    #8表示退款艾佳币冻结
+    log    event_code值正确
+    should be equal as integers    ${user_id1[0][10]}    2    #执行成功
+    log    trade_status表示执行成功
+    should be equal as integers    ${user_id1[0][11]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    表ajb_account_transaction校验成功
+    ${user_id[0][0]_transaction}    set variable    ${user_id[0][0]}
+    set suite variable    ${user_id[0][0]_transaction}
+    execute sql string    delete from ajb_account_transaction where id ='${user_id1[0][0]}'
+    log    检验表account_amount
+    ${amount_app_after}    query    select * from account_amount where account_id='${account_id_app}'
+    ${amount_boss_after}    query    select * from account_amount where account_id='${account_id_boss}'
+    ${total_amount_check}    evaluate    ${amount_boss_after[0][2]}+${amount_app_after[0][2]}-${amount_boss[0][2]}-${amount_app[0][2]}
+    should be equal as integers    ${total_amount_check}    ${user_id_refund[0][7]}
+    log    total_amount正确
+    ${balance_amount_check}    evaluate    ${amount_boss_after[0][3]}+${amount_app_after[0][3]}-${amount_boss[0][3]}-${amount_app[0][3]}
+    should be equal as integers    ${balance_amount_check}    ${user_id_refund[0][7]}
+    log    balance_amount正确
+    ${frozen_amount_check}    evaluate    ${amount_boss[0][4]}+${amount_app[0][4]}-${amount_boss_after[0][4]}-${amount_app_after[0][4]}
+    should be equal as integers    ${frozen_amount_check}    0
+    log    frozen_amount正确
+    log    检验表account_amount成功
+    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    execute sql string    UPDATE account_amount SET total_amount =${amount_boss[0][2]},balance_amount=${amount_boss[0][3]},frozen_amount=${amount_boss[0][4]} where account_id="${account_id_boss}";
+    execute sql string    UPDATE account_amount SET total_amount=${amount_boss[0][2]},balance_amount=${amount_boss[0][3]},frozen_amount=${amount_boss[0][4]} where account_id="${account_id_app}";
+    log    成功
+    ${after_time_after}    query    select * from account_base where user_id="${boss_user_account_id}"
+    should be equal    ${after_time_after[0][6]}    ${after_time_after[1][6]}
+    ${after_time_after1}=    convert date    ${after_time_after[0][6]}    datetime
+    ${after_time_check}=    convert date    ${after_time_check1}    datetime
+    should be equal    ${after_time_after1.month}    ${after_time_check.month}
+    should be equal    ${after_time_after1.day}    ${after_time_check.day}
+    log    账户未过期，且有效期小于15天的时候，有效期延长15天
+
+艾佳币账户未过期，支付订单后取消顶大，解冻艾佳币，有效期大于15天的不延长
+    参数配置
+    ${current_time}=    get current date
+    ${after_time}=    add time to date    ${current_time}    20 days
+    ${account_begin_time}=    subtract time from date    ${current_time}    10 days
+    ${after_time_check1}=    convert date    ${after_time}    datetime
+    ${id}    query    select * from ajb_account_open_record where user_id="${boss_user_account_id}"
+    execute sql string    delete from account_base where user_id="${boss_user_account_id}"
+    execute sql string    insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("${id[0][3]}","${boss_user_account_id}","1","2","2","${account_begin_time}","${after_time}","${account_begin_time}","${account_begin_time}","0");
+    execute sql string    insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("${id[1][3]}","${boss_user_account_id}","1","2","2","${account_begin_time}","${after_time}","${account_begin_time}","${account_begin_time}","0");
+    清数据    888888
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361500885834","${boss_user_account_id}","${boss_channel_no}","1","32102151361500885834","","2","1","13","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #orderNum    \    \    \    接口地址
+    输入入参值和接口地址    32102151361500885834    \    \    \    ${environment}/ihome-api/settlement/orderPayRefund
+    ${user_id_refund}    query    select * from ajb_account_transaction where order_num='${args11}' and event_code=13
+    ${account_id_bos}    query    select * from ajb_account_open_record where user_id='${user_id_refund[0][2]}' and channel_no=1
+    ${account_id_boss}    set variable    ${account_id_bos[0][3]}
+    ${account_id_ap}    query    select * from ajb_account_open_record where user_id='${user_id_refund[0][2]}' and channel_no=2
+    ${account_id_app}    set variable    ${account_id_ap[0][3]}
+    ${amount_boss}    query    select * from account_amount where account_id='${account_id_boss}'
+    ${amount_app}    query    select * from account_amount where account_id='${account_id_app}'
+    ${value}    convert to string    ${args55}
+    ${data}    ajbWithdrawCancel    ${args11}    ${args55}
+    log    ${data.status_code}
+    should be equal as strings    ${data.status_code}    200
+    log    接口的响应码正确
+    ${toJson}    to json    ${data.text}
+    should be equal as strings    ${toJson['success']}    True
+    should be equal as strings    ${toJson['msg']}    成功
+    log    接口中返回的值校验成功！
+    ${current_time}    get_current_date
+    ${current_time_before_30}    subtract time from date    ${current_time}    5 seconds
+    ${current_time_after_30}    Add Time To Date    ${current_time}    100 seconds
+    ${user_id}    query    select * from account_unilateral_bill where event_code=14 and user_id='${user_id_refund[0][2]}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    ${bill_no_length}    get length    ${user_id[0][1]}
+    should be equal as integers    ${bill_no_length}    20
+    log    bill_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][2]}    ${user_id_refund[0][2]}
+    log    当下user_id是正确的！
+    ${command_no_length}    get length    ${user_id[0][4]}
+    should be equal as integers    ${command_no_length}    20
+    log    commandl_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][5]}    1    #1是艾佳币产品
+    log    product_code值是1，表示是艾佳币产品，表示正确
+    should be equal as integers    ${user_id[0][6]}    14    #8表示退款艾佳币冻结
+    log    event_code值正确
+    should be equal as integers    ${user_id[0][7]}    3
+    log    command_type值正确
+    should be equal as integers    ${user_id[0][8]}    ${user_id_refund[0][7]}
+    log    change_amount的变化数值是正确的
+    should be equal as integers    ${user_id[0][12]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    表account_unilateral_bill校验成功
+    ${user_id_unilateral_delete}    ConnMysql    delete from account_unilateral_bill where id ='${user_id[0][0]}'
+    log    现在开始校验表ajb_account_transaction
+    ${current_time1}    get_current_date
+    ${current_time_before_301}    subtract time from date    ${current_time1}    5 seconds
+    ${current_time_after_301}    Add Time To Date    ${current_time1}    100 seconds
+    ${user_id1}    query    select * from ajb_account_transaction where event_code=14 and user_id='${user_id_refund[0][2]}' and update_time between' ${current_time_before_301}' and '${current_time_after_301}'
+    ${business_no_length}    get length    ${user_id1[0][1]}
+    should be equal as integers    ${business_no_length}    20
+    log    business_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id1[0][2]}    ${user_id_refund[0][2]}
+    log    当下user_id是正确的！
+    should be equal as integers    ${user_id1[0][5]}    ${args11}
+    log    order_num显示正确！
+    ${pay_no_after}    convert to string    ${user_id1[0][6]}
+    ${pay_no_after_length}    get length    ${pay_no_after}
+    should be equal as integers    ${pay_no_after_length}    23
+    log    pay_no表现正确
+    should be equal as integers    ${user_id1[0][7]}    ${user_id_refund[0][7]}
+    log    amount的变化数值是正确的
+    should be equal as integers    ${user_id1[0][8]}    1    #1是艾佳币产品
+    log    product_code值是1，表示是艾佳币产品，表示正确
+    should be equal as integers    ${user_id1[0][9]}    14    #8表示退款艾佳币冻结
+    log    event_code值正确
+    should be equal as integers    ${user_id1[0][10]}    2    #执行成功
+    log    trade_status表示执行成功
+    should be equal as integers    ${user_id1[0][11]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    表ajb_account_transaction校验成功
+    ${user_id[0][0]_transaction}    set variable    ${user_id[0][0]}
+    set suite variable    ${user_id[0][0]_transaction}
+    execute sql string    delete from ajb_account_transaction where id ='${user_id1[0][0]}'
+    log    检验表account_amount
+    ${amount_app_after}    query    select * from account_amount where account_id='${account_id_app}'
+    ${amount_boss_after}    query    select * from account_amount where account_id='${account_id_boss}'
+    ${total_amount_check}    evaluate    ${amount_boss_after[0][2]}+${amount_app_after[0][2]}-${amount_boss[0][2]}-${amount_app[0][2]}
+    should be equal as integers    ${total_amount_check}    ${user_id_refund[0][7]}
+    log    total_amount正确
+    ${balance_amount_check}    evaluate    ${amount_boss_after[0][3]}+${amount_app_after[0][3]}-${amount_boss[0][3]}-${amount_app[0][3]}
+    should be equal as integers    ${balance_amount_check}    ${user_id_refund[0][7]}
+    log    balance_amount正确
+    ${frozen_amount_check}    evaluate    ${amount_boss[0][4]}+${amount_app[0][4]}-${amount_boss_after[0][4]}-${amount_app_after[0][4]}
+    should be equal as integers    ${frozen_amount_check}    0
+    log    frozen_amount正确
+    log    检验表account_amount成功
+    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    execute sql string    UPDATE account_amount SET total_amount =${amount_boss[0][2]},balance_amount=${amount_boss[0][3]},frozen_amount=${amount_boss[0][4]} where account_id="${account_id_boss}";
+    execute sql string    UPDATE account_amount SET total_amount=${amount_boss[0][2]},balance_amount=${amount_boss[0][3]},frozen_amount=${amount_boss[0][4]} where account_id="${account_id_app}";
+    log    成功
+    ${after_time_after}    query    select * from account_base where user_id="${boss_user_account_id}"
+    should be equal    ${after_time_after[0][6]}    ${after_time_after[1][6]}
+    ${after_time_after1}=    convert date    ${after_time_after[0][6]}    datetime
+    ${after_time_check}=    convert date    ${after_time_check1}    datetime
+    should be equal    ${after_time_after1.month}    ${after_time_check.month}
+    should be equal    ${after_time_after1.day}    ${after_time_check.day}
+    log    账户未过期，且有效期大于15天的时候，有效期不延长
+
+艾佳币账户未过期，支付订单后取消顶大，解冻艾佳币，有效期等于15天的不延长
+    参数配置
+    ${current_time}=    get current date
+    ${after_time}=    add time to date    ${current_time}    15 days
+    ${account_begin_time}=    subtract time from date    ${current_time}    10 days
+    ${after_time_check1}=    convert date    ${after_time}    datetime
+    ${id}    query    select * from ajb_account_open_record where user_id="${boss_user_account_id}"
+    execute sql string    delete from account_base where user_id="${boss_user_account_id}"
+    execute sql string    insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("${id[0][3]}","${boss_user_account_id}","1","2","2","${account_begin_time}","${after_time}","${account_begin_time}","${account_begin_time}","0");
+    execute sql string    insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("${id[1][3]}","${boss_user_account_id}","1","2","2","${account_begin_time}","${after_time}","${account_begin_time}","${account_begin_time}","0");
+    清数据    888888
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361500885834","${boss_user_account_id}","${boss_channel_no}","1","32102151361500885834","","2","1","13","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #orderNum    \    \    \    接口地址
+    输入入参值和接口地址    32102151361500885834    \    \    \    ${environment}/ihome-api/settlement/orderPayRefund
+    ${user_id_refund}    query    select * from ajb_account_transaction where order_num='${args11}' and event_code=13
+    ${account_id_bos}    query    select * from ajb_account_open_record where user_id='${user_id_refund[0][2]}' and channel_no=1
+    ${account_id_boss}    set variable    ${account_id_bos[0][3]}
+    ${account_id_ap}    query    select * from ajb_account_open_record where user_id='${user_id_refund[0][2]}' and channel_no=2
+    ${account_id_app}    set variable    ${account_id_ap[0][3]}
+    ${amount_boss}    query    select * from account_amount where account_id='${account_id_boss}'
+    ${amount_app}    query    select * from account_amount where account_id='${account_id_app}'
+    ${value}    convert to string    ${args55}
+    ${data}    ajbWithdrawCancel    ${args11}    ${args55}
+    log    ${data.status_code}
+    should be equal as strings    ${data.status_code}    200
+    log    接口的响应码正确
+    ${toJson}    to json    ${data.text}
+    should be equal as strings    ${toJson['success']}    True
+    should be equal as strings    ${toJson['msg']}    成功
+    log    接口中返回的值校验成功！
+    ${current_time}    get_current_date
+    ${current_time_before_30}    subtract time from date    ${current_time}    5 seconds
+    ${current_time_after_30}    Add Time To Date    ${current_time}    100 seconds
+    ${user_id}    query    select * from account_unilateral_bill where event_code=14 and user_id='${user_id_refund[0][2]}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    ${bill_no_length}    get length    ${user_id[0][1]}
+    should be equal as integers    ${bill_no_length}    20
+    log    bill_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][2]}    ${user_id_refund[0][2]}
+    log    当下user_id是正确的！
+    ${command_no_length}    get length    ${user_id[0][4]}
+    should be equal as integers    ${command_no_length}    20
+    log    commandl_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][5]}    1    #1是艾佳币产品
+    log    product_code值是1，表示是艾佳币产品，表示正确
+    should be equal as integers    ${user_id[0][6]}    14    #8表示退款艾佳币冻结
+    log    event_code值正确
+    should be equal as integers    ${user_id[0][7]}    3
+    log    command_type值正确
+    should be equal as integers    ${user_id[0][8]}    ${user_id_refund[0][7]}
+    log    change_amount的变化数值是正确的
+    should be equal as integers    ${user_id[0][12]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    表account_unilateral_bill校验成功
+    ${user_id_unilateral_delete}    ConnMysql    delete from account_unilateral_bill where id ='${user_id[0][0]}'
+    log    现在开始校验表ajb_account_transaction
+    ${current_time1}    get_current_date
+    ${current_time_before_301}    subtract time from date    ${current_time1}    5 seconds
+    ${current_time_after_301}    Add Time To Date    ${current_time1}    100 seconds
+    ${user_id1}    query    select * from ajb_account_transaction where event_code=14 and user_id='${user_id_refund[0][2]}' and update_time between' ${current_time_before_301}' and '${current_time_after_301}'
+    ${business_no_length}    get length    ${user_id1[0][1]}
+    should be equal as integers    ${business_no_length}    20
+    log    business_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id1[0][2]}    ${user_id_refund[0][2]}
+    log    当下user_id是正确的！
+    should be equal as integers    ${user_id1[0][5]}    ${args11}
+    log    order_num显示正确！
+    ${pay_no_after}    convert to string    ${user_id1[0][6]}
+    ${pay_no_after_length}    get length    ${pay_no_after}
+    should be equal as integers    ${pay_no_after_length}    23
+    log    pay_no表现正确
+    should be equal as integers    ${user_id1[0][7]}    ${user_id_refund[0][7]}
+    log    amount的变化数值是正确的
+    should be equal as integers    ${user_id1[0][8]}    1    #1是艾佳币产品
+    log    product_code值是1，表示是艾佳币产品，表示正确
+    should be equal as integers    ${user_id1[0][9]}    14    #8表示退款艾佳币冻结
+    log    event_code值正确
+    should be equal as integers    ${user_id1[0][10]}    2    #执行成功
+    log    trade_status表示执行成功
+    should be equal as integers    ${user_id1[0][11]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    表ajb_account_transaction校验成功
+    ${user_id[0][0]_transaction}    set variable    ${user_id[0][0]}
+    set suite variable    ${user_id[0][0]_transaction}
+    execute sql string    delete from ajb_account_transaction where id ='${user_id1[0][0]}'
+    log    检验表account_amount
+    ${amount_app_after}    query    select * from account_amount where account_id='${account_id_app}'
+    ${amount_boss_after}    query    select * from account_amount where account_id='${account_id_boss}'
+    ${total_amount_check}    evaluate    ${amount_boss_after[0][2]}+${amount_app_after[0][2]}-${amount_boss[0][2]}-${amount_app[0][2]}
+    should be equal as integers    ${total_amount_check}    ${user_id_refund[0][7]}
+    log    total_amount正确
+    ${balance_amount_check}    evaluate    ${amount_boss_after[0][3]}+${amount_app_after[0][3]}-${amount_boss[0][3]}-${amount_app[0][3]}
+    should be equal as integers    ${balance_amount_check}    ${user_id_refund[0][7]}
+    log    balance_amount正确
+    ${frozen_amount_check}    evaluate    ${amount_boss[0][4]}+${amount_app[0][4]}-${amount_boss_after[0][4]}-${amount_app_after[0][4]}
+    should be equal as integers    ${frozen_amount_check}    0
+    log    frozen_amount正确
+    log    检验表account_amount成功
+    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    execute sql string    UPDATE account_amount SET total_amount =${amount_boss[0][2]},balance_amount=${amount_boss[0][3]},frozen_amount=${amount_boss[0][4]} where account_id="${account_id_boss}";
+    execute sql string    UPDATE account_amount SET total_amount=${amount_boss[0][2]},balance_amount=${amount_boss[0][3]},frozen_amount=${amount_boss[0][4]} where account_id="${account_id_app}";
+    log    成功
+    ${after_time_after}    query    select * from account_base where user_id="${boss_user_account_id}"
+    should be equal    ${after_time_after[0][6]}    ${after_time_after[1][6]}
+    ${after_time_after1}=    convert date    ${after_time_after[0][6]}    datetime
+    ${after_time_check}=    convert date    ${after_time_check1}    datetime
+    should be equal    ${after_time_after1.month}    ${after_time_check.month}
+    should be equal    ${after_time_after1.day}    ${after_time_check.day}
+    log    账户未过期，且有效期大于15天的时候，有效期不延长
+
+艾佳币账户过期，支付订单后取消顶大，解冻艾佳币，有效期延长15天
+    参数配置
+    ${current_time}=    get current date
+    ${after_time}=    subtract time from date    ${current_time}    2 days
+    ${account_begin_time}=    subtract time from date    ${current_time}    10 days
+    ${after_time_check1}=    add time to date    ${current_time}    15 days
+    ${id}    query    select * from ajb_account_open_record where user_id="${boss_user_account_id}"
+    execute sql string    delete from account_base where user_id="${boss_user_account_id}"
+    execute sql string    insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("${id[0][3]}","${boss_user_account_id}","1","2","2","${account_begin_time}","${after_time}","${account_begin_time}","${account_begin_time}","0");
+    execute sql string    insert into account_base(id,user_id,role_type,account_type,account_status,account_begin_time,account_end_time,add_time,update_time,del_flag) values("${id[1][3]}","${boss_user_account_id}","1","2","2","${account_begin_time}","${after_time}","${account_begin_time}","${account_begin_time}","0");
+    清数据    888888
+    execute sql string    insert into ajb_account_transaction(id,business_no,user_id,account_id,channel_no,order_num,pay_no,amount,product_code,event_code,trade_status,del_flag,add_time,update_time) values("${id_delete}","32102151361500885834","${boss_user_account_id}","${boss_channel_no}","1","32102151361500885834","","2","1","13","2","0","2017-07-26 16:11:40","2017-07-26 16:11:40");
+    \    #orderNum    接口地址
+    输入入参值和接口地址    32102151361500885834    \    \    \    ${environment}/ihome-api/settlement/orderPayRefund
+    ${user_id_refund}    query    select * from ajb_account_transaction where order_num='${args11}' and event_code=13
+    ${account_id_bos}    query    select * from ajb_account_open_record where user_id='${user_id_refund[0][2]}' and channel_no=1
+    ${account_id_boss}    set variable    ${account_id_bos[0][3]}
+    ${account_id_ap}    query    select * from ajb_account_open_record where user_id='${user_id_refund[0][2]}' and channel_no=2
+    ${account_id_app}    set variable    ${account_id_ap[0][3]}
+    ${amount_boss}    query    select * from account_amount where account_id='${account_id_boss}'
+    ${amount_app}    query    select * from account_amount where account_id='${account_id_app}'
+    ${value}    convert to string    ${args55}
+    ${data}    ajbWithdrawCancel    ${args11}    ${args55}
+    log    ${data.status_code}
+    should be equal as strings    ${data.status_code}    200
+    log    接口的响应码正确
+    ${toJson}    to json    ${data.text}
+    should be equal as strings    ${toJson['success']}    True
+    should be equal as strings    ${toJson['msg']}    成功
+    log    接口中返回的值校验成功！
+    ${current_time}    get_current_date
+    ${current_time_before_30}    subtract time from date    ${current_time}    5 seconds
+    ${current_time_after_30}    Add Time To Date    ${current_time}    100 seconds
+    ${user_id}    query    select * from account_unilateral_bill where event_code=14 and user_id='${user_id_refund[0][2]}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    ${bill_no_length}    get length    ${user_id[0][1]}
+    should be equal as integers    ${bill_no_length}    20
+    log    bill_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][2]}    ${user_id_refund[0][2]}
+    log    当下user_id是正确的！
+    ${command_no_length}    get length    ${user_id[0][4]}
+    should be equal as integers    ${command_no_length}    20
+    log    commandl_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id[0][5]}    1    #1是艾佳币产品
+    log    product_code值是1，表示是艾佳币产品，表示正确
+    should be equal as integers    ${user_id[0][6]}    14    #8表示退款艾佳币冻结
+    log    event_code值正确
+    should be equal as integers    ${user_id[0][7]}    3
+    log    command_type值正确
+    should be equal as integers    ${user_id[0][8]}    ${user_id_refund[0][7]}
+    log    change_amount的变化数值是正确的
+    should be equal as integers    ${user_id[0][12]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    表account_unilateral_bill校验成功
+    ${user_id_unilateral_delete}    ConnMysql    delete from account_unilateral_bill where id ='${user_id[0][0]}'
+    log    现在开始校验表ajb_account_transaction
+    ${current_time1}    get_current_date
+    ${current_time_before_301}    subtract time from date    ${current_time1}    5 seconds
+    ${current_time_after_301}    Add Time To Date    ${current_time1}    100 seconds
+    ${user_id1}    query    select * from ajb_account_transaction where event_code=14 and user_id='${user_id_refund[0][2]}' and update_time between' ${current_time_before_301}' and '${current_time_after_301}'
+    ${business_no_length}    get length    ${user_id1[0][1]}
+    should be equal as integers    ${business_no_length}    20
+    log    business_no的数据长度正确，校验成功
+    should be equal as integers    ${user_id1[0][2]}    ${user_id_refund[0][2]}
+    log    当下user_id是正确的！
+    should be equal as integers    ${user_id1[0][5]}    ${args11}
+    log    order_num显示正确！
+    ${pay_no_after}    convert to string    ${user_id1[0][6]}
+    ${pay_no_after_length}    get length    ${pay_no_after}
+    should be equal as integers    ${pay_no_after_length}    23
+    log    pay_no表现正确
+    should be equal as integers    ${user_id1[0][7]}    ${user_id_refund[0][7]}
+    log    amount的变化数值是正确的
+    should be equal as integers    ${user_id1[0][8]}    1    #1是艾佳币产品
+    log    product_code值是1，表示是艾佳币产品，表示正确
+    should be equal as integers    ${user_id1[0][9]}    14    #8表示退款艾佳币冻结
+    log    event_code值正确
+    should be equal as integers    ${user_id1[0][10]}    2    #执行成功
+    log    trade_status表示执行成功
+    should be equal as integers    ${user_id1[0][11]}    0    #其中0表示未删除
+    log    del_flag的值是0是未删除，是正确状态
+    log    表ajb_account_transaction校验成功
+    ${user_id[0][0]_transaction}    set variable    ${user_id[0][0]}
+    set suite variable    ${user_id[0][0]_transaction}
+    execute sql string    delete from ajb_account_transaction where id ='${user_id1[0][0]}'
+    log    检验表account_amount
+    ${amount_app_after}    query    select * from account_amount where account_id='${account_id_app}'
+    ${amount_boss_after}    query    select * from account_amount where account_id='${account_id_boss}'
+    ${total_amount_check}    evaluate    ${amount_boss_after[0][2]}+${amount_app_after[0][2]}-${amount_boss[0][2]}-${amount_app[0][2]}
+    should be equal as integers    ${total_amount_check}    ${user_id_refund[0][7]}
+    log    total_amount正确
+    ${balance_amount_check}    evaluate    ${amount_boss_after[0][3]}+${amount_app_after[0][3]}-${amount_boss[0][3]}-${amount_app[0][3]}
+    should be equal as integers    ${balance_amount_check}    ${user_id_refund[0][7]}
+    log    balance_amount正确
+    ${frozen_amount_check}    evaluate    ${amount_boss[0][4]}+${amount_app[0][4]}-${amount_boss_after[0][4]}-${amount_app_after[0][4]}
+    should be equal as integers    ${frozen_amount_check}    0
+    log    frozen_amount正确
+    log    检验表account_amount成功
+    execute sql string    delete from ajb_account_transaction where id=${id_delete}
+    execute sql string    UPDATE account_amount SET total_amount =${amount_boss[0][2]},balance_amount=${amount_boss[0][3]},frozen_amount=${amount_boss[0][4]} where account_id="${account_id_boss}";
+    execute sql string    UPDATE account_amount SET total_amount=${amount_boss[0][2]},balance_amount=${amount_boss[0][3]},frozen_amount=${amount_boss[0][4]} where account_id="${account_id_app}";
+    log    成功
+    ${after_time_after}    query    select * from account_base where user_id="${boss_user_account_id}"
+    should be equal    ${after_time_after[0][6]}    ${after_time_after[1][6]}
+    ${after_time_after1}=    convert date    ${after_time_after[0][6]}    datetime
+    ${after_time_check}=    convert date    ${after_time_check1}    datetime
+    should be equal    ${after_time_after1.month}    ${after_time_check.month}
+    should be equal    ${after_time_after1.day}    ${after_time_check.day}
+    log    账户未过期，且有效期大于15天的时候，有效期不延长

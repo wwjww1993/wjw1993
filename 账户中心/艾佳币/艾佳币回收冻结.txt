@@ -1,0 +1,171 @@
+*** Settings ***
+Library           requests
+Library           Collections
+Library           json
+Library           demjson
+Library           urllib2
+Library           Selenium2Library
+Library           RequestsLibrary
+Library           wjwTestLibrary
+Resource          myResource.txt
+Library           DatabaseLibrary
+
+*** Test Cases ***
+拥有boss账户的用户，BOSS发起退款（未确认），冻结艾佳币接口返回成功
+    参数配置
+    \    #userId    amount    remark    \    接口地址
+    输入入参值和接口地址    ${boss_user_account_id}    2    \    \    ${environment}/ihome-api/settlement/ajbWithdrawFreeze
+    获得account_id
+    连接接口
+    字段验证
+    表ajb_account_open_record的校验
+    表account_unilateral_bill的校验
+    表ajb_account_transaction
+    表account_amount的校验
+    艾佳币恢复数目
+
+拥有boss账户的用户，BOSS发起退款（未确认），冻结艾佳币当输入的amount为0时，接口返回失败，艾佳币数额不合法，数据不如库里
+    参数配置
+    \    #userId    amount    remark    接口地址
+    输入入参值和接口地址    ${boss_user_account_id}    0    \    \    ${environment}/ihome-api/settlement/ajbWithdrawFreeze
+    获得account_id
+    连接接口
+    log    ${data.status_code}
+    should be equal as strings    ${data.status_code}    200
+    log    接口的响应码正确
+    ${toJson}    to json    ${data.text}
+    should be equal as strings    ${toJson['success']}    False
+    should be equal as strings    ${toJson['data']}    None
+    log    接口中返回的值校验成功！
+    ${toJson_after}    convert to string    ${toJson['msg']}
+    ${toJson_convert}    to json    ${toJson_after}
+    should be equal as strings    ${toJson_convert['amount']}    艾佳币数额不合法
+    log    接口中返回的值校验成功！
+    参数配置
+    ${user_id}    query    select * from account_amount where account_id ='${account_id}'
+    should be equal as integers    ${user_id[0][2]}    ${total_amount_before}
+    log    total_amount变化前后的数目正确
+    should be equal as integers    ${user_id[0][3]}    ${balance_amount_before}
+    log    balance_amount变化前后的数目正确
+    should be equal as integers    ${user_id[0][4]}    ${frozen_amount_before}
+    log    frozen_amount变化前后的数目正确
+    log    amounts的数据没有变化正确的
+    should be equal as integers    ${user_id[0][7]}    0
+    log    表account_amount内容没有发生变化
+    ${current_time}    get_current_date
+    ${current_time_before_30}    subtract time from date    ${current_time}    60 seconds
+    ${current_time_after_30}    Add Time To Date    ${current_time}    60 seconds
+    ${bill_check}    query    select * from account_unilateral_bill where account_id ='${account_id}' and event_code=7 and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    ${bill_check_length}    get length    ${bill_check}
+    should be equal as strings    ${bill_check_length}    0
+    log    account_unilateral_bill里的没有相关数据
+    ${transaction_check}    query    select * from ajb_account_transaction where user_id ='${args11}' and event_code=7 and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    ${transaction_check_length}    get length    ${transaction_check}
+    should be equal as strings    ${transaction_check_length}    0
+    log    ajb_account_transaction里的没有相关数据
+    log    当输入已有的user_id和amount数目为0的时候返回数据没有入库
+    艾佳币恢复数目
+
+没有的boss账户的用户，BOSS发起退款（未确认），冻结艾佳币输入正数的金额数，接口返回成功，但不能创建账户，
+    参数配置
+    \    #userId    amount    remark    接口地址
+    输入入参值和接口地址    12345671    1    2    \    ${environment}/ihome-api/settlement/ajbWithdrawFreeze
+    ${no_user_id}    query    select * from ajb_account_open_record where user_id ='${args11}'
+    should be empty    ${no_user_id}
+    log    此user_id不存在
+    ${data_no_user_id}    Data    ${args11}    ${args22}    ${args33}    ${args55}
+    should be equal as strings    ${data_no_user_id.status_code}    200
+    log    接口的响应码正确
+    ${toJson1}    to json    ${data_no_user_id.text}
+    should be equal as strings    ${toJson1['success']}    True
+    should be equal as strings    ${toJson1['msg']}    成功
+    ${no_user_id_orderNum}    Get From Dictionary    ${toJson1['data']}    orderNum
+    ${no_user_id_orderNum_length}    convert to string    ${no_user_id_orderNum}
+    should be equal as strings    ${no_user_id_orderNum_length}    None
+    log    接口中返回的值校验成功！
+    ${no_user_id_after}    query    select * from ajb_account_open_record where user_id ='${args11}'
+    should be empty    ${no_user_id_after}
+    log    此用户不存在，调用接口也不能创建账户
+    ${current_time_no}    get_current_date
+    ${current_time_before_301}    subtract time from date    ${current_time_no}    15 seconds
+    ${current_time_after_302}    Add Time To Date    ${current_time_no}    61 seconds
+    ${user_id}    query    select * from account_unilateral_bill where user_id ='${args11}' and update_time between' ${current_time_before_301}' and '${current_time_after_302}'
+    should be empty    ${user_id}
+    log    表account_unilateral_bill里是空的
+    ${current_time_nouser}    get_current_date
+    ${current_time_before_3011}    subtract time from date    ${current_time_nouser}    15 seconds
+    ${current_time_after_3022}    Add Time To Date    ${current_time_nouser}    61 seconds
+    ${user_id_no}    query    select * from ajb_account_transaction where user_id ='${args11}' and update_time between' ${current_time_before_3011}' and '${current_time_after_3022}'
+    should be empty    ${user_id_no}
+    log    ajb_account_transaction里是空的
+    log    调用艾佳币回收冻结，没有user_id,也不能创建新的账号。
+
+拥有boss账户的用户，BOSS发起退款（未确认），冻结艾佳币艾佳币数目输入为字符，接口返回失败，报400
+    参数配置
+    \    #userId    amount    remark    接口地址
+    输入入参值和接口地址    ${boss_user_account_id}    str    \    \    ${environment}/ihome-api/settlement/ajbWithdrawFreeze
+    获得account_id
+    连接接口
+    log    ${data.status_code}
+    should be equal as strings    ${data.status_code}    400
+    log    400由于语法格式有误，服务器无法理解此请求。
+    log    接口的响应码正确
+    amount和表里的校验
+    log    输入已有的user_id和amount为字符的时候，语法错误，报400
+    艾佳币恢复数目
+
+拥有boss账户的用户，俩次向BOSS发起退款（未确认），接口返回成功，对每次数据库进行校验
+    参数配置
+    \    #userId    amount    remark    接口地址
+    输入入参值和接口地址    ${boss_user_account_id}    2    \    \    ${environment}/ihome-api/settlement/ajbWithdrawFreeze
+    获得account_id
+    连接接口
+    字段验证
+    表ajb_account_open_record的校验
+    表account_unilateral_bill的校验
+    表ajb_account_transaction
+    表account_amount的校验
+    log    第一次调用接口成功入库了
+    艾佳币恢复数目
+    连接接口
+    字段验证
+    表ajb_account_open_record的校验
+    表account_unilateral_bill的校验
+    表ajb_account_transaction
+    表account_amount的校验
+    log    第二次调用接口成功入库了
+    艾佳币恢复数目
+
+当艾佳币冻结的数目超过账户艾佳币的总数目，调用接口，接口返回成功，没有订单号，没有入数据库
+    参数配置
+    ${database_before}    query    select * from ajb_account_transaction where user_id ='${boss_user_account_id}' and channel_no='1'
+    ${database_}    query    select * from account_amount where account_id ='${database_before[0][3]}'
+    #获得account_id和${user_id_real}
+    ${account_id}    set variable    ${database_[0][1]}
+    ${total_account_amount}    query    select * from account_amount where account_id ="${database_[0][1]}"
+    ${actual_amount}    evaluate    ${total_account_amount[0][2]}+1
+    \    #userid    amount    remark    \    接口地址
+    输入入参值和接口地址    ${boss_user_account_id}    ${actual_amount}    \    \    ${environment}/ihome-api/settlement/ajbWithdrawFreeze
+    获得account_id
+    连接接口
+    字段验证
+    amount和表里的校验
+    艾佳币恢复数目
+
+当艾佳币冻结的数目超过艾佳币余额的数目，调用接口，接口
+    参数配置
+    ${database_before}    query    select * from ajb_account_transaction where user_id ='${boss_user_account_id}' and channel_no='1'
+    ${database_}    query    select * from account_amount where account_id ='${database_before[0][3]}'
+    #获得account_id和${user_id_real}
+    ${account_id}    set variable    ${database_[0][1]}
+    ${total_account_amount}    query    select * from account_amount where account_id ="${database_[0][1]}"
+    ${actual_amount}    evaluate    ${total_account_amount[0][3]}+1
+    \    #userid    amount    remark    \    接口地址
+    输入入参值和接口地址    ${boss_user_account_id}    ${actual_amount}    \    \    ${environment}/ihome-api/settlement/ajbWithdrawFreeze
+    获得account_id
+    连接接口
+    字段验证
+    表account_unilateral_bill的校验
+    表ajb_account_transaction
+    Comment    表account_amount的校验
+    艾佳币恢复数目
