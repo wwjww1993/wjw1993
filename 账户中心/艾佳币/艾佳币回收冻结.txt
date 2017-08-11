@@ -13,7 +13,7 @@ Library           DatabaseLibrary
 *** Test Cases ***
 拥有boss账户的用户，BOSS发起退款（未确认），冻结艾佳币接口返回成功
     参数配置
-    \    #userId    amount    remark    \    接口地址
+    \    #userId    amount    remark    接口地址
     输入入参值和接口地址    ${boss_user_account_id}    2    \    \    ${environment}/ihome-api/settlement/ajbWithdrawFreeze
     获得account_id
     连接接口
@@ -144,28 +144,10 @@ Library           DatabaseLibrary
     ${account_id}    set variable    ${database_[0][1]}
     ${total_account_amount}    query    select * from account_amount where account_id ="${database_[0][1]}"
     ${actual_amount}    evaluate    ${total_account_amount[0][2]}+1
-    \    #userid    amount    remark    \    接口地址
+    \    #userid    amount    remark    接口地址
     输入入参值和接口地址    ${boss_user_account_id}    ${actual_amount}    \    \    ${environment}/ihome-api/settlement/ajbWithdrawFreeze
     获得account_id
     连接接口
     字段验证
     amount和表里的校验
-    艾佳币恢复数目
-
-当艾佳币冻结的数目超过艾佳币余额的数目，调用接口，接口
-    参数配置
-    ${database_before}    query    select * from ajb_account_transaction where user_id ='${boss_user_account_id}' and channel_no='1'
-    ${database_}    query    select * from account_amount where account_id ='${database_before[0][3]}'
-    #获得account_id和${user_id_real}
-    ${account_id}    set variable    ${database_[0][1]}
-    ${total_account_amount}    query    select * from account_amount where account_id ="${database_[0][1]}"
-    ${actual_amount}    evaluate    ${total_account_amount[0][3]}+1
-    \    #userid    amount    remark    \    接口地址
-    输入入参值和接口地址    ${boss_user_account_id}    ${actual_amount}    \    \    ${environment}/ihome-api/settlement/ajbWithdrawFreeze
-    获得account_id
-    连接接口
-    字段验证
-    表account_unilateral_bill的校验
-    表ajb_account_transaction
-    Comment    表account_amount的校验
     艾佳币恢复数目
