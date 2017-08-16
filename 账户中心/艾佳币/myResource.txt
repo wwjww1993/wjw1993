@@ -19,7 +19,10 @@ Library           MongoDBLibrary
     log    接口中返回的值校验成功！
     @{Link1}    create list    http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawCancel    http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawConfirm    http://192.168.1.31:10003/ihome-api/settlement/cancelPay    http://192.168.1.31:10003/ihome-api/settlement/confirmPay    http://192.168.1.31:10003/ihome-api/settlement/orderPayRefund
     ...    http://192.168.1.31:10003/ihome-api/settlement/freezePay
-    ${orderNum}    run keyword unless    "${value}" in @{Link1}    Get From Dictionary    ${toJson['data']}    orderNum
+    @{Link2}    create list    http://192.168.1.31:10003/ihome-api/settlement/ajbActivityRecharge    http://192.168.1.31:10003/ihome-api/settlement/ajbRecharge    http://192.168.1.31:10003/ihome-api/settlement/ajbWithdrawFreeze
+    ${orderNum}    run keyword if    "${value}" in @{Link2}    Get From Dictionary    ${toJson['data']}    orderNum
+    ...    ELSE IF    "${value}" in @{Link1}    set variable    ${args11}
+    ...    ELSE    ${args22}
     set suite variable    ${orderNum}
 
 连接接口
@@ -83,8 +86,11 @@ update_time校验
 表account_unilateral_bill的校验
     log    现在开始校验表account_unilateral_bill
     参数配置
-    update_time校验    account_unilateral_bill
-    ${user_id}    query    select * from account_unilateral_bill where account_id ='${account_id} 'and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
+    操作判断
+    ${update_time_unilateral_bill}    get current date
+    ${current_time_before}    subtract time from date    ${update_time_unilateral_bill}    0 seconds
+    ${current_time_after}    Add Time To Date    ${update_time_unilateral_bill}    100 seconds
+    ${user_id}    query    select * from account_unilateral_bill where account_id ='${account_id} 'and update_time between' ${current_time_before}' and '${current_time_after}'
     ${bill_no_length}    get length    ${user_id[0][1]}
     should be equal as integers    ${bill_no_length}    20
     log    bill_no的数据长度正确，校验成功
@@ -195,40 +201,40 @@ update_time校验
 表ajb_account_transaction
     log    现在开始校验表ajb_account_transaction
     参数配置
-    update_time校验    ajb_account_transaction
-    ${user_id}    query    select * from ajb_account_transaction where account_id ='${account_id}' and update_time between' ${current_time_before_30}' and '${current_time_after_30}'
-    ${business_no_length}    get length    ${user_id[0][1]}
+    操作判断
+    ${user_id1}    query    select * from ajb_account_transaction where account_id ='${account_id}' and order_num='${orderNum}' and event_code='${event_code_after}'
+    ${business_no_length}    get length    ${user_id1[0][1]}
     should be equal as integers    ${business_no_length}    20
     log    business_no的数据长度正确，校验成功
-    should be equal as integers    ${user_id[0][2]}    ${user_id_real}
+    should be equal as integers    ${user_id1[0][2]}    ${user_id_real}
     log    当下user_id是正确的！
-    should be equal as integers    ${user_id[0][4]}    ${channel_no}
+    should be equal as integers    ${user_id1[0][4]}    ${channel_no}
     log    channel_no的值正确
     ${bill_order_num}    run keyword if    "${value}" in @{Link}    set variable    ${args11}
     ...    ELSE IF    "${value}"=="http://192.168.1.31:10003/ihome-api/settlement/freezePay"    set variable    ${args22}
     ...    ELSE    set variable    ${orderNum}
-    should be equal as integers    ${user_id[0][5]}    ${bill_order_num}
+    should be equal as integers    ${user_id1[0][5]}    ${bill_order_num}
     log    order_num显示正确！
-    操作判断
-    ${pay_no_after}    convert to string    ${user_id[0][6]}
+    ${pay_no_after}    convert to string    ${user_id1[0][6]}
     ${pay_no_after_length}    get length    ${pay_no_after}
     should be equal as integers    ${pay_no_after_length}    ${pay_no}
     log    pay_no表现正确
-    should be equal as integers    ${user_id[0][7]}    ${amount}
+    should be equal as integers    ${user_id1[0][7]}    ${amount}
     log    amount的变化数值是正确的
-    should be equal as integers    ${user_id[0][8]}    1    #1是艾佳币产品
+    should be equal as integers    ${user_id1[0][8]}    1    #1是艾佳币产品
     log    product_code值是1，表示是艾佳币产品，表示正确
-    should be equal as integers    ${user_id[0][9]}    ${event_code_after}    #8表示退款艾佳币冻结
+    should be equal as integers    ${user_id1[0][9]}    ${event_code_after}    #8表示退款艾佳币冻结
     log    event_code值正确
-    should be equal as integers    ${user_id[0][10]}    2    #执行成功
+    should be equal as integers    ${user_id1[0][10]}    2    #执行成功
     log    trade_status表示执行成功
-    should be equal as integers    ${user_id[0][11]}    0    #其中0表示未删除
+    should be equal as integers    ${user_id1[0][11]}    0    #其中0表示未删除
     log    del_flag的值是0是未删除，是正确状态
     log    add_time和update_time时间保持一致
     log    表ajb_account_transaction校验成功
-    ${user_id[0][0]_transaction}    set variable    ${user_id[0][0]}
+    ${user_id[0][0]_transaction}    set variable    ${user_id1[0][0]}
     set suite variable    ${user_id[0][0]_transaction}
-    ${user_id_unilateral_delete1}    execute sql string    delete from ajb_account_transaction where id ='${user_id[0][0]}'
+    set suite variable    ${user_id1[0][13]}
+    ${user_id_unilateral_delete1}    execute sql string    delete from ajb_account_transaction where id ='${user_id1[0][0]}'
 
 表account_amount的校验
     log    现在开始校验表account_amount
